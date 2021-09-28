@@ -1,10 +1,10 @@
-# Getting Started with Create React App
+# Used libraries
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- [Create React App](https://github.com/facebook/create-react-app).
+- [MUI](https://mui.com/)
+- [React i18n](https://react.i18next.com/)
 
 ## Available Scripts
-
-In the project directory, you can run:
 
 ### `yarn start`
 
@@ -29,18 +29,53 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+## Guides
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### How to use translation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- open translations/translation.ts file
+- add your translation following the pattern:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```typescript
+{
+  uniqueKey: {
+    en: 'English translation',
+    es: 'Spanish translation',
+  }
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- where you want to use it, include the translate function using: (where useTranslate is imported from `hooks/useTranslate.ts`)
 
-## Learn More
+```typescript
+const t = useTranslate();
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- to use the translated string use (uniqueKey represents the uniqueKey given in the steps above)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```typescript
+t("uniqueKey");
+```
+
+example:
+
+```typescript
+// translations.ts
+export const translations = {
+  helloWorld: {
+    en: "Hello World",
+    es: "Hola Mundo",
+  },
+};
+
+// App.tsx
+const App: React.FC = () => {
+  const t = useTranslate();
+
+  return (
+    <div className="App">
+      <h1>{t("helloWorld")}</h1>
+    </div>
+  );
+};
+```

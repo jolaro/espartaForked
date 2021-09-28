@@ -1,21 +1,18 @@
+import { Button, Card, Checkbox } from "@mui/material";
+import useTranslate from "hooks/useTranslate";
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import LanguageSwitcher from "components/molecules/LanguageSwitcher";
 
-function App() {
+const App: React.FC = () => {
+  const t = useTranslate();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <h1>{t("helloWorld")}</h1>
+      <LanguageSwitcher />
+      <Button variant="contained">It's cool</Button>
     </div>
   );
-}
+};
 
 export default App;
