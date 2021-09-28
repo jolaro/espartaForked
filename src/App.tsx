@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox } from "@mui/material";
+import { Button } from "@mui/material";
 import useTranslate from "hooks/useTranslate";
 import React from "react";
 import LanguageSwitcher from "components/molecules/LanguageSwitcher";
