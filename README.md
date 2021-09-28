@@ -50,8 +50,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ```typescript
 {
   uniqueKey: {
-    en: 'English translation',
-    es: 'Spanish translation',
+    [Language.ENGLISH]: 'English translation',
+    [Language.SPANISH]: 'Spanish translation',
   }
 }
 ```
@@ -74,8 +74,8 @@ example:
 // translations.ts
 export const translations = {
   helloWorld: {
-    en: "Hello World",
-    es: "Hola Mundo",
+    [Language.ENGLISH]: "Hello World",
+    [Language.SPANISH]: "Hola Mundo",
   },
 };
 

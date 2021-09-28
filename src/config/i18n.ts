@@ -1,19 +1,20 @@
-import { getTranslations } from "../translations/translations";
+import { getTranslations } from "../translations/translations.util";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { Language } from "translations/translations";
 
 const resources = {
   en: {
-    translation: getTranslations("en"),
+    translation: getTranslations(Language.ENGLISH),
   },
   es: {
-    translation: getTranslations("es"),
+    translation: getTranslations(Language.SPANISH),
   },
 };
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en",
+  lng: Language.ENGLISH,
   interpolation: {
     escapeValue: false, // react already safes from xss
   },

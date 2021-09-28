@@ -9,6 +9,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1>{t("helloWorld")}</h1>
+      <h3>{t("helloWorldSubtitle")}</h3>
       <LanguageSwitcher />
       <Button variant="contained">It's cool</Button>
     </div>
