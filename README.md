@@ -5,6 +5,7 @@
 - [React i18n](https://react.i18next.com/) (Translations)
 - [React hook form](https://react-hook-form.com/get-started) (Easily validate forms)
 - [React Query](https://react-query.tanstack.com/) (Working with the API - creating queries and mutations)
+- [React Hookstate](https://hookstate.js.org/docs/getting-started) (Managing state)
 
 ## Available Scripts
 
