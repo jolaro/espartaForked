@@ -12,9 +12,14 @@ const bodyLayoutStyles = asStyle({
     },
   },
   listItem: {
-    "&:hover": {
+    "&.Mui-selected": {
       backgroundColor: "primary.main",
-      color: "primary.contrastText",
+      "&, & svg": {
+        color: "primary.contrastText",
+      },
+      "&:hover": {
+        backgroundColor: "primary.light",
+      },
     },
   },
   appBar: {

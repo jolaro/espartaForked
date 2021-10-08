@@ -3,6 +3,8 @@ import Home from "pages/Home";
 import { TranslationKeys } from "translations/_translation_interface";
 import { pageTranslations } from "translations/namespaces/pages.translations";
 import { getPropertyName } from "utils/get_property_name.util";
+import HomeIcon from "@mui/icons-material/Home";
+import BiotechIcon from "@mui/icons-material/Biotech";
 
 interface Route {
   /**
@@ -25,6 +27,11 @@ interface Route {
   component: React.FC;
 
   /**
+   * Icon which will be shown in navigation and other applicable places
+   */
+  icon?: React.FC;
+
+  /**
    * Whether to match path as exact or as a base
    */
   exact?: boolean;
@@ -32,15 +39,17 @@ interface Route {
 
 const routes: Route[] = [
   {
-    title: getPropertyName(pageTranslations, (p) => p.home),
+    title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
     path: "/",
     component: Home,
     exact: true,
+    icon: HomeIcon,
   },
   {
-    title: getPropertyName(pageTranslations, (p) => p.sandbox),
+    title: getPropertyName(pageTranslations, (p) => p["page.home"]),
     path: "/app/sandbox",
     component: App,
+    icon: BiotechIcon,
   },
 ];
 

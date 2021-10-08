@@ -1,11 +1,11 @@
 import { asTranslation, Language } from "../_translation_interface";
 
 export const pageTranslations = asTranslation({
-  home: {
+  "page.home": {
     [Language.ENGLISH]: "Home English",
     [Language.SPANISH]: "Hogar",
   },
-  sandbox: {
+  "page.sandbox": {
     [Language.ENGLISH]: "Sandbox",
     [Language.SPANISH]: "Sandbox",
   },
