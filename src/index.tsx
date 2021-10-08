@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import theme from "config/theme";
 import { ThemeProvider } from "@mui/material";
-import "./styles/main.scss";
+import "./styles/scss/main.scss";
 import "./config/i18n";
 import Router from "router/Router";
 
