@@ -15,8 +15,6 @@ const NavBar: React.FC<NavBarProps> = () => {
     history.push(path);
   }, []);
 
-  console.log(routes[0].title);
-
   return (
     <>
       <Toolbar />

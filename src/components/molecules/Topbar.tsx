@@ -2,6 +2,7 @@ import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import React from "react";
 import bodyLayoutStyles from "styles/mui/bodyLayoutStyles";
 import MenuIcon from "@mui/icons-material/Menu";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 interface TopbarProps {
   isMobile: boolean;
@@ -22,7 +23,7 @@ const Topbar: React.FC<TopbarProps> = ({ isMobile, onMenuIconClick }) => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           News
         </Typography>
-        language selector
+        <LanguageSwitcher />
       </Toolbar>
     </AppBar>
   );
