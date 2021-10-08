@@ -1,4 +1,5 @@
-import { Language, translations } from "./translations";
+import { translations } from "./translations";
+import { Language } from "./_translation_interface";
 
 /**
  * Transforms the `translations` object to the required format for i18n library

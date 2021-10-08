@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { translations } from "translations/translations";
+import { TranslationKeys } from "translations/_translation_interface";
 
 const useTranslate = () => {
   const { t: translate } = useTranslation();
 
-  const t = (key: keyof typeof translations) => translate(key);
+  const t = (key: TranslationKeys) => translate(key);
 
   return t;
 };

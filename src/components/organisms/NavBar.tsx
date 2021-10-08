@@ -1,4 +1,5 @@
 import { Divider, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import useTranslate from "hooks/useTranslate";
 import React, { useCallback } from "react";
 import { useHistory } from "react-router";
 import routes from "router/routes";
@@ -8,10 +9,13 @@ interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = () => {
   const history = useHistory();
+  const t = useTranslate();
 
   const navigateTo = useCallback((path: string) => {
     history.push(path);
   }, []);
+
+  console.log(routes[0].title);
 
   return (
     <>
@@ -19,10 +23,10 @@ const NavBar: React.FC<NavBarProps> = () => {
       <Divider />
       <List>
         {routes.map((route, index) => (
-          <ListItem button key={route.title} sx={bodyLayoutStyles.listItem} onClick={() => navigateTo(route.path)}>
+          <ListItem button key={route.path} sx={bodyLayoutStyles.listItem} onClick={() => navigateTo(route.path)}>
             {/* TODO: Icon in routes as well */}
             <ListItemIcon></ListItemIcon>
-            <ListItemText primary={route.title} />
+            <ListItemText primary={t(route.title)} />
           </ListItem>
         ))}
       </List>

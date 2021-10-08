@@ -2,8 +2,7 @@ import React from "react";
 import { ReactComponent as UKFlag } from "../../assets/flags/united-kingdom.svg";
 import { ReactComponent as ESFlag } from "../../assets/flags/spain.svg";
 import { useTranslation } from "react-i18next";
-import { Language } from "translations/translations";
-
+import { Language } from "translations/_translation_interface";
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
 
