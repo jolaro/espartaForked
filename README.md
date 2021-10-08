@@ -90,3 +90,7 @@ const App: React.FC = () => {
   );
 };
 ```
+
+## Routing
+
+To add new page follow the pattern established in `router/routes.ts` and add new element to the routes object. Look at the comments on the `Route` interface declaration.
