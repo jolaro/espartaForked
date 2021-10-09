@@ -4,6 +4,10 @@ export const saveAuthToken = (authToken: string) => {
   window.localStorage.setItem(STORAGE_AUTH_TOKEN_KEY, authToken);
 };
 
+export const removeAuthToken = () => {
+  window.localStorage.removeItem(STORAGE_AUTH_TOKEN_KEY);
+};
+
 export const isLoggedIn = () => {
   return Boolean(window.localStorage.getItem(STORAGE_AUTH_TOKEN_KEY));
 };

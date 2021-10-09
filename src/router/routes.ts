@@ -41,6 +41,11 @@ interface Route {
    * Should the page be excluded from rendering in the navigation
    */
   hidden?: boolean;
+
+  /**
+   * If the route is restricted and only logged in users can access it.
+   */
+  restricted: boolean;
 }
 
 const routes: Route[] = [
@@ -50,6 +55,7 @@ const routes: Route[] = [
     component: Home,
     icon: HomeIcon,
     exact: true,
+    restricted: true,
   },
   {
     title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
@@ -57,13 +63,15 @@ const routes: Route[] = [
     component: App,
     icon: BiotechIcon,
     exact: true,
+    restricted: true,
   },
   {
-    title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
+    title: getPropertyName(pageTranslations, (p) => p["page.signin"]),
     path: "/sign-in",
     component: SignInSide,
     exact: true,
     hidden: true,
+    restricted: false,
   },
 ];
 

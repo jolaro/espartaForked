@@ -33,4 +33,8 @@ export const signInTranslations = asTranslation({
     [Language.ENGLISH]: "Email or password is incorrect",
     [Language.SPANISH]: "Correo electrónico o la contraseña son incorrectos",
   },
+  "signIn.signOut": {
+    [Language.ENGLISH]: "Sign out",
+    [Language.SPANISH]: "desconectar",
+  },
 });

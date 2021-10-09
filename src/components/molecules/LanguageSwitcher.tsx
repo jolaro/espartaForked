@@ -7,13 +7,14 @@ import { languageSwitcherStyles } from "styles/mui/langaugeSwitcherStyles";
 import { useTranslation } from "react-i18next";
 import useTranslate from "hooks/useTranslate";
 import { STORAGE_LANGUAGE_KEY } from "config/i18n";
+import { useSnackbar } from "notistack";
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
   const t = useTranslate();
   const languageMenuAnchorElement = useHookstate<null | HTMLElement>(null);
   const open = Boolean(languageMenuAnchorElement.get());
-  const isSnackbarOpen = useHookstate(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleClose = () => {
     languageMenuAnchorElement.set(null);
@@ -24,7 +25,7 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   const handleLanguageChange = (language: Language) => {
-    isSnackbarOpen.set(true);
+    enqueueSnackbar(t("notification.languageChanged"));
     i18n.changeLanguage(language);
     window.localStorage.setItem(STORAGE_LANGUAGE_KEY, language);
     handleClose();
@@ -46,16 +47,6 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={isSnackbarOpen.get()}
-        autoHideDuration={2000}
-        onClose={() => isSnackbarOpen.set(false)}
-      >
-        <Alert severity="success" sx={{ width: "100%" }}>
-          {t("notification.languageChanged")}
-        </Alert>
-      </Snackbar>
       <IconButton aria-label="language" onClick={handleOpenLanguageMenu}>
         <LanguageIcon />
       </IconButton>

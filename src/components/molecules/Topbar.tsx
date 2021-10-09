@@ -9,6 +9,7 @@ import routes from "router/routes";
 import { useHookstate } from "@hookstate/core";
 import { TranslationKeys } from "translations/_translation_interface";
 import { useTranslation } from "react-i18next";
+import SignOutButton from "components/atoms/SignOutButton";
 
 const DEFAULT_TITLE = "page.home";
 
@@ -46,6 +47,7 @@ const Topbar: React.FC<TopbarProps> = ({ isMobile, onMenuIconClick }) => {
           {t(openedPageTitle.get())}
         </Typography>
         <LanguageSwitcher />
+        <SignOutButton />
       </Toolbar>
     </AppBar>
   );

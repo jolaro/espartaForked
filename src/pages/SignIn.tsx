@@ -1,11 +1,9 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -21,6 +19,11 @@ import GlobalState from "state/GlobalState";
 import { useHookstate } from "@hookstate/core";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Alert } from "@mui/material";
+import { useHistory } from "react-router";
+import { useEffect } from "react";
+import { useSnackbar } from "notistack";
+import { snooze } from "utils/snooze";
+import { useUser } from "hooks/useUser";
 
 // TODO: Remove when real API is ready
 const callMockApi = (validate: boolean) =>
@@ -41,7 +44,10 @@ type Inputs = {
 export const SignInSide: React.FC = () => {
   const isLoading = useHookstate(false);
   const errorSignIn = useHookstate(false);
+  const { isLoggedIn } = useUser();
   const t = useTranslate();
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const schema = yup
     .object({
@@ -56,6 +62,17 @@ export const SignInSide: React.FC = () => {
     formState: { errors },
   } = useForm<Inputs>({ resolver: yupResolver(schema) });
 
+  useEffect(() => {
+    (async () => {
+      if (isLoggedIn.get()) {
+        await snooze(500);
+        isLoading.set(false);
+        await snooze(50);
+        history.push("/");
+      }
+    })();
+  }, [isLoggedIn.get()]);
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     // TODO: Remove when real API is ready
     errorSignIn.set(false);
@@ -63,9 +80,9 @@ export const SignInSide: React.FC = () => {
       isLoading.set(true);
       await callMockApi(data.email !== "reject@gmail.com");
       GlobalState.setSignedIn("dajkdoajdw9au893u28913u8921u3981u38921u");
+      enqueueSnackbar(t("notification.signedIn"));
     } catch (e) {
       errorSignIn.set(true);
-    } finally {
       isLoading.set(false);
     }
   };
@@ -73,8 +90,8 @@ export const SignInSide: React.FC = () => {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} sx={signInStyles.grid} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={3} square>
+      <Grid item xs={false} sm={false} md={7} sx={signInStyles.grid} />
+      <Grid item xs={12} sm={12} md={5} component={Paper} elevation={3} square>
         <Box sx={signInStyles.languageSwitcher}>
           <LanguageSwitcher />
         </Box>
