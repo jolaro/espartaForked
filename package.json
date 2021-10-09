@@ -8,6 +8,7 @@
     "@hookform/resolvers": "^2.8.2",
     "@hookstate/core": "^3.0.12",
     "@mui/icons-material": "^5.0.1",
+    "@mui/lab": "^5.0.0-alpha.50",
     "@mui/material": "^5.0.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

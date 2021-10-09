@@ -17,6 +17,17 @@ import LanguageSwitcher from "components/molecules/LanguageSwitcher";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import GlobalState from "state/GlobalState";
+import { useHookstate } from "@hookstate/core";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Alert } from "@mui/material";
+
+// TODO: Remove when real API is ready
+const callMockApi = (validate: boolean) =>
+  new Promise<void>((resolve, reject) => {
+    if (validate) setTimeout(() => resolve(), 1200);
+    else reject();
+  });
 
 const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -28,6 +39,8 @@ type Inputs = {
 };
 
 export const SignInSide: React.FC = () => {
+  const isLoading = useHookstate(false);
+  const errorSignIn = useHookstate(false);
   const t = useTranslate();
 
   const schema = yup
@@ -43,7 +56,19 @@ export const SignInSide: React.FC = () => {
     formState: { errors },
   } = useForm<Inputs>({ resolver: yupResolver(schema) });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    // TODO: Remove when real API is ready
+    errorSignIn.set(false);
+    try {
+      isLoading.set(true);
+      await callMockApi(data.email !== "reject@gmail.com");
+      GlobalState.setSignedIn("dajkdoajdw9au893u28913u8921u3981u38921u");
+    } catch (e) {
+      errorSignIn.set(true);
+    } finally {
+      isLoading.set(false);
+    }
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -60,6 +85,11 @@ export const SignInSide: React.FC = () => {
           <Typography component="h1" variant="h5">
             {t("signIn.title")}
           </Typography>
+          {errorSignIn.get() && (
+            <Box sx={signInStyles.errorMessage}>
+              <Alert severity="error">{t("signIn.invalidLogin")}</Alert>
+            </Box>
+          )}
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
             <TextField
               {...register("email")}
@@ -90,9 +120,9 @@ export const SignInSide: React.FC = () => {
               label={t("signIn.rememberMe")}
               {...register("rememberMe", { setValueAs: (v) => !!v })}
             />
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <LoadingButton loading={isLoading.get()} type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               {t("signIn.title")}
-            </Button>
+            </LoadingButton>
           </Box>
         </Box>
       </Grid>

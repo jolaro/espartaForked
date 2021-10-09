@@ -29,4 +29,8 @@ export const signInTranslations = asTranslation({
     [Language.ENGLISH]: "The entered email is invalid",
     [Language.SPANISH]: "El correo electrónico ingresado no es válido",
   },
+  "signIn.invalidLogin": {
+    [Language.ENGLISH]: "Email or password is incorrect",
+    [Language.SPANISH]: "Correo electrónico o la contraseña son incorrectos",
+  },
 });

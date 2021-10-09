@@ -23,4 +23,9 @@ export const signInStyles = asStyle({
     flexDirection: "row-reverse",
     m: 3,
   },
+  errorMessage: {
+    mt: 2,
+    mb: 1,
+    width: "100%",
+  },
 });
