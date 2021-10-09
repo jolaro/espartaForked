@@ -21,18 +21,20 @@ const NavBar: React.FC<NavBarProps> = () => {
       <Toolbar />
       <Divider />
       <List>
-        {routes.map((route) => (
-          <ListItem
-            button
-            selected={route.path === match.path}
-            key={route.path}
-            sx={bodyLayoutStyles.listItem}
-            onClick={() => navigateTo(route.path)}
-          >
-            <ListItemIcon>{route.icon && <route.icon />}</ListItemIcon>
-            <ListItemText primary={t(route.title)} />
-          </ListItem>
-        ))}
+        {routes
+          .filter((route) => !route.hidden)
+          .map((route) => (
+            <ListItem
+              button
+              selected={route.path === match.path}
+              key={route.path}
+              sx={bodyLayoutStyles.listItem}
+              onClick={() => navigateTo(route.path)}
+            >
+              <ListItemIcon>{route.icon && <route.icon />}</ListItemIcon>
+              <ListItemText primary={t(route.title)} />
+            </ListItem>
+          ))}
       </List>
     </>
   );

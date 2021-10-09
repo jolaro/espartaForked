@@ -9,4 +9,8 @@ export const pageTranslations = asTranslation({
     [Language.ENGLISH]: "Sandbox",
     [Language.SPANISH]: "Sandbox",
   },
+  "page.signin": {
+    [Language.ENGLISH]: "Sign In",
+    [Language.SPANISH]: "Registrarse",
+  },
 });

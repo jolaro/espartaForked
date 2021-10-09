@@ -5,6 +5,7 @@ import { pageTranslations } from "translations/namespaces/pages.translations";
 import { getPropertyName } from "utils/get_property_name.util";
 import HomeIcon from "@mui/icons-material/Home";
 import BiotechIcon from "@mui/icons-material/Biotech";
+import { SignInSide } from "pages/SignIn";
 
 interface Route {
   /**
@@ -35,6 +36,11 @@ interface Route {
    * Whether to match path as exact or as a base
    */
   exact?: boolean;
+
+  /**
+   * Should the page be excluded from rendering in the navigation
+   */
+  hidden?: boolean;
 }
 
 const routes: Route[] = [
@@ -51,6 +57,13 @@ const routes: Route[] = [
     component: App,
     icon: BiotechIcon,
     exact: true,
+  },
+  {
+    title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
+    path: "/sign-in",
+    component: SignInSide,
+    exact: true,
+    hidden: true,
   },
 ];
 
