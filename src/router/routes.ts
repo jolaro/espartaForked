@@ -39,17 +39,18 @@ interface Route {
 
 const routes: Route[] = [
   {
-    title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
+    title: getPropertyName(pageTranslations, (p) => p["page.home"]),
     path: "/",
     component: Home,
-    exact: true,
     icon: HomeIcon,
+    exact: true,
   },
   {
-    title: getPropertyName(pageTranslations, (p) => p["page.home"]),
+    title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
     path: "/app/sandbox",
     component: App,
     icon: BiotechIcon,
+    exact: true,
   },
 ];
 

@@ -6,6 +6,7 @@ import { AVAILABLE_LANGUAGES, Language } from "translations/_translation_interfa
 import { languageSwitcherStyles } from "styles/mui/langaugeSwitcherStyles";
 import { useTranslation } from "react-i18next";
 import useTranslate from "hooks/useTranslate";
+import { STORAGE_LANGUAGE_KEY } from "config/i18n";
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -25,6 +26,7 @@ const LanguageSwitcher: React.FC = () => {
   const handleLanguageChange = (language: Language) => {
     isSnackbarOpen.set(true);
     i18n.changeLanguage(language);
+    window.localStorage.setItem(STORAGE_LANGUAGE_KEY, language);
     handleClose();
   };
 
@@ -47,7 +49,7 @@ const LanguageSwitcher: React.FC = () => {
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={isSnackbarOpen.get()}
-        autoHideDuration={1500}
+        autoHideDuration={2000}
         onClose={() => isSnackbarOpen.set(false)}
       >
         <Alert severity="success" sx={{ width: "100%" }}>
