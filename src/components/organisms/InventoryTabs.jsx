@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import TabPanel from "../atoms/TabPanel";
 import InventoryItemsTable from "../molecules/InventoryItemsTable";
+import InventoryRequestTable from "../molecules/InventoryRequestTable";
+import InventoryTable from "../molecules/InventoryTable";
 
 TabPanel.propTypes = {
   children: PropTypes.node,
@@ -20,7 +22,7 @@ function a11yProps(index) {
 }
 
 function InventoryTabs() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -36,13 +38,12 @@ function InventoryTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <InventoryItemsTable/>
+        <InventoryTable value={0} headers={["Id", "Name", "CurrentQuantity", "Category"]}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <InventoryTable value={1} headers={["Id", "Name", "Items", "Status", "Role"]}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
       </TabPanel>
     </Box>
   );
