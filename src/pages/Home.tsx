@@ -1,12 +1,14 @@
 import BodyLayout from "layouts/BodyLayout";
 import React from "react";
-import InventoryItemsTable from "../components/organisms/InventoryItemsTable";
+import InventoryTabs from "../components/organisms/InventoryTabs";
 
 interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = () => {
-  return <BodyLayout><InventoryItemsTable/></BodyLayout>;
+  return <BodyLayout>
+    <InventoryTabs/>
+  </BodyLayout>;
 };
 
 export default Home;
