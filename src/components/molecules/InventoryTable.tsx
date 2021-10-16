@@ -34,7 +34,7 @@ interface Props {
     name: "",
 
   };
-  headers?: [];
+  headers?: Array<string>;
   value?: Number;
 }
 
