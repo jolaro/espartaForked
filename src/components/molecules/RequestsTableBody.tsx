@@ -2,7 +2,7 @@ import * as React from "react";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 
 export function RequestsTableBody() {
@@ -49,7 +49,8 @@ export function RequestsTableBody() {
                       style={getStatusStyle(request.status)}>{request.status}
           </Typography>
         </TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}> </TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>
+        </TableCell>
       </TableRow>
     ))}
   </TableBody>;
