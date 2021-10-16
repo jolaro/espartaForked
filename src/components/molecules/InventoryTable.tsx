@@ -45,10 +45,9 @@ function InventoryTable(props: Props) {
     if (props.value == 0) {
       return <WeaponsTableBody />;
     } else if (props.value == 1) {
-      return <RequestsTableBody/>;
-    }
-    else {
-      return <SoldiersTableBody/>;
+      return <RequestsTableBody />;
+    } else {
+      return <SoldiersTableBody />;
     }
   }
 

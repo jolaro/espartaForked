@@ -2,11 +2,11 @@ import { Stack } from "@mui/material";
 import { RejectButton } from "../atoms/RejectButton";
 import { ApproveButton } from "../atoms/ApproveButton";
 
-function StackRequestButtons() {
+export function StackRequestButtons() {
   return (
-    <Stack>
-      <RejectButton/>
-      <ApproveButton/>
+    <Stack direction='row' spacing={1}>
+      <RejectButton />
+      <ApproveButton />
     </Stack>
   );
 }

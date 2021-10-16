@@ -2,8 +2,9 @@ import * as React from "react";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import { StackRequestButtons } from "./StackRequestButtons";
 
 export function RequestsTableBody() {
   let requests = [], status = ["Approved", "Pending", "Rejected"], roles = ["Commander", "Officer", "Soldier"],
@@ -13,7 +14,7 @@ export function RequestsTableBody() {
     requests[i] =
       {
         id: Math.floor(Math.random() * 10000000),
-          name: "Name",
+        name: "Name",
         role: roles[Math.floor(Math.random() * roles.length)],
         items: mockItems,
         status: status[Math.floor(Math.random() * status.length)],
@@ -43,13 +44,14 @@ export function RequestsTableBody() {
         </TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{request.name}</TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{request.role}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{request.items}</TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>
           <Typography className={inventoryTableStyles().itemQuantityStatus}
                       style={getStatusStyle(request.status)}>{request.status}
           </Typography>
         </TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>{request.items}</TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>
+          <StackRequestButtons />
         </TableCell>
       </TableRow>
     ))}

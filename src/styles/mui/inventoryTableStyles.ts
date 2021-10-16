@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import { themeOptions } from "../../config/theme";
 
 export const inventoryTableStyles = makeStyles((theme) => ({
   table: {
@@ -15,8 +16,8 @@ export const inventoryTableStyles = makeStyles((theme) => ({
   tableHeaderCell: {
     textAlign: "center",
     fontWeight: "bold",
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.getContrastText(theme.palette.primary.dark),
+    backgroundColor: "#f8ff02",
+    color: "black",
   },
   tableBodyCell: {
     textAlign: "center",
