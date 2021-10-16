@@ -4,8 +4,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import TabPanel from "../atoms/TabPanel";
-import InventoryItemsTable from "../molecules/InventoryItemsTable";
-import InventoryRequestTable from "../molecules/InventoryRequestTable";
 import InventoryTable from "../molecules/InventoryTable";
 
 TabPanel.propTypes = {
@@ -38,12 +36,13 @@ function InventoryTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <InventoryTable value={0} headers={["Id", "Name", "CurrentQuantity", "Category"]}/>
+        <InventoryTable value={0} headers={["Id", "Name", "Quantity", "Category", "Status"]}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <InventoryTable value={1} headers={["Id", "Name", "Items", "Status", "Role"]}/>
+        <InventoryTable value={1} headers={["Id", "Name", "Role", "Items", "Status", ""]}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <InventoryTable value={2} headers={["Id", "Name", "Role", "Items", "Status"]}/>
       </TabPanel>
     </Box>
   );

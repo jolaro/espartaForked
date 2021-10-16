@@ -7,7 +7,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import { WeaponsTableBody } from "./WeaponsTableBody";
-import { RequestTableBody } from "./RequestTableBody";
+import { RequestsTableBody } from "./RequestsTableBody";
+import { SoldiersTableBody } from "./SoldiersTableBody";
 
 function createData(
   name: string,
@@ -40,12 +41,15 @@ interface Props {
 
 function InventoryTable(props: Props) {
 
-  function test() {
+  function getTableBody() {
     if (props.value == 0) {
       console.log(props.value);
       return <WeaponsTableBody />;
-    } else {
-      return <RequestTableBody/>;
+    } else if (props.value == 1) {
+      return <RequestsTableBody/>;
+    }
+    else {
+      return <SoldiersTableBody/>;
     }
   }
 
@@ -58,7 +62,7 @@ function InventoryTable(props: Props) {
           )}
         </TableRow>
       </TableHead>
-      {test()}
+      {getTableBody()}
     </Table>
   </TableContainer>;
 }

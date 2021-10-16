@@ -5,7 +5,7 @@ import TableRow from "@mui/material/TableRow";
 import { Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 
-export function RequestTableBody() {
+export function RequestsTableBody() {
   let items = [], status = ["Approved", "Pending", "Rejected"], roles = ["Commander", "Officer", "Soldier"],
     mockItems = "2x ItemA \n 2x ItemB";
 
@@ -31,7 +31,7 @@ export function RequestTableBody() {
           {item.id}
         </TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{item.name}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.items}</TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.role}</TableCell>
         {/*<TableCell className={inventoryTableStyles().tableBodyCell}>*/}
         {/*  <Typography className={inventoryTableStyles().itemQuantityStatus} style={*/}
         {/*               backgroundColor: 'white'*/}
@@ -42,8 +42,8 @@ export function RequestTableBody() {
         {/*  >{item.currentQuantity}*/}
         {/*  </Typography>*/}
         {/*</TableCell>*/}
+        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.items}</TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{item.status}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.role}</TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}> </TableCell>
       </TableRow>
     ))}
