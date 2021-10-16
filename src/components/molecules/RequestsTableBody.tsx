@@ -23,9 +23,9 @@ export function RequestsTableBody() {
 
   function getStatusStyle(request: any) {
     let backgroundColor;
-    if (request == "Approved") {
+    if (request === "Approved") {
       backgroundColor = "#4caf50";
-    } else if (request == "Pending") {
+    } else if (request === "Pending") {
       backgroundColor = "#ff9800";
     } else {
       backgroundColor = "#ef5350";

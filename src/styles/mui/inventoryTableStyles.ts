@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core";
-import { themeOptions } from "../../config/theme";
 
 export const inventoryTableStyles = makeStyles((theme) => ({
   table: {

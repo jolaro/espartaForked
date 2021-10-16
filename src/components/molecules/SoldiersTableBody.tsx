@@ -22,9 +22,9 @@ export function SoldiersTableBody() {
 
   function getStatusStyle(request: any) {
     let backgroundColor;
-    if (request == "Returned") {
+    if (request === "Returned") {
       backgroundColor = "#4caf50";
-    } else if (request == "Pending for pick up") {
+    } else if (request === "Pending for pick up") {
       backgroundColor = "#ff9800";
     } else {
       backgroundColor = "#ef5350";
