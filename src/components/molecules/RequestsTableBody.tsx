@@ -6,11 +6,11 @@ import { Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 
 export function RequestsTableBody() {
-  let items = [], status = ["Approved", "Pending", "Rejected"], roles = ["Commander", "Officer", "Soldier"],
+  let requests = [], status = ["Approved", "Pending", "Rejected"], roles = ["Commander", "Officer", "Soldier"],
     mockItems = "2x ItemA \n 2x ItemB";
 
   for (let i = 0; i < 15; i++) {
-    items[i] =
+    requests[i] =
       {
         id: Math.floor(Math.random() * 10000000),
           name: "Name",
@@ -20,30 +20,35 @@ export function RequestsTableBody() {
       };
   }
 
+  function getStatusStyle(request: any) {
+    let backgroundColor;
+    if (request == "Approved") {
+      backgroundColor = "#4caf50";
+    } else if (request == "Pending") {
+      backgroundColor = "#ff9800";
+    } else {
+      backgroundColor = "#ef5350";
+    }
+    return { backgroundColor: backgroundColor };
+  }
 
   return <TableBody>
-    {items.map((item) => (
+    {requests.map((request) => (
       <TableRow
-        key={item.id}
+        key={request.id}
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
       >
         <TableCell component="th" scope="row" className={inventoryTableStyles().tableBodyCell}>
-          {item.id}
+          {request.id}
         </TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.name}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.role}</TableCell>
-        {/*<TableCell className={inventoryTableStyles().tableBodyCell}>*/}
-        {/*  <Typography className={inventoryTableStyles().itemQuantityStatus} style={*/}
-        {/*               backgroundColor: 'white'*/}
-        {/*    // ((item.currentQuantity > item.totalQuantity * 0.60 && "#03a9f4") ||*/}
-        {/*    //   (item.currentQuantity > item.totalQuantity * 0.30 && "#ff9800") ||*/}
-        {/*    //   (item.currentQuantity >= 0 && "#ef5350")),*/}
-        {/*  }*/}
-        {/*  >{item.currentQuantity}*/}
-        {/*  </Typography>*/}
-        {/*</TableCell>*/}
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.items}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.status}</TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>{request.name}</TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>{request.role}</TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>{request.items}</TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>
+          <Typography className={inventoryTableStyles().itemQuantityStatus}
+                      style={getStatusStyle(request.status)}>{request.status}
+          </Typography>
+        </TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}> </TableCell>
       </TableRow>
     ))}

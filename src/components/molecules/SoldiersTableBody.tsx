@@ -20,6 +20,17 @@ export function SoldiersTableBody() {
       };
   }
 
+  function getStatusStyle(request: any) {
+    let backgroundColor;
+    if (request == "Returned") {
+      backgroundColor = "#4caf50";
+    } else if (request == "Pending for pick up") {
+      backgroundColor = "#ff9800";
+    } else {
+      backgroundColor = "#ef5350";
+    }
+    return { backgroundColor: backgroundColor };
+  }
 
   return <TableBody>
     {soldiers.map((soldier) => (
@@ -32,18 +43,12 @@ export function SoldiersTableBody() {
         </TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{soldier.name}</TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{soldier.role}</TableCell>
-        {/*<TableCell className={inventoryTableStyles().tableBodyCell}>*/}
-        {/*  <Typography className={inventoryTableStyles().itemQuantityStatus} style={*/}
-        {/*               backgroundColor: 'white'*/}
-        {/*    // ((soldier.currentQuantity > soldier.totalQuantity * 0.60 && "#03a9f4") ||*/}
-        {/*    //   (soldier.currentQuantity > soldier.totalQuantity * 0.30 && "#ff9800") ||*/}
-        {/*    //   (soldier.currentQuantity >= 0 && "#ef5350")),*/}
-        {/*  }*/}
-        {/*  >{soldier.currentQuantity}*/}
-        {/*  </Typography>*/}
-        {/*</TableCell>*/}
         <TableCell className={inventoryTableStyles().tableBodyCell}>{soldier.items}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{soldier.status}</TableCell>
+        <TableCell className={inventoryTableStyles().tableBodyCell}>
+          <Typography className={inventoryTableStyles().itemQuantityStatus}
+                      style={getStatusStyle(soldier.status)}>{soldier.status}
+          </Typography>
+        </TableCell>
       </TableRow>
     ))}
   </TableBody>;
