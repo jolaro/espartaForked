@@ -43,7 +43,6 @@ function InventoryTable(props: Props) {
 
   function getTableBody() {
     if (props.value == 0) {
-      console.log(props.value);
       return <WeaponsTableBody />;
     } else if (props.value == 1) {
       return <RequestsTableBody/>;

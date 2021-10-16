@@ -20,6 +20,8 @@ export const inventoryTableStyles = makeStyles((theme) => ({
   },
   tableBodyCell: {
     textAlign: "center",
+    backgroundColor: "white",
+    color: "black",
   },
   itemQuantityStatus: {
     fontStyle: "bold",

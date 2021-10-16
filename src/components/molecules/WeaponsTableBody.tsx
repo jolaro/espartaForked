@@ -19,6 +19,17 @@ export function WeaponsTableBody() {
       };
   }
 
+  function getQuantityStyle(item: any) {
+    let backgroundColor;
+    if (item.currentQuantity > item.totalQuantity * 0.60) {
+      backgroundColor = "#03a9f4";
+    } else if (item.currentQuantity > item.totalQuantity * 0.30) {
+      backgroundColor = "#ff9800";
+    } else {
+      backgroundColor = "#ef5350";
+    }
+    return { backgroundColor: backgroundColor };
+  }
 
   return <TableBody>
     {items.map((item) => (
@@ -30,17 +41,11 @@ export function WeaponsTableBody() {
           {item.id}
         </TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{item.name}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.currentQuantity}</TableCell>
-        {/*<TableCell className={inventoryTableStyles().tableBodyCell}>*/}
-        {/*  <Typography className={inventoryTableStyles().itemQuantityStatus} style={*/}
-        {/*               backgroundColor: 'white'*/}
-        {/*    // ((item.currentQuantity > item.totalQuantity * 0.60 && "#03a9f4") ||*/}
-        {/*    //   (item.currentQuantity > item.totalQuantity * 0.30 && "#ff9800") ||*/}
-        {/*    //   (item.currentQuantity >= 0 && "#ef5350")),*/}
-        {/*  }*/}
-        {/*  >{item.currentQuantity}*/}
-        {/*  </Typography>*/}
-        {/*</TableCell>*/}
+        <TableCell className={inventoryTableStyles().tableBodyCell}>
+          <Typography className={inventoryTableStyles().itemQuantityStatus}
+                      style={getQuantityStyle(item)}>{item.currentQuantity}
+          </Typography>
+        </TableCell>
         <TableCell className={inventoryTableStyles().tableBodyCell}>{item.category}</TableCell>
       </TableRow>
     ))}

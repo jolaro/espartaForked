@@ -20,7 +20,7 @@ function a11yProps(index) {
 }
 
 function InventoryTabs() {
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -36,7 +36,7 @@ function InventoryTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <InventoryTable value={0} headers={["Id", "Name", "Quantity", "Category", "Status"]}/>
+        <InventoryTable value={0} headers={["Id", "Name", "Quantity", "Category"]}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <InventoryTable value={1} headers={["Id", "Name", "Role", "Items", "Status", ""]}/>
