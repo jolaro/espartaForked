@@ -1,13 +1,20 @@
-import App from "../App";
 import Home from "pages/Home";
 import { TranslationKeys } from "translations/_translation_interface";
 import { pageTranslations } from "translations/namespaces/pages.translations";
 import { getPropertyName } from "utils/get_property_name.util";
 import HomeIcon from "@mui/icons-material/Home";
-import BiotechIcon from "@mui/icons-material/Biotech";
 import { SignInSide } from "pages/SignIn";
+import SoldierBrowseItems from "pages/SoldierBrowseItems";
+import SoldierMyRequests from "pages/SoldierMyRequests";
+import VerticalSplitIcon from "@mui/icons-material/VerticalSplit";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 
-interface Route {
+export interface Route {
+  /**
+   * Unique id for every route
+   */
+  id: number;
+
   /**
    * Title which the user will see.
    * Use translation object and helper function
@@ -46,32 +53,55 @@ interface Route {
    * If the route is restricted and only logged in users can access it.
    */
   restricted: boolean;
+
+  /**
+   * In which group the link should be displayed
+   */
+  group: string;
 }
 
 const routes: Route[] = [
   {
+    id: 1,
     title: getPropertyName(pageTranslations, (p) => p["page.home"]),
     path: "/",
     component: Home,
     icon: HomeIcon,
     exact: true,
     restricted: true,
+    group: "Manager",
   },
   {
-    title: getPropertyName(pageTranslations, (p) => p["page.sandbox"]),
-    path: "/app/sandbox",
-    component: App,
-    icon: BiotechIcon,
-    exact: true,
-    restricted: true,
-  },
-  {
+    id: 3,
     title: getPropertyName(pageTranslations, (p) => p["page.signin"]),
     path: "/sign-in",
     component: SignInSide,
     exact: true,
     hidden: true,
     restricted: false,
+    group: "Other",
+  },
+  {
+    id: 5,
+    title: getPropertyName(pageTranslations, (p) => p["page.soldier.browseItems"]),
+    path: "/soldier/browse",
+    icon: VerticalSplitIcon,
+    component: SoldierBrowseItems,
+    exact: true,
+    hidden: false,
+    restricted: true,
+    group: "Soldier",
+  },
+  {
+    id: 6,
+    title: getPropertyName(pageTranslations, (p) => p["page.soldier.myRequests"]),
+    path: "/soldier/requests",
+    icon: ListAltIcon,
+    component: SoldierMyRequests,
+    exact: true,
+    hidden: false,
+    restricted: true,
+    group: "Soldier",
   },
 ];
 

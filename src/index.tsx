@@ -6,21 +6,25 @@ import "./styles/scss/main.scss";
 import "./config/i18n";
 import Router from "router/Router";
 import { SnackbarProvider } from "notistack";
+import { LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        maxSnack={4}
-        autoHideDuration={2000}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <Router />
-      </SnackbarProvider>
-    </ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider
+          maxSnack={4}
+          autoHideDuration={2000}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Router />
+        </SnackbarProvider>
+      </ThemeProvider>
+    </LocalizationProvider>
   </React.StrictMode>,
   document.getElementById("root"),
 );
