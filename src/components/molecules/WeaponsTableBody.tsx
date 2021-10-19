@@ -3,7 +3,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { Typography } from "@material-ui/core";
-import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import { inventoryTableClasses, inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import useTranslate from "../../hooks/useTranslate";
 
 export function WeaponsTableBody() {
@@ -39,16 +39,16 @@ export function WeaponsTableBody() {
         key={item.id}
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
       >
-        <TableCell component="th" scope="row" className={inventoryTableStyles().tableBodyCell}>
+        <TableCell component="th" scope="row" sx={inventoryTableStyles.tableBodyCell}>
           {item.id}
         </TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.name}</TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>
-          <Typography className={inventoryTableStyles().itemQuantityStatus}
+        <TableCell sx={inventoryTableStyles.tableBodyCell}>{item.name}</TableCell>
+        <TableCell sx={inventoryTableStyles.tableBodyCell}>
+          <Typography className={inventoryTableClasses().itemQuantityStatus}
                       style={getQuantityStyle(item)}>{item.currentQuantity}
           </Typography>
         </TableCell>
-        <TableCell className={inventoryTableStyles().tableBodyCell}>{item.category}</TableCell>
+        <TableCell sx={inventoryTableStyles.tableBodyCell}>{item.category}</TableCell>
       </TableRow>
     ))}
   </TableBody>;

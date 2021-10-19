@@ -6,6 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import bodyLayoutStyles from "../../styles/mui/bodyLayoutStyles";
 
 interface Props {
   item?: {
@@ -18,12 +19,12 @@ interface Props {
 
 
 function InventoryTable(props: Props) {
-  return <TableContainer component={Paper} className={inventoryTableStyles().tableContainer}>
-    <Table sx={{ minWidth: 650 }} aria-label="simple table" className={inventoryTableStyles().table}>
+  return <TableContainer component={Paper} sx={inventoryTableStyles.tableContainer}>
+    <Table aria-label="simple table" sx={inventoryTableStyles.table}>
       <TableHead>
         <TableRow>
           {props.headers?.map((header) =>
-            <TableCell key={header} className={inventoryTableStyles().tableHeaderCell}>{header}</TableCell>,
+            <TableCell key={header} sx={inventoryTableStyles.tableHeaderCell}>{header}</TableCell>,
           )}
         </TableRow>
       </TableHead>

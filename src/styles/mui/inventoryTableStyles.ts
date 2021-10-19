@@ -1,11 +1,12 @@
 import { makeStyles } from "@material-ui/core";
+import { asStyle } from "./_sx_interface";
 
-export const inventoryTableStyles = makeStyles((theme) => ({
+export const inventoryTableStyles = asStyle({
   table: {
     minWidth: 50,
   },
   tableContainer: {
-    borderRadius: 15,
+    borderRadius: 8,
     marginLeft: "auto",
     marginRight: "auto",
     margin: "10px, 10px",
@@ -15,14 +16,17 @@ export const inventoryTableStyles = makeStyles((theme) => ({
   tableHeaderCell: {
     textAlign: "center",
     fontWeight: "bold",
-    backgroundColor: "#f8ff02",
     color: "black",
+    backgroundColor: "primary.main",
   },
   tableBodyCell: {
     textAlign: "center",
     backgroundColor: "white",
     color: "black",
   },
+});
+
+export const inventoryTableClasses = makeStyles(theme => ({
   itemQuantityStatus: {
     fontStyle: "bold",
     borderRadius: 8,
