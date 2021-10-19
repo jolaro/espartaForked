@@ -3,5 +3,5 @@ import useTranslate from "../../hooks/useTranslate";
 
 export function ApproveButton() {
   const t = useTranslate();
-  return <Button variant="contained" color="success">{t("approve")}</Button>;
-}
+  return <Button variant="contained" style={{ backgroundColor: "#4caf50", color: "white", width: 100 }}>{t("approve")}</Button>;
+} 

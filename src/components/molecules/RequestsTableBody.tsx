@@ -53,7 +53,7 @@ export function RequestsTableBody() {
         </TableCell>
         <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.items}</TableCell>
         <TableCell sx={inventoryTableStyles.tableBodyCell}>
-          <StackRequestButtons />
+          <StackRequestButtons request={request}/>
         </TableCell>
       </TableRow>
     ))}

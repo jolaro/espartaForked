@@ -94,7 +94,7 @@ export const translations = asTranslation({
     [Language.SPANISH]: "Rechazar",
   },
   rejected: {
-    [Language.ENGLISH]: "Reject",
+    [Language.ENGLISH]: "Rejected",
     [Language.SPANISH]: "Rechazado",
   },
   pending: {
