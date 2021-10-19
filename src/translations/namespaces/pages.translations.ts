@@ -2,15 +2,23 @@ import { asTranslation, Language } from "../_translation_interface";
 
 export const pageTranslations = asTranslation({
   "page.home": {
-    [Language.ENGLISH]: "Home English",
+    [Language.ENGLISH]: "Home",
     [Language.SPANISH]: "Hogar",
-  },
-  "page.sandbox": {
-    [Language.ENGLISH]: "Sandbox",
-    [Language.SPANISH]: "Sandbox",
   },
   "page.signin": {
     [Language.ENGLISH]: "Sign In",
     [Language.SPANISH]: "Registrarse",
+  },
+  "page.soldier": {
+    [Language.ENGLISH]: "Request Items",
+    [Language.SPANISH]: "Solicitar Artículos",
+  },
+  "page.soldier.browseItems": {
+    [Language.ENGLISH]: "Browse Items",
+    [Language.SPANISH]: "Examinar artículos",
+  },
+  "page.soldier.myRequests": {
+    [Language.ENGLISH]: "My Requests",
+    [Language.SPANISH]: "Mis solicitudes",
   },
 });

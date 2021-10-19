@@ -1,40 +1,30 @@
-import { Divider, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
-import useTranslate from "hooks/useTranslate";
-import React, { useCallback } from "react";
-import { useHistory, useRouteMatch } from "react-router";
-import routes from "router/routes";
-import bodyLayoutStyles from "styles/mui/bodyLayoutStyles";
+import { Divider, List, Toolbar } from "@mui/material";
+import NavBarList from "components/molecules/NavBarList";
+import React, { useMemo } from "react";
+import routes, { Route } from "router/routes";
 
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = () => {
-  const history = useHistory();
-  const t = useTranslate();
-  const match = useRouteMatch();
-
-  const navigateTo = useCallback((path: string) => {
-    history.push(path);
-  }, []);
+  const groupedRoutes = useMemo(
+    () =>
+      routes
+        .filter((route) => !route.hidden)
+        .reduce((acc, curr) => {
+          acc[curr.group] = [curr];
+          return acc;
+        }, {} as Record<string, Route[]>),
+    [],
+  );
 
   return (
     <>
       <Toolbar />
       <Divider />
       <List>
-        {routes
-          .filter((route) => !route.hidden)
-          .map((route) => (
-            <ListItem
-              button
-              selected={route.path === match.path}
-              key={route.path}
-              sx={bodyLayoutStyles.listItem}
-              onClick={() => navigateTo(route.path)}
-            >
-              <ListItemIcon>{route.icon && <route.icon />}</ListItemIcon>
-              <ListItemText primary={t(route.title)} />
-            </ListItem>
-          ))}
+        {Object.keys(groupedRoutes).map((group) => (
+          <NavBarList key={group} group={group} />
+        ))}
       </List>
     </>
   );
