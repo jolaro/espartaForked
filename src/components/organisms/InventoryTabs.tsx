@@ -5,9 +5,9 @@ import Box from "@mui/material/Box";
 import TabPanel from "../atoms/TabPanel";
 import InventoryTable from "../molecules/InventoryTable";
 import { WeaponsTableBody } from "../molecules/WeaponsTableBody";
-import { RequestPage } from "@mui/icons-material";
 import { RequestsTableBody } from "../molecules/RequestsTableBody";
-import { SoldiersTableBody } from "../molecules/SoldiersTableBody";
+import { AssignTableBody } from "../molecules/AssignTableBody";
+import useTranslate from "../../hooks/useTranslate";
 
 function a11yProps(index: number) {
   return {
@@ -17,8 +17,15 @@ function a11yProps(index: number) {
 }
 
 function InventoryTabs() {
+  const t = useTranslate();
+  const id = t("id");
+  const name = t("name");
+  const quantity = t("quantity");
+  const category = t("category");
+  const role = t("role");
+  const items = t("items");
+  const status = t("status");
   const [tabIndex, setTabIndex] = React.useState(0);
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   };
@@ -27,24 +34,24 @@ function InventoryTabs() {
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={tabIndex} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Items" {...a11yProps(0)} />
-          <Tab label="Request" {...a11yProps(1)} />
-          <Tab label="Assign" {...a11yProps(2)} />
+          <Tab label={t("weapons")} {...a11yProps(0)} />
+          <Tab label={t("requests")} {...a11yProps(1)} />
+          <Tab label={t("assign")} {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={tabIndex} index={0}>
-        <InventoryTable headers={["Id", "Name", "Quantity", "Category"]} >
+        <InventoryTable headers={[id, name, quantity, category]} >
           <WeaponsTableBody/>
         </InventoryTable>
       </TabPanel>
       <TabPanel value={tabIndex} index={1}>
-        <InventoryTable headers={["Id", "Name", "Role", "Items", "Status", ""]}>
+        <InventoryTable headers={[id, name, role, items, status, ""]}>
           <RequestsTableBody/>
         </InventoryTable>
       </TabPanel>
       <TabPanel value={tabIndex} index={2}>
-        <InventoryTable headers={["Id", "Name", "Role", "Items", "Status"]}>
-          <SoldiersTableBody/>
+        <InventoryTable headers={[id, name, role, items, status]}>
+          <AssignTableBody/>
         </InventoryTable>
       </TabPanel>
     </Box>

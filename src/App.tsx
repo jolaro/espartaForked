@@ -4,10 +4,11 @@ import React from "react";
 import LanguageSwitcher from "components/molecules/LanguageSwitcher";
 import BodyLayout from "layouts/BodyLayout";
 import { useSnackbar } from "notistack";
+import { TranslationKeys } from "./translations/_translation_interface";
 
 const App: React.FC = () => {
-  const t = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
+  const t = useTranslate();
 
   return (
     <BodyLayout>

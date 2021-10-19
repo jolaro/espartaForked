@@ -1,5 +1,7 @@
 import { Button } from "@mui/material";
+import useTranslate from "../../hooks/useTranslate";
 
 export function RejectButton() {
-  return <Button variant="contained" color="error">Reject</Button>;
+  const t = useTranslate();
+  return <Button variant="contained" color="error">{t("reject")}</Button>;
 }

@@ -4,9 +4,11 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import useTranslate from "../../hooks/useTranslate";
 
 export function WeaponsTableBody() {
-  let items = [], categories = ["Light", "Medium", "Heavy"];
+  const t = useTranslate();
+  let items = [], categories = [t("light"), t("medium"), t("heavy")];
 
   for (let i = 0; i < 15; i++) {
     items[i] =

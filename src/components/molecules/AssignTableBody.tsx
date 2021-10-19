@@ -4,9 +4,11 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import useTranslate from "../../hooks/useTranslate";
 
-export function SoldiersTableBody() {
-  let soldiers = [], status = ["Pending for pick up", "Returned", "In use"], roles = ["Commander", "Officer", "Soldier"],
+export function AssignTableBody() {
+  const t = useTranslate();
+  let soldiers = [], status = [t("pendingForPickUp"), t("returned"), t("inUse")], roles = [t("commander"), t("officer"), t("troop")],
     mockItems = "2x ItemA \n 2x ItemB";
 
   for (let i = 0; i < 15; i++) {
@@ -20,11 +22,11 @@ export function SoldiersTableBody() {
       };
   }
 
-  function getStatusStyle(request: any) {
+  function getStatusStyle(status: any) {
     let backgroundColor;
-    if (request === "Returned") {
+    if (status === t("returned")) {
       backgroundColor = "#4caf50";
-    } else if (request === "Pending for pick up") {
+    } else if (status === t("pendingForPickUp")) {
       backgroundColor = "#ff9800";
     } else {
       backgroundColor = "#ef5350";

@@ -5,9 +5,11 @@ import TableRow from "@mui/material/TableRow";
 import { Typography } from "@material-ui/core";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import { StackRequestButtons } from "./StackRequestButtons";
+import useTranslate from "../../hooks/useTranslate";
 
 export function RequestsTableBody() {
-  let requests = [], status = ["Approved", "Pending", "Rejected"], roles = ["Commander", "Officer", "Soldier"],
+  const t = useTranslate();
+  let requests = [], status = [t("approved"), t("pending"), t("rejected")], roles = [t("commander"), t("officer"), t("troop")],
     mockItems = "2x ItemA \n 2x ItemB";
 
   for (let i = 0; i < 15; i++) {
@@ -23,9 +25,9 @@ export function RequestsTableBody() {
 
   function getStatusStyle(request: any) {
     let backgroundColor;
-    if (request === "Approved") {
+    if (request === t("approved")) {
       backgroundColor = "#4caf50";
-    } else if (request === "Pending") {
+    } else if (request === t("pending")) {
       backgroundColor = "#ff9800";
     } else {
       backgroundColor = "#ef5350";

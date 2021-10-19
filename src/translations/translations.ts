@@ -15,4 +15,100 @@ export const translations = asTranslation({
     [Language.ENGLISH]: "Hello team",
     [Language.SPANISH]: "Hola equipo!",
   },
+  weapons: {
+    [Language.ENGLISH]: "Weapons",
+    [Language.SPANISH]: "Armas",
+  },
+  requests: {
+    [Language.ENGLISH]: "Requests",
+    [Language.SPANISH]: "Peticiones",
+  },
+  assign: {
+    [Language.ENGLISH]: "Assign",
+    [Language.SPANISH]: "Asignar",
+  },
+  id: {
+    [Language.ENGLISH]: "Id",
+    [Language.SPANISH]: "Identificación",
+  },
+  name: {
+    [Language.ENGLISH]: "Name",
+    [Language.SPANISH]: "Nombre",
+  },
+  quantity: {
+    [Language.ENGLISH]: "Quanity",
+    [Language.SPANISH]: "Cantidad",
+  },
+  category: {
+    [Language.ENGLISH]: "Category",
+    [Language.SPANISH]: "Categoría",
+  },
+  role: {
+    [Language.ENGLISH]: "Role",
+    [Language.SPANISH]: "Roles",
+  },
+  items: {
+    [Language.ENGLISH]: "Items",
+    [Language.SPANISH]: "Elementos",
+  },
+  status: {
+    [Language.ENGLISH]: "Status",
+    [Language.SPANISH]: "Estado",
+  },
+  pendingForPickUp: {
+    [Language.ENGLISH]: "Pending for pick up",
+    [Language.SPANISH]: "Pendiente de ser recogido",
+  },
+  returned: {
+    [Language.ENGLISH]: "Returned",
+    [Language.SPANISH]: "Devuelto",
+  },
+  inUse: {
+    [Language.ENGLISH]: "In use",
+    [Language.SPANISH]: "En uso",
+  },
+  commander: {
+    [Language.ENGLISH]: "Commander",
+    [Language.SPANISH]: "Comandante",
+  },
+  officer: {
+    [Language.ENGLISH]: "Officer",
+    [Language.SPANISH]: "Oficial",
+  },
+  troop: {
+    [Language.ENGLISH]: "Troop",
+    [Language.SPANISH]: "Tropa",
+  },
+  approve: {
+    [Language.ENGLISH]: "Approve",
+    [Language.SPANISH]: "Aprobar",
+  },
+  approved: {
+    [Language.ENGLISH]: "Approved",
+    [Language.SPANISH]: "Aprobado",
+  },
+  reject: {
+    [Language.ENGLISH]: "Reject",
+    [Language.SPANISH]: "Rechazar",
+  },
+  rejected: {
+    [Language.ENGLISH]: "Reject",
+    [Language.SPANISH]: "Rechazado",
+  },
+  pending: {
+    [Language.ENGLISH]: "Pending",
+    [Language.SPANISH]: "Pendiente",
+  },
+  light: {
+    [Language.ENGLISH]: "Light",
+    [Language.SPANISH]: "Ligero",
+  },
+  medium: {
+    [Language.ENGLISH]: "Medium",
+    [Language.SPANISH]: "Medio",
+  },
+  heavy: {
+    [Language.ENGLISH]: "Heavy",
+    [Language.SPANISH]: "Pesada",
+  },
 });
