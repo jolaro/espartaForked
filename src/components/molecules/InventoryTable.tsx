@@ -6,33 +6,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
-import { WeaponsTableBody } from "./WeaponsTableBody";
-import { RequestsTableBody } from "./RequestsTableBody";
-import { SoldiersTableBody } from "./SoldiersTableBody";
 
 interface Props {
   item?: {
     id: "",
     name: "",
-
-  };
-  headers?: Array<string>;
-  value?: Number;
+  },
+  headers?: Array<string>,
+  children?: React.ReactNode
 }
 
 
 function InventoryTable(props: Props) {
-
-  function getTableBody() {
-    if (props.value == 0) {
-      return <WeaponsTableBody />;
-    } else if (props.value == 1) {
-      return <RequestsTableBody />;
-    } else {
-      return <SoldiersTableBody />;
-    }
-  }
-
   return <TableContainer component={Paper} className={inventoryTableStyles().tableContainer}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table" className={inventoryTableStyles().table}>
       <TableHead>
@@ -42,7 +27,7 @@ function InventoryTable(props: Props) {
           )}
         </TableRow>
       </TableHead>
-      {getTableBody()}
+      {props.children}
     </Table>
   </TableContainer>;
 }
