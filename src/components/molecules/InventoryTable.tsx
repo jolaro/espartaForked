@@ -9,10 +9,6 @@ import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import bodyLayoutStyles from "../../styles/mui/bodyLayoutStyles";
 
 interface Props {
-  item?: {
-    id: "",
-    name: "",
-  },
   headers?: Array<string>,
   children?: React.ReactNode
 }
