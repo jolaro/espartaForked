@@ -6,13 +6,26 @@ import { Typography } from "@material-ui/core";
 import { inventoryTableClasses, inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import { StackRequestButtons } from "./StackRequestButtons";
 import useTranslate from "../../hooks/useTranslate";
+import { useEffect, useState } from "react";
+import { Button } from "@mui/material";
 
 export function RequestsTableBody() {
   const t = useTranslate();
-  let requests = [], status = [t("approved"), t("pending"), t("rejected")], roles = [t("commander"), t("officer"), t("troop")],
+  let requests = [], status = [t("approved"), t("pending"), t("rejected")],
+    roles = [t("commander"), t("officer"), t("troop")],
     mockItems = "2x ItemA \n 2x ItemB";
 
-  for (let i = 0; i < 15; i++) {
+  const request2 = {
+    id: Math.floor(Math.random() * 10000000),
+    name: "Name",
+    role: roles[Math.floor(Math.random() * roles.length)],
+    items: mockItems,
+    status: "Pending",
+  };
+
+  const [request1, setRequestStatus] = useState(request2);
+
+  for (let i = 0; i < 2; i++) {
     requests[i] =
       {
         id: Math.floor(Math.random() * 10000000),
@@ -22,6 +35,7 @@ export function RequestsTableBody() {
         status: status[Math.floor(Math.random() * status.length)],
       };
   }
+  const [requests1, setRequests] = useState(requests);
 
   function getStatusStyle(request: any) {
     let backgroundColor;
@@ -35,8 +49,29 @@ export function RequestsTableBody() {
     return { backgroundColor: backgroundColor };
   }
 
+  interface Request {
+    id: number,
+    name: string,
+    role: string
+    items: string,
+    status: string,
+  }
+
+  const updateStatus = (request: Request) => (setRequestStatus(request));
+  const updateRequests = (request: Request) => {
+    console.log(request);
+    for (let i = 0; i < (requests1.length - 1); i++) {
+      if (requests1[i].id == request.id) {
+        requests1[i] = request;
+        break;
+      }
+    }
+    let newRequests = [request];
+    setRequests(newRequests);
+  };
+
   return <TableBody>
-    {requests.map((request) => (
+    {requests1.map((request) => (
       <TableRow
         key={request.id}
         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -53,9 +88,9 @@ export function RequestsTableBody() {
         </TableCell>
         <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.items}</TableCell>
         <TableCell sx={inventoryTableStyles.tableBodyCell}>
-          <StackRequestButtons request={request}/>
+          <StackRequestButtons request={request1} onHandleClick={updateRequests} />
         </TableCell>
-      </TableRow>
-    ))}
+      </TableRow>))
+    }
   </TableBody>;
 }
