@@ -36,6 +36,20 @@ const mockupObjects = [
     items: "2x ItemA \n 2x ItemB",
     status: "Pending",
   },
+  {
+    id: Math.floor(Math.random() * 10000000),
+    name: "Name",
+    role: Role.TROOP,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Pending",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000),
+    name: "Name2",
+    role: Role.COMMANDER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Approved",
+  },
 ];
 
 export function RequestsTableBody() {
@@ -45,7 +59,7 @@ export function RequestsTableBody() {
   function getStatusStyle(request: Request) {
     console.log(request.status);
     let backgroundColor;
-    if (request.status === t("approved") || request.status === "Pending") {
+    if (request.status === t("approved") || request.status === "Approved") {
       backgroundColor = "#4caf50";
     } else if (request.status === t("pending") || request.status === "Pending") {
       backgroundColor = "#ff9800";
@@ -58,7 +72,7 @@ export function RequestsTableBody() {
   const updateRequests = (request: Request) => {
     const requestsCopy: Request[] = [...requests];
     console.log("test");
-    for (let i = 0; i < requestsCopy.length - 1; i++) {
+    for (let i = 0; i < requestsCopy.length; i++) {
       if (requestsCopy[i].id === request.id) {
         requestsCopy[i] = request;
         break;

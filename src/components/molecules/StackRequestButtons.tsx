@@ -14,12 +14,12 @@ export function StackRequestButtons(props: any) {
   };
 
   const handleRejectClick = () => {
-    newRequest.status = t("reject");
+    newRequest.status = t("rejected");
     props.onHandleClick(newRequest);
   };
 
   const handleApproveClick = () => {
-    newRequest.status = t("approve");
+    newRequest.status = t("approved");
     props.onHandleClick(newRequest);
   };
 
