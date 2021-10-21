@@ -2,11 +2,9 @@ import * as React from "react";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { makeStyles, Typography } from "@material-ui/core";
-import { inventoryTableClasses, inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import useTranslate from "../../hooks/useTranslate";
-import { CSSProperties } from "react";
-import { Sx } from "../../styles/mui/_sx_interface";
+import Box from "@mui/material/Box";
+import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 
 export function AssignTableBody() {
   const t = useTranslate();
@@ -49,9 +47,9 @@ export function AssignTableBody() {
         <TableCell sx={inventoryTableStyles.tableBodyCell}>{soldier.role}</TableCell>
         <TableCell sx={inventoryTableStyles.tableBodyCell}>{soldier.items}</TableCell>
         <TableCell sx={inventoryTableStyles.tableBodyCell}>
-          <Typography className={inventoryTableClasses().itemQuantityStatus}
+          <Box sx={inventoryTableStyles.itemQuantityStatus}
                       style={getStatusStyle(soldier.status)}>{soldier.status}
-          </Typography>
+          </Box>
         </TableCell>
       </TableRow>
     ))}

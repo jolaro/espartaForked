@@ -2,13 +2,11 @@ import * as React from "react";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import { Typography } from "@material-ui/core";
-import { inventoryTableClasses, inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import { StackRequestButtons } from "./StackRequestButtons";
 import useTranslate from "../../hooks/useTranslate";
-import { useEffect, useState } from "react";
-import { Button } from "@mui/material";
-import { useHookstate } from "@hookstate/core";
+import Box from "@mui/material/Box";
+import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import { useState } from "react";
 
 enum Role {
   COMMANDER = "commander",
@@ -81,9 +79,9 @@ export function RequestsTableBody() {
           <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.name}</TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.role}</TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>
-            <Typography className={inventoryTableClasses().itemQuantityStatus} style={getStatusStyle(request.status)}>
+            <Box sx={inventoryTableStyles.itemQuantityStatus} style={getStatusStyle(request.status)}>
               {request.status}
-            </Typography>
+            </Box>
           </TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.items}</TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>

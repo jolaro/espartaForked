@@ -24,9 +24,6 @@ export const inventoryTableStyles = asStyle({
     backgroundColor: "white",
     color: "black",
   },
-});
-
-export const inventoryTableClasses = makeStyles(theme => ({
   itemQuantityStatus: {
     fontStyle: "bold",
     borderRadius: 8,
@@ -36,4 +33,16 @@ export const inventoryTableClasses = makeStyles(theme => ({
     display: "inline-block",
     verticalAlign: "center   ",
   },
-}));
+});
+
+// export const inventoryTableClasses = asStyle(({
+//   itemQuantityStatus: {
+//     fontStyle: "bold",
+//     borderRadius: 8,
+//     backgroundColor: "gray",
+//     color: "white",
+//     padding: "3px 25px",
+//     display: "inline-block",
+//     verticalAlign: "center   ",
+//   },
+// }));
