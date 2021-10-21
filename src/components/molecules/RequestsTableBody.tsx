@@ -5,8 +5,8 @@ import TableRow from "@mui/material/TableRow";
 import { StackRequestButtons } from "./StackRequestButtons";
 import useTranslate from "../../hooks/useTranslate";
 import Box from "@mui/material/Box";
-import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import { useState } from "react";
+import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 
 enum Role {
   COMMANDER = "commander",
@@ -42,11 +42,12 @@ export function RequestsTableBody() {
   const t = useTranslate();
   const [requests, setRequests] = useState<Request[]>(mockupObjects);
 
-  function getStatusStyle(request: any) {
+  function getStatusStyle(request: Request) {
+    console.log(request.status);
     let backgroundColor;
-    if (request === t("approved")) {
+    if (request.status === t("approved") || request.status === "Pending") {
       backgroundColor = "#4caf50";
-    } else if (request === t("pending")) {
+    } else if (request.status === t("pending") || request.status === "Pending") {
       backgroundColor = "#ff9800";
     } else {
       backgroundColor = "#ef5350";
@@ -54,18 +55,15 @@ export function RequestsTableBody() {
     return { backgroundColor: backgroundColor };
   }
 
-  // const updateStatus = (request: Request) => setRequestStatus(request);
-
   const updateRequests = (request: Request) => {
     const requestsCopy: Request[] = [...requests];
-
+    console.log("test");
     for (let i = 0; i < requestsCopy.length - 1; i++) {
       if (requestsCopy[i].id === request.id) {
         requestsCopy[i] = request;
         break;
       }
     }
-
     setRequests(requestsCopy);
   };
 
@@ -79,7 +77,7 @@ export function RequestsTableBody() {
           <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.name}</TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.role}</TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>
-            <Box sx={inventoryTableStyles.itemQuantityStatus} style={getStatusStyle(request.status)}>
+            <Box sx={inventoryTableStyles.itemQuantityStatus} style={getStatusStyle(request)}>
               {request.status}
             </Box>
           </TableCell>

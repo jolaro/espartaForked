@@ -25,7 +25,7 @@ export function StackRequestButtons(props: any) {
 
   return (
     <Stack direction="row" spacing={1}>
-      {props.request.status === t("pending") && (
+      {(props.request.status === t("pending") || props.request.status === "Pending") && (
         <>
           <RejectButton onHandleClick={handleRejectClick} />
           <ApproveButton onHandleClick={handleApproveClick} />
