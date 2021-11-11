@@ -45,7 +45,7 @@ export function WeaponsTableBody() {
           </TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>{weapon.name}</TableCell>
           <TableCell sx={inventoryTableStyles.tableBodyCell}>
-            <Box sx={inventoryTableStyles.itemQuantityStatus} style={getQuantityStyle(weapon)}>
+            <Box sx={{ ...inventoryTableStyles.itemQuantityStatus, ...getQuantityStyle(weapon) }}>
               {weapon.desired_amount}
             </Box>
           </TableCell>

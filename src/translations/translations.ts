@@ -113,4 +113,8 @@ export const translations = asTranslation({
     [Language.ENGLISH]: "Heavy",
     [Language.SPANISH]: "Pesada",
   },
+  add: {
+    [Language.ENGLISH]: "Add",
+    [Language.SPANISH]: "Agregar",
+  },
 });
