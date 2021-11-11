@@ -3,6 +3,21 @@ export interface RandomCatFactResponse {
   length: number;
 }
 
+interface LoginEndpointData {
+  email: string;
+  password: string;
+}
+
+interface LoginEndpointResponse {
+  //TODO: Add User interface
+  //onSuccess:
+  user?: any;
+  access_token?: string;
+
+  //onError:
+  message?: string;
+}
+
 /**
  * ! EXAMPLE POST/PUT CONFIG ENTRY
  * post config has to has the following:
@@ -35,8 +50,14 @@ export type Endpoint =
   //     url: "/api/example/2";
   //     response: ExampleEndpoint2Result;
   //   }
-  {
-    method: "GET";
-    url: "https://catfact.ninja/fact";
-    response: RandomCatFactResponse;
-  };
+  | {
+      method: "GET";
+      url: "https://catfact.ninja/fact";
+      response: RandomCatFactResponse;
+    }
+  | {
+      method: "POST";
+      url: "/api/login";
+      data: LoginEndpointData;
+      response: LoginEndpointResponse;
+    };

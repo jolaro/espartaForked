@@ -18,19 +18,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import GlobalState from "state/GlobalState";
 import { useHookstate } from "@hookstate/core";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Alert } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
 import { useSnackbar } from "notistack";
 import { snooze } from "utils/snooze";
 import { useUser } from "hooks/useUser";
-
-// TODO: Remove when real API is ready
-const callMockApi = (validate: boolean) =>
-  new Promise<void>((resolve, reject) => {
-    if (validate) setTimeout(() => resolve(), 1200);
-    else reject();
-  });
+import ApiService from "utils/api_service/api_service";
 
 const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -74,13 +68,21 @@ export const SignInSide: React.FC = () => {
   }, [isLoggedIn.get()]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // TODO: Remove when real API is ready
     errorSignIn.set(false);
     try {
       isLoading.set(true);
-      await callMockApi(data.email !== "reject@gmail.com");
-      GlobalState.setSignedIn("dajkdoajdw9au893u28913u8921u3981u38921u");
-      enqueueSnackbar(t("notification.signedIn"));
+      const response = await ApiService.post("/api/login", {
+        email: data.email,
+        password: data.password,
+      });
+      if (response.data.access_token) {
+        GlobalState.setSignedIn(response.data.access_token);
+        enqueueSnackbar(t("notification.signedIn"));
+      } else {
+        errorSignIn.set(true);
+      }
+
+      isLoading.set(false);
     } catch (e) {
       errorSignIn.set(true);
       isLoading.set(false);
@@ -107,7 +109,7 @@ export const SignInSide: React.FC = () => {
               <Alert severity="error">{t("signIn.invalidLogin")}</Alert>
             </Box>
           )}
-          <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={signInStyles.form}>
             <TextField
               {...register("email")}
               margin="normal"
@@ -117,7 +119,7 @@ export const SignInSide: React.FC = () => {
               label={t("signIn.email")}
               autoComplete="email"
               autoFocus
-              error={!!errors.email}
+              error={!!errors.email || errorSignIn.get()}
               helperText={errors.email?.message || ""}
             />
             <TextField
@@ -129,17 +131,22 @@ export const SignInSide: React.FC = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              error={!!errors.password}
+              error={!!errors.password || errorSignIn.get()}
               helperText={errors.password?.message || ""}
             />
             <FormControlLabel
               control={<Checkbox color="primary" />}
               label={t("signIn.rememberMe")}
+              sx={{ width: "99%" }}
               {...register("rememberMe", { setValueAs: (v) => !!v })}
             />
-            <LoadingButton loading={isLoading.get()} type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-              {t("signIn.title")}
-            </LoadingButton>
+            <Box sx={signInStyles.buttonContainer}>
+              <Button variant="text">Register</Button>
+              or
+              <LoadingButton loading={isLoading.get()} type="submit" variant="contained">
+                {t("signIn.title")}
+              </LoadingButton>
+            </Box>
           </Box>
         </Box>
       </Grid>

@@ -16,12 +16,26 @@ export const signInStyles = asStyle({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  form: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    mt: 1,
+    width: "100%",
   },
   signInIcon: { m: 1, bgcolor: "secondary.main", width: 60, height: 60 },
   languageSwitcher: {
     ...commonStyles.flex,
     flexDirection: "row-reverse",
     m: 3,
+  },
+  buttonContainer: {
+    display: "flex",
+    gap: "1rem",
+    height: "50px",
+    alignItems: "center",
   },
   errorMessage: {
     mt: 2,
