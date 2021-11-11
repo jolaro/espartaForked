@@ -27,7 +27,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
       title: "Icon",
       id: "icon",
       muiProps: {
-        width: "60px",
+        width: "5%",
       },
     },
     {
@@ -35,7 +35,6 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
       id: "name",
       muiProps: {
         align: "left",
-        width: "60%",
       },
     },
     {
@@ -43,6 +42,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
       id: "category",
       muiProps: {
         align: "center",
+        width: "8%",
       },
     },
     {
@@ -50,7 +50,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
       id: "actions",
       muiProps: {
         align: "center",
-        width: "5%",
+        width: "8%",
       },
     },
   ];
@@ -87,7 +87,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
   return (
     <BodyLayout>
       <PageTabs {...pageTabProps} />
-      <GenericTable columns={columns} rows={rows} />
+      <GenericTable columns={columns} rows={rows} loading={true} />
       <SoldierRequestDialog itemId={requestItemId.get() || ""} />
     </BodyLayout>
   );

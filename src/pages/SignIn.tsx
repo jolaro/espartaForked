@@ -46,7 +46,7 @@ export const SignInSide: React.FC = () => {
   const schema = yup
     .object({
       email: yup.string().matches(EMAIL_REGEX, t("signIn.invalidEmail")).required(t("signIn.requiredField")),
-      password: yup.string().min(8, t("signIn.passwordTooShort")).required(t("signIn.requiredField")),
+      password: yup.string().min(6, t("signIn.passwordTooShort")).required(t("signIn.requiredField")),
     })
     .required();
 
@@ -75,14 +75,15 @@ export const SignInSide: React.FC = () => {
         email: data.email,
         password: data.password,
       });
-      if (response.data.access_token) {
-        GlobalState.setSignedIn(response.data.access_token);
+      if (response.data.access_token && response.data.user) {
+        GlobalState.signIn(response.data.access_token, response.data.user);
         enqueueSnackbar(t("notification.signedIn"));
+        await snooze(500);
+        history.push("/");
       } else {
         errorSignIn.set(true);
+        isLoading.set(false);
       }
-
-      isLoading.set(false);
     } catch (e) {
       errorSignIn.set(true);
       isLoading.set(false);

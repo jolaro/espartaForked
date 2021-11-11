@@ -36,6 +36,7 @@ export const signInStyles = asStyle({
     gap: "1rem",
     height: "50px",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   errorMessage: {
     mt: 2,

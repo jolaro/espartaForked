@@ -1,21 +1,44 @@
-import { removeAuthToken } from "./../utils/user_auth.util";
-import { getAuthTokenFromStorage, isLoggedIn, saveAuthToken } from "../utils/user_auth.util";
+import {
+  getUser,
+  removeAuthToken,
+  getAuthTokenFromStorage,
+  isLoggedIn,
+  saveAuthToken,
+  saveUser,
+} from "./../utils/user_auth.util";
 import { createState } from "@hookstate/core";
+import { User } from "interfaces/User";
 
 class GlobalState {
-  public authToken = createState(getAuthTokenFromStorage());
-  public isLoggedIn = createState(isLoggedIn());
+  private _authToken = createState(getAuthTokenFromStorage());
+  private _isLoggedIn = createState(isLoggedIn());
+  private _user = createState<User | null>(getUser());
 
-  public setSignedIn = (authToken: string) => {
-    this.authToken.set(authToken);
-    this.isLoggedIn.set(true);
+  public get authToken(): string | null {
+    return this._authToken.get();
+  }
+
+  public get isLoggedIn(): boolean {
+    return this._isLoggedIn.get();
+  }
+
+  public get user(): User | null {
+    return this._user.get();
+  }
+
+  public signIn = (authToken: string, user: User) => {
+    this._authToken.set(authToken);
+    this._isLoggedIn.set(true);
+    this._user.set(user);
+
+    saveUser(user);
     saveAuthToken(authToken);
   };
 
   public signOut = () => {
     removeAuthToken();
-    this.authToken.set(null);
-    this.isLoggedIn.set(false);
+    this._authToken.set(null);
+    this._isLoggedIn.set(false);
   };
 }
 

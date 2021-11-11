@@ -1,5 +1,15 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TableCellProps } from "@mui/material";
-import React from "react";
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableCellProps,
+  LinearProgress,
+  Skeleton,
+} from "@mui/material";
+import React, { useMemo } from "react";
 import { soldierAvailableItemsStyles } from "styles/mui/soldierAvailableItemsStyles";
 
 export interface ColumnConfig {
@@ -15,13 +25,41 @@ export type GenericTableRow = {
 interface SoldierAvailableItemsProps {
   columns: ColumnConfig[];
   rows: GenericTableRow[];
+  loading?: boolean;
+  loadingSkeletonsCount?: number;
 }
 
 const getColumnIds = (columns: ColumnConfig[]): string[] => {
   return columns.map((c) => c.id);
 };
 
-const SoldierAvailableItems: React.FC<SoldierAvailableItemsProps> = ({ columns, rows }) => {
+const SoldierAvailableItems: React.FC<SoldierAvailableItemsProps> = ({
+  columns,
+  rows,
+  loading,
+  loadingSkeletonsCount = 5,
+}) => {
+  const tableBody = useMemo(() => {
+    const rowsToShow = !loading ? rows : new Array(loadingSkeletonsCount).fill({});
+
+    return (
+      <TableBody>
+        {rowsToShow.map((row, i) => {
+          const columnIds = getColumnIds(columns);
+          return (
+            <TableRow key={`row-${i}`} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              {columnIds.map((columnId, columnIndex) => (
+                <TableCell key={`value-${columnId}-${i}`} {...columns[columnIndex].muiProps}>
+                  {loading ? <Skeleton /> : row[columnId]}
+                </TableCell>
+              ))}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    );
+  }, [loading, rows, loadingSkeletonsCount, columns]);
+
   return (
     <TableContainer>
       <Table sx={{ minWidth: 400 }} aria-label="simple table">
@@ -34,21 +72,9 @@ const SoldierAvailableItems: React.FC<SoldierAvailableItemsProps> = ({ columns, 
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {rows.map((row, i) => {
-            const columnIds = getColumnIds(columns);
-            return (
-              <TableRow key={`row-${i}`} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                {columnIds.map((columnId, columnIndex) => (
-                  <TableCell key={`value-${columnId}-${i}`} {...columns[columnIndex].muiProps}>
-                    {row[columnId]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            );
-          })}
-        </TableBody>
+        {tableBody}
       </Table>
+      {loading && <LinearProgress color="inherit" />}
     </TableContainer>
   );
 };
