@@ -87,7 +87,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
   return (
     <BodyLayout>
       <PageTabs {...pageTabProps} />
-      <GenericTable columns={columns} rows={rows} loading={true} />
+      <GenericTable columns={columns} rows={rows} />
       <SoldierRequestDialog itemId={requestItemId.get() || ""} />
     </BodyLayout>
   );
