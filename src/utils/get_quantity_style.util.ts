@@ -7,7 +7,7 @@ const BreakpointColors = {
   HIGH: "#ef5350",
 };
 
-export const getQuantityStyle = (weapon: Weapon): SxProps => {
+export const getQuantityStyle = (weapon: Weapon) => {
   const desiredAmount = weapon.desired_amount;
   let color = BreakpointColors.HIGH;
 
