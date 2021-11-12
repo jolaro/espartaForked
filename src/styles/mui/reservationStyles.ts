@@ -5,9 +5,21 @@ export const reservationStyles = asStyle({
     minWidth: 50,
   },
 
+  detailsMainBox: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    columnGap: 10,
+  },
+
   detailsBox: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "left",
+  },
+
+  detailsBoxItem: {
+    flexGrow: 0,
   },
 });
