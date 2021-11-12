@@ -10,7 +10,7 @@ interface SoldierImageProps {
 
 export function SoldierImage(props: SoldierImageProps) {
   return (
-    <Box sx={reservationStyles.detailsBoxItem}>
+    <Box sx={reservationStyles.detailsBoxElement}>
       <Paper elevation={10}>
         <img style={soldierImg} alt={props.alt} src={props.imageUrl} />
       </Paper>

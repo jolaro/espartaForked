@@ -19,15 +19,33 @@ export const reservationStyles = asStyle({
     alignItems: "left",
   },
 
-  detailsBoxItem: {
+  detailsBoxElement: {
     flexGrow: 0,
   },
 
-});
+  itemsTableBox: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 0.5,
+  },
 
+  itemsTableHeader: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  itemsTableHeaderName: {
+    alignSelf: "flex-start",
+  },
+
+  itemsTableHeaderButton: {
+    alignSelf: "flex-end",
+  },
+});
 
 // CSS
 export const soldierImg = {
-    width: "100%",
-    height: "auto",
-  };
+  width: "100%",
+  height: "auto",
+};

@@ -1,14 +1,15 @@
-import { Box, Chip } from "@mui/material";
+import { Box, Button, Chip } from "@mui/material";
 import { SoldierDetails } from "components/atoms/SoldierDetails";
 import { SoldierImage } from "components/atoms/SoldierImage";
 import GenericTable, { ColumnConfig, GenericTableRow } from "components/molecules/GenericTable";
 import BodyLayout from "layouts/BodyLayout";
 import { reservationStyles } from "styles/mui/reservationStyles";
+import AddIcon from "@mui/icons-material/Add";
+import { ItemTableHeader } from "components/molecules/ItemTableHeader";
 
 interface ReservationProps {}
 
 const Reservation: React.FC<ReservationProps> = () => {
-
   const columns: ColumnConfig[] = [
     {
       title: "ItemId",
@@ -55,14 +56,24 @@ const Reservation: React.FC<ReservationProps> = () => {
     },
   ];
 
+  const addItem = () => {};
+
   return (
     <BodyLayout>
       <Box sx={reservationStyles.detailsMainBox}>
-        <SoldierImage alt="Soldier placeholder" imageUrl="http://cpgw.org.uk/wp-content/uploads/soldier-placeholder.png"/>
+        <SoldierImage
+          alt="Soldier placeholder"
+          imageUrl="http://cpgw.org.uk/wp-content/uploads/soldier-placeholder.png"
+        />
         <SoldierDetails name="Soldier Name" id="12234" role="Troop" />
       </Box>
       <Box>
-      <GenericTable columns={columns} rows={rows} />
+        <h2>QR/Barcodes</h2>
+        <Button variant="contained">Link QR/Barcode</Button>
+      </Box>
+      <Box sx={reservationStyles.itemsTableBox}>
+        <ItemTableHeader onHandleClick={addItem} />
+        <GenericTable columns={columns} rows={rows} />
       </Box>
     </BodyLayout>
   );
