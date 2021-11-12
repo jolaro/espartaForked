@@ -22,4 +22,12 @@ export const reservationStyles = asStyle({
   detailsBoxItem: {
     flexGrow: 0,
   },
+
 });
+
+
+// CSS
+export const soldierImg = {
+    width: "100%",
+    height: "auto",
+  };
