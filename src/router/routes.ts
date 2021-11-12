@@ -8,6 +8,7 @@ import SoldierBrowseItems from "pages/SoldierBrowseItems";
 import SoldierMyRequests from "pages/SoldierMyRequests";
 import VerticalSplitIcon from "@mui/icons-material/VerticalSplit";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import Reservation from "pages/Reservation";
 
 export interface Route {
   /**
@@ -67,6 +68,15 @@ const routes: Route[] = [
     path: "/",
     component: Home,
     icon: HomeIcon,
+    exact: true,
+    restricted: true,
+    group: "Manager",
+  },
+  {
+    id: 2,
+    title: getPropertyName(pageTranslations, (p) => p["page.reservation"]),
+    path: "/reservation",
+    component: Reservation,
     exact: true,
     restricted: true,
     group: "Manager",

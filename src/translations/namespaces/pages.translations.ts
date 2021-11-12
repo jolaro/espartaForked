@@ -21,4 +21,8 @@ export const pageTranslations = asTranslation({
     [Language.ENGLISH]: "My Requests",
     [Language.SPANISH]: "Mis solicitudes",
   },
+  "page.reservation": {
+    [Language.ENGLISH]: "Reservation",
+    [Language.SPANISH]: "Reserva",
+  },
 });

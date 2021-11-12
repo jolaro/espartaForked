@@ -25,9 +25,13 @@ export const translations = asTranslation({
     [Language.ENGLISH]: "Requests",
     [Language.SPANISH]: "Peticiones",
   },
-  assign: {
-    [Language.ENGLISH]: "Assign",
-    [Language.SPANISH]: "Asignar",
+  reservations: {
+    [Language.ENGLISH]: "Reservations",
+    [Language.SPANISH]: "Reservaciones",
+  },
+  addReservation: {
+    [Language.ENGLISH]: "Add reservation",
+    [Language.SPANISH]: "Agregar reservación",
   },
   id: {
     [Language.ENGLISH]: "Id",

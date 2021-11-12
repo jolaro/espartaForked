@@ -1,4 +1,3 @@
-import { makeStyles } from "@material-ui/core";
 import { asStyle } from "./_sx_interface";
 
 export const inventoryTableStyles = asStyle({
@@ -34,15 +33,3 @@ export const inventoryTableStyles = asStyle({
     verticalAlign: "center   ",
   },
 });
-
-// export const inventoryTableClasses = asStyle(({
-//   itemQuantityStatus: {
-//     fontStyle: "bold",
-//     borderRadius: 8,
-//     backgroundColor: "gray",
-//     color: "white",
-//     padding: "3px 25px",
-//     display: "inline-block",
-//     verticalAlign: "center   ",
-//   },
-// }));
