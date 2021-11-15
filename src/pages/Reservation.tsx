@@ -1,7 +1,7 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { SoldierDetails } from "components/atoms/SoldierDetails";
 import { SoldierImage } from "components/atoms/SoldierImage";
-import GenericTable, { ColumnConfig, GenericTableRow } from "components/molecules/GenericTable";
+import GenericTable, { ColumnConfig } from "components/molecules/GenericTable";
 import BodyLayout from "layouts/BodyLayout";
 import { reservationStyles } from "styles/mui/reservationStyles";
 import AddIcon from "@mui/icons-material/Add";
@@ -12,6 +12,8 @@ import { Weapon } from "components/molecules/WeaponsTableBody";
 import { IconButton } from "components/atoms/IconButton";
 import { User } from "interfaces/User";
 import SoldierFormDialog from "components/molecules/SoldierFormDialog";
+import { ItemResponse } from "utils/api_service/endpoints.config";
+import { GenericTableRow } from "components/molecules/GenericTable";
 
 interface ReservationProps {}
 
@@ -68,7 +70,7 @@ const Reservation: React.FC<ReservationProps> = () => {
     }
   };
 
-  const addWeapons = (weapons: Weapon[]) => {
+  const addWeapons = (weapons: ItemResponse[]) => {
     handleClickCloseWeaponsDialog();
     const newRows: GenericTableRow[] = [];
     if (weapons != null) {
@@ -76,8 +78,8 @@ const Reservation: React.FC<ReservationProps> = () => {
         console.log(weapons[i]);
         newRows.push({
           itemId: weapons[i].id.toString(),
-          name: weapons[i].name,
-          category: weapons[i].category_id.toString(),
+          name: <Typography>{weapons[i].item_type?.name}</Typography>,
+          category: <Typography>{weapons[i].item_type?.category}</Typography>,
           qr_barcode: weapons[i].id.toString(),
         });
       }

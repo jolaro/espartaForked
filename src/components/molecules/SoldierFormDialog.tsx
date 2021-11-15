@@ -17,46 +17,8 @@ import Avatar from "@mui/material/Avatar";
 import { alpha, Box, InputBase, styled, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { User } from "interfaces/User";
-
-// For testing, mock list of soldiers
-const soldiers: User[] = [
-  {
-    id: 1,
-    name: "23",
-    email: "string",
-    access_level: "1",
-    email_verified_at: null,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 4,
-    name: "strsdfing",
-    email: "string",
-    access_level: "1",
-    email_verified_at: null,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 3,
-    name: "bob",
-    email: "string",
-    access_level: "1",
-    email_verified_at: null,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 2,
-    name: "string",
-    email: "string",
-    access_level: "1",
-    email_verified_at: null,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-];
+import ApiService from "utils/api_service/api_service";
+import { useCallback } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -107,16 +69,35 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
     created_at: new Date(),
     updated_at: new Date(),
   };
+  const [soldiers, setSoldiers] = React.useState<User[]>([]);
   const [selectedSoldier, setSelectedSoldier] = React.useState(selectedSoldier1);
   const [searchKeyword, setSearchKeyword] = React.useState("");
   const [foundSoldiers, setFoundSoldiers] = React.useState(soldiers);
+
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = useCallback(async () => {
+    const responseUsers = await ApiService.get("/api/users");
+    const users: User[] = responseUsers.data;
+
+    for (let i = 0; i < users.length; i++) {
+      users[i].role = getRole(users[i].access_level);
+    }
+    setSoldiers(users);
+    setFoundSoldiers(users);
+  }, []);
 
   const filter = (e: any) => {
     const keyword = e.target.value;
 
     if (keyword !== "") {
       const results = soldiers.filter((soldier) => {
-        return soldier.name.toLowerCase().startsWith(keyword.toLowerCase());
+        return (
+          soldier.name.toLowerCase().startsWith(keyword.toLowerCase()) ||
+          soldier.id.toString().toLowerCase().startsWith(keyword.toLowerCase())
+        );
         // Use the toLowerCase() method to make it case-insensitive
       });
       setFoundSoldiers(results);

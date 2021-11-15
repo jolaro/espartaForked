@@ -13,7 +13,6 @@ interface Props {
   children?: React.ReactNode
 }
 
-
 function InventoryTable(props: Props) {
   return <TableContainer component={Paper} sx={inventoryTableStyles.tableContainer}>
     <Table aria-label="simple table" sx={inventoryTableStyles.table}>

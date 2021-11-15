@@ -9,7 +9,8 @@ import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
 import { getQuantityStyle } from "utils/get_quantity_style.util";
 
 export interface Weapon {
-  category_id: number;
+  weight_category: string;
+  category?: string;
   created_at: string;
   desired_amount: number;
   current_amount: number;

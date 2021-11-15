@@ -70,7 +70,7 @@ const parseItemTypes = (
   return itemTypes.map((item) => ({
     icon: <MilitaryTechIcon />,
     name: item.name,
-    category: <Chip label={item.category_id} />,
+    category: <Chip label={item.weight_category} />,
     actions: getRequestButton(item.id.toString()),
   }));
 };

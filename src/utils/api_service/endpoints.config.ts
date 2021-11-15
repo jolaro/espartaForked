@@ -22,8 +22,18 @@ export interface ItemTypesResponse {
   id: number;
   name: string;
   price: string;
-  category_id: string;
+  weight_category: string;
+  category: string;
   desired_amount: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ItemResponse {
+  id: number;
+  item_type_id: string;
+  item_type?: ItemTypesResponse;
+  serial: string;
   created_at: string;
   updated_at: string;
 }
@@ -58,6 +68,16 @@ export type Endpoint =
       method: "GET";
       url: "/api/itemtypes";
       response: ItemTypesResponse[];
+    }
+    | {
+      method: "GET";
+      url: "/api/items";
+      response: ItemResponse[];
+    }
+    | {
+      method: "GET";
+      url: "/api/users";
+      response: User[];
     }
   | {
       method: "POST";

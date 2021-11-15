@@ -17,54 +17,9 @@ import Avatar from "@mui/material/Avatar";
 import { alpha, Box, InputBase, styled, Typography } from "@mui/material";
 import { Weapon } from "./WeaponsTableBody";
 import SearchIcon from "@mui/icons-material/Search";
-
-// For testing, mock list of weapons
-const weapons: Weapon[] = [
-  {
-    category_id: 2,
-    created_at: "",
-    desired_amount: 10,
-    current_amount: 5,
-    id: 10,
-    image: "string",
-    name: "Weapon1",
-    price: 100,
-    updated_at: "string",
-  },
-  {
-    category_id: 2,
-    created_at: "",
-    desired_amount: 10,
-    current_amount: 5,
-    id: 12,
-    image: "string",
-    name: "Weapon2",
-    price: 100,
-    updated_at: "string",
-  },
-  {
-    category_id: 2,
-    created_at: "",
-    desired_amount: 10,
-    current_amount: 5,
-    id: 23,
-    image: "string",
-    name: "Uzi",
-    price: 100,
-    updated_at: "string",
-  },
-  {
-    category_id: 2,
-    created_at: "",
-    desired_amount: 10,
-    current_amount: 5,
-    id: 34,
-    image: "string",
-    name: "HandGun",
-    price: 100,
-    updated_at: "string",
-  },
-];
+import { useCallback } from "react";
+import ApiService from "utils/api_service/api_service";
+import { ItemResponse, ItemTypesResponse } from "utils/api_service/endpoints.config";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -101,22 +56,59 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 interface WeaponFormDialogProps {
   handleClickClose: () => void;
-  handleAddWeapons: (weapons: Weapon[]) => void;
+  handleAddWeapons: (weapons: ItemResponse[]) => void;
   open: boolean;
 }
 
 export default function WeaponFormDialog(props: WeaponFormDialogProps) {
-  const selectedWeapons1: Weapon[] = [];
-  const [selectedWeapons, setSelectedWeapons] = React.useState(selectedWeapons1);
+  const [weapons, setWeapons] = React.useState<ItemResponse[]>([]);
+  const [selectedWeapons, setSelectedWeapons] = React.useState<ItemResponse[]>([]);
   const [searchKeyword, setSearchKeyword] = React.useState("");
-  const [foundWeapons, setFoundWeapons] = React.useState(weapons);
+  const [foundWeapons, setFoundWeapons] = React.useState<ItemResponse[]>([]);
+
+  React.useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const getCategory = (weight_category: string) => {
+    if (weight_category === "0") {
+      return "Light";
+    } else if (weight_category === "1") {
+      return "Medium";
+    } else if (weight_category === "2") {
+      return "Heavy";
+    } else {
+      return "";
+    }
+  };
+
+  const fetchItems = useCallback(async () => {
+    const responseItems = await ApiService.get("/api/items");
+    const responseItemsTypes = await ApiService.get("/api/itemtypes");
+    const itemsResponse: ItemResponse[] = responseItems.data;
+    const itemsItemsTypes: ItemTypesResponse[] = responseItemsTypes.data;
+
+    for (let i = 0; i < itemsResponse.length; i++) {
+      for (let i2 = 0; i2 < itemsItemsTypes.length; i2++) {
+        if (itemsResponse[i].item_type_id === itemsItemsTypes[i2].id.toString()) {
+          itemsItemsTypes[i2].category = getCategory(itemsItemsTypes[i2].weight_category);
+          itemsResponse[i].item_type = itemsItemsTypes[i2];
+        }
+      }
+    }
+    setWeapons(itemsResponse);
+    setFoundWeapons(itemsResponse);
+  }, []);
 
   const filter = (e: any) => {
     const keyword = e.target.value;
 
     if (keyword !== "") {
       const results = weapons.filter((weapon) => {
-        return weapon.name.toLowerCase().startsWith(keyword.toLowerCase());
+        return (
+          weapon.item_type?.name.toLowerCase().startsWith(keyword.toLowerCase()) ||
+          weapon.id.toString().toLowerCase().startsWith(keyword.toLowerCase())
+        );
         // Use the toLowerCase() method to make it case-insensitive
       });
       setFoundWeapons(results);
@@ -128,7 +120,7 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
     setSearchKeyword(keyword);
   };
 
-  const handleToggle = (value: Weapon) => () => {
+  const handleToggle = (value: ItemResponse) => () => {
     const currentIndex = selectedWeapons.indexOf(value);
     const newChecked = [...selectedWeapons];
 
@@ -175,7 +167,7 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
                         <Avatar alt={`Avatar n°${weapon.id + 1}`} src={`/static/images/avatar/${weapon.id + 1}.jpg`} />
                       </ListItemAvatar>
                       <ListItemText
-                        primary={weapon.name}
+                        primary={weapon?.item_type?.name}
                         secondary={
                           <React.Fragment>
                             <Box>
@@ -195,7 +187,7 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
                                 variant="body2"
                                 color="text.primary"
                               >
-                                Category: {weapon.category_id}
+                                Category: {weapon.item_type?.category}
                               </Typography>
                             </Box>
                           </React.Fragment>
