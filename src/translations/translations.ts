@@ -3,12 +3,14 @@ import { notificationTranslations } from "./namespaces/notifications.translation
 import { pageTranslations } from "./namespaces/pages.translations";
 import { asTranslation, Language } from "./_translation_interface";
 import { soldierActionTranslations } from "./namespaces/soldierActions.translations";
+import { tableTranslations } from "./namespaces/table.translations";
 
 export const translations = asTranslation({
   ...pageTranslations,
   ...notificationTranslations,
   ...signInTranslations,
   ...soldierActionTranslations,
+  ...tableTranslations,
   helloWorld: {
     [Language.ENGLISH]: "Hello World",
     [Language.SPANISH]: "Hola Mundo",

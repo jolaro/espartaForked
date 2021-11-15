@@ -1,6 +1,6 @@
 import { Button, Chip, Tooltip } from "@mui/material";
 import GenericTable, { ColumnConfig, GenericTableRow } from "components/molecules/GenericTable";
-import React from "react";
+import React, { useState } from "react";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import AddIcon from "@mui/icons-material/Add";
 import useTranslate from "hooks/useTranslate";
@@ -9,51 +9,45 @@ import { useHookstate } from "@hookstate/core";
 import { useSoldierPageTabs } from "hooks/useSoldierPageTabs";
 import PageTabs from "components/molecules/PageTabs/PageTabs";
 import BodyLayout from "layouts/BodyLayout";
+import useCategoryFilter from "components/molecules/GenericTable/useCategoryFilter";
+
+const columns: ColumnConfig[] = [
+  {
+    title: "Icon",
+    id: "icon",
+    muiProps: {
+      width: "5%",
+    },
+  },
+  {
+    title: "Item Name",
+    id: "name",
+    muiProps: {
+      align: "left",
+    },
+  },
+  {
+    title: "Category",
+    id: "category",
+    muiProps: {
+      align: "center",
+      width: "8%",
+    },
+  },
+  {
+    title: "Actions",
+    id: "actions",
+    muiProps: {
+      align: "center",
+      width: "8%",
+    },
+  },
+];
 
 interface SoldierBrowseItemsProps {}
 
 const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
   const t = useTranslate();
-  const requestItemId = useHookstate<string | null>(null);
-  const pageTabProps = useSoldierPageTabs();
-
-  const handleOpenRequestDialog = (itemId: string) => {
-    requestItemId.set(itemId);
-    isSoldierRequestDialogOpen.set(true);
-  };
-
-  const columns: ColumnConfig[] = [
-    {
-      title: "Icon",
-      id: "icon",
-      muiProps: {
-        width: "5%",
-      },
-    },
-    {
-      title: "Item Name",
-      id: "name",
-      muiProps: {
-        align: "left",
-      },
-    },
-    {
-      title: "Category",
-      id: "category",
-      muiProps: {
-        align: "center",
-        width: "8%",
-      },
-    },
-    {
-      title: "Actions",
-      id: "actions",
-      muiProps: {
-        align: "center",
-        width: "8%",
-      },
-    },
-  ];
 
   const getRequestButton = (itemId: string) => (
     <Tooltip title={t("soldierActions.requestTooltip")}>
@@ -69,7 +63,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
     </Tooltip>
   );
 
-  const rows: GenericTableRow[] = [
+  const allRows: GenericTableRow[] = [
     {
       icon: <MilitaryTechIcon />,
       name: "AK-47",
@@ -84,10 +78,20 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
     },
   ];
 
+  const requestItemId = useHookstate<string | null>(null);
+  const pageTabProps = useSoldierPageTabs();
+  const [rows, setRows] = useState<GenericTableRow[]>(allRows);
+  const categoryFilter = useCategoryFilter(rows, setRows, allRows);
+
+  const handleOpenRequestDialog = (itemId: string) => {
+    requestItemId.set(itemId);
+    isSoldierRequestDialogOpen.set(true);
+  };
+
   return (
     <BodyLayout>
       <PageTabs {...pageTabProps} />
-      <GenericTable columns={columns} rows={rows} />
+      <GenericTable columns={columns} rows={rows} filters={[...categoryFilter]} />
       <SoldierRequestDialog itemId={requestItemId.get() || ""} />
     </BodyLayout>
   );
