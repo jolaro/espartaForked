@@ -19,18 +19,6 @@ export const translations = asTranslation({
     [Language.ENGLISH]: "Hello team",
     [Language.SPANISH]: "Hola equipo!",
   },
-  weapons: {
-    [Language.ENGLISH]: "Weapons",
-    [Language.SPANISH]: "Armas",
-  },
-  requests: {
-    [Language.ENGLISH]: "Requests",
-    [Language.SPANISH]: "Peticiones",
-  },
-  assign: {
-    [Language.ENGLISH]: "Assign",
-    [Language.SPANISH]: "Asignar",
-  },
   id: {
     [Language.ENGLISH]: "Id",
     [Language.SPANISH]: "Identificación",

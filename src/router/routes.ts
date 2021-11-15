@@ -8,6 +8,11 @@ import SoldierBrowseItems from "pages/SoldierBrowseItems";
 import SoldierMyRequests from "pages/SoldierMyRequests";
 import VerticalSplitIcon from "@mui/icons-material/VerticalSplit";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import ManagerWeaponItems from "pages/ManagerWeaponItems";
+import ManagerRequestsBrowser from "pages/ManagerRequestsBrowser";
+import ManagerAssignItems from "pages/ManagerAssignItems";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 export interface Route {
   /**
@@ -69,10 +74,44 @@ const routes: Route[] = [
     icon: HomeIcon,
     exact: true,
     restricted: true,
+    hidden: true,
+    group: "Manager",
+  },
+  {
+    id: 2,
+    title: getPropertyName(pageTranslations, (p) => p["page.manager.weapons"]),
+    path: "/manager/weapons",
+    icon: VerticalSplitIcon,
+    component: ManagerWeaponItems,
+    exact: true,
+    hidden: false,
+    restricted: true,
     group: "Manager",
   },
   {
     id: 3,
+    title: getPropertyName(pageTranslations, (p) => p["page.manager.requests"]),
+    path: "/manager/requests",
+    icon: FormatListBulletedIcon,
+    component: ManagerRequestsBrowser,
+    exact: true,
+    hidden: false,
+    restricted: true,
+    group: "Manager",
+  },
+  {
+    id: 4,
+    title: getPropertyName(pageTranslations, (p) => p["page.manager.assign"]),
+    path: "/manager/assign",
+    icon: AssignmentIndIcon,
+    component: ManagerAssignItems,
+    exact: true,
+    hidden: false,
+    restricted: true,
+    group: "Manager",
+  },
+  {
+    id: 5,
     title: getPropertyName(pageTranslations, (p) => p["page.signin"]),
     path: "/sign-in",
     component: SignInSide,
@@ -82,7 +121,7 @@ const routes: Route[] = [
     group: "Other",
   },
   {
-    id: 5,
+    id: 6,
     title: getPropertyName(pageTranslations, (p) => p["page.soldier.browseItems"]),
     path: "/soldier/browse",
     icon: VerticalSplitIcon,
@@ -93,7 +132,7 @@ const routes: Route[] = [
     group: "Soldier",
   },
   {
-    id: 6,
+    id: 7,
     title: getPropertyName(pageTranslations, (p) => p["page.soldier.myRequests"]),
     path: "/soldier/requests",
     icon: ListAltIcon,
