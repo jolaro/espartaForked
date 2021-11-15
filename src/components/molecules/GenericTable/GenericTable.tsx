@@ -42,12 +42,13 @@ interface GenericTableProps {
   columns: ColumnConfig[];
   rows: GenericTableRow[];
   filters?: TableFilter[];
+  noFilters?: boolean;
   loading?: boolean;
 }
 
 const isString = (value: any): value is string => typeof value === "string";
 
-const GenericTable: React.FC<GenericTableProps> = ({ columns, rows, loading, filters }) => {
+const GenericTable: React.FC<GenericTableProps> = ({ columns, rows, loading, filters, noFilters = false }) => {
   const currentFilterTextRef = useRef<string>("");
   const [filteredRows, setFilteredRows] = useState<GenericTableRow[]>(rows);
 
@@ -82,10 +83,12 @@ const GenericTable: React.FC<GenericTableProps> = ({ columns, rows, loading, fil
 
   return (
     <>
-      <Box sx={filterStyles.parentFilterContainer}>
-        <Filters onChange={handleFilterChange} />
-        {filters && filters.map((filter) => renderFilter(filter))}
-      </Box>
+      {!noFilters && (
+        <Box sx={filterStyles.parentFilterContainer}>
+          <Filters onChange={handleFilterChange} />
+          {filters && filters.map((filter) => renderFilter(filter))}
+        </Box>
+      )}
       <TableContainer>
         <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHead>
