@@ -6,6 +6,8 @@ import BodyLayout from "layouts/BodyLayout";
 import { reservationStyles } from "styles/mui/reservationStyles";
 import AddIcon from "@mui/icons-material/Add";
 import { ItemTableHeader } from "components/molecules/ItemTableHeader";
+import * as React from "react";
+import WeaponFormDialog from "components/molecules/WeaponDialog";
 
 interface ReservationProps {}
 
@@ -56,7 +58,19 @@ const Reservation: React.FC<ReservationProps> = () => {
     },
   ];
 
-  const addItem = () => {};
+  const addWeapon = (name: string) => {
+    handleClickClose();
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClickClose = () => {
+    setOpen(false);
+  };
 
   return (
     <BodyLayout>
@@ -72,8 +86,9 @@ const Reservation: React.FC<ReservationProps> = () => {
         <Button variant="contained">Link QR/Barcode</Button>
       </Box>
       <Box sx={reservationStyles.itemsTableBox}>
-        <ItemTableHeader onHandleClick={addItem} />
+        <ItemTableHeader onHandleClick={handleClickOpen} />
         <GenericTable columns={columns} rows={rows} />
+        <WeaponFormDialog handleClickClose={handleClickClose} open={open} handleAddWeapon={addWeapon} />
       </Box>
     </BodyLayout>
   );
