@@ -10,6 +10,8 @@ import * as React from "react";
 import WeaponFormDialog from "components/molecules/WeaponDialog";
 import { Weapon } from "components/molecules/WeaponsTableBody";
 import { IconButton } from "components/atoms/IconButton";
+import GlobalState from "state/GlobalState";
+import { User } from "interfaces/User";
 
 interface ReservationProps {}
 
@@ -39,17 +41,17 @@ const Reservation: React.FC<ReservationProps> = () => {
   const genericTableRows: GenericTableRow[] = [];
   const [rows, setRows] = React.useState(genericTableRows);
 
-  const addSoldier = (weapons: Weapon[]) => {
+  const addSoldier = (users: User[]) => {
     handleClickClose();
     const newRows: GenericTableRow[] = [];
-    if (weapons != null) {
-      for (let i = 0; i < weapons.length; i++) {
-        console.log(weapons[i]);
+    if (users != null) {
+      for (let i = 0; i < users.length; i++) {
+        console.log(users[i]);
         newRows.push({
-          itemId: weapons[i].id.toString(),
-          name: weapons[i].name,
-          category: weapons[i].category_id.toString(),
-          qr_barcode: weapons[i].id.toString(),
+          itemId: users[i].id.toString(),
+          name: users[i].name,
+          category: users[i].toString(),
+          qr_barcode: users[i].id.toString(),
         });
       }
     }
