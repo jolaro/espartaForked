@@ -49,17 +49,6 @@ export interface ItemTypesResponse {
  */
 
 export type Endpoint =
-  // | {
-  //     method: "POST";
-  //     url: "/api/example";
-  //     response: ExampleEndpointResult;
-  //     data: ExampleEndpointData;
-  //   }
-  // | {
-  //     method: "GET";
-  //     url: "/api/example/2";
-  //     response: ExampleEndpoint2Result;
-  //   }
   | {
       method: "GET";
       url: "https://catfact.ninja/fact";
