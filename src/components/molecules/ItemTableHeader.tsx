@@ -14,7 +14,7 @@ export function ItemTableHeader(props: ItemTableHeaderProps) {
         <h4>Items</h4>
       </Box>
       <Box sx={reservationStyles.itemsTableHeaderButton}>
-        <IconButton icon={<AddIcon />} text="Add" onHandleClick={props.onHandleClick} />
+        <IconButton icon={<AddIcon />} text="Add weapon" onHandleClick={props.onHandleClick} />
       </Box>
     </Box>
   );

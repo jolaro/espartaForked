@@ -1,4 +1,4 @@
-import { Box, Button, Chip } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { SoldierDetails } from "components/atoms/SoldierDetails";
 import { SoldierImage } from "components/atoms/SoldierImage";
 import GenericTable, { ColumnConfig, GenericTableRow } from "components/molecules/GenericTable";
@@ -9,6 +9,7 @@ import { ItemTableHeader } from "components/molecules/ItemTableHeader";
 import * as React from "react";
 import WeaponFormDialog from "components/molecules/WeaponDialog";
 import { Weapon } from "components/molecules/WeaponsTableBody";
+import { IconButton } from "components/atoms/IconButton";
 
 interface ReservationProps {}
 
@@ -34,22 +35,26 @@ const columns: ColumnConfig[] = [
   },
 ];
 
-const rows: GenericTableRow[] = [
-  {
-    name: "AK-47",
-    category: <Chip label="Heavy" />,
-    status: <Chip label="Returned" />,
-  },
-  {
-    name: "M4a1-s",
-    category: <Chip label="Light" />,
-    status: <Chip color="error" label="In use" />,
-  },
-];
-
 const Reservation: React.FC<ReservationProps> = () => {
   const genericTableRows: GenericTableRow[] = [];
   const [rows, setRows] = React.useState(genericTableRows);
+
+  const addSoldier = (weapons: Weapon[]) => {
+    handleClickClose();
+    const newRows: GenericTableRow[] = [];
+    if (weapons != null) {
+      for (let i = 0; i < weapons.length; i++) {
+        console.log(weapons[i]);
+        newRows.push({
+          itemId: weapons[i].id.toString(),
+          name: weapons[i].name,
+          category: weapons[i].category_id.toString(),
+          qr_barcode: weapons[i].id.toString(),
+        });
+      }
+    }
+    setRows(newRows);
+  };
 
   const addWeapons = (weapons: Weapon[]) => {
     handleClickClose();
@@ -80,6 +85,15 @@ const Reservation: React.FC<ReservationProps> = () => {
 
   return (
     <BodyLayout>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "right",
+        }}
+      >
+        <IconButton icon={<AddIcon />} text="Add Soldier" onHandleClick={addSoldier} />
+      </Box>
       <Box sx={reservationStyles.detailsMainBox}>
         <SoldierImage
           alt="Soldier placeholder"
