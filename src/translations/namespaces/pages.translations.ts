@@ -25,4 +25,16 @@ export const pageTranslations = asTranslation({
     [Language.ENGLISH]: "Reservation",
     [Language.SPANISH]: "Reserva",
   },
+  "page.manager.weapons": {
+    [Language.ENGLISH]: "Weapons",
+    [Language.SPANISH]: "Armas",
+  },
+  "page.manager.requests": {
+    [Language.ENGLISH]: "Requests",
+    [Language.SPANISH]: "Peticiones",
+  },
+  "page.manager.assign": {
+    [Language.ENGLISH]: "Assign",
+    [Language.SPANISH]: "Asignar",
+  },
 });

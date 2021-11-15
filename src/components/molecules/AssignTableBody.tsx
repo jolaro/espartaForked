@@ -1,14 +1,14 @@
-import StackRequestButtons from "./StackRequestButtons";
 import useTranslate from "../../hooks/useTranslate";
-import { useState } from "react";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
-import { Chip } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import { Role } from "interfaces/Role";
+import { Chip } from "@mui/material";
+import { useState } from "react";
+import PersonIcon from "@mui/icons-material/Person";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import PendingIcon from "@mui/icons-material/Pending";
 
-export interface Request extends GenericTableRow {
+export interface Assignation extends GenericTableRow {
   id: string;
   name: string;
   role: Role;
@@ -43,20 +43,20 @@ const columns: ColumnConfig[] = [
     id: "items",
     title: "Items",
     muiProps: {
-      width: "37%",
+      width: "30%",
     },
   },
   {
     id: "status",
     title: "Status",
     muiProps: {
-      width: "8%",
+      width: "15%",
       align: "right",
     },
   },
 ];
 
-const mockRows: Request[] = [
+const mockRows: Assignation[] = [
   {
     id: Math.floor(Math.random() * 10000000).toString(),
     name: "Jeniffer Lawrence",
@@ -87,11 +87,11 @@ const mockRows: Request[] = [
   },
 ];
 
-export function RequestsTableBody() {
+export function AssignTableBody() {
   const t = useTranslate();
-  const [rows, setRows] = useState<Request[]>(mockRows);
+  const [rows, setRows] = useState<Assignation[]>(mockRows);
 
-  function getStatusComponent(request: Request) {
+  function getStatusComponent(request: Assignation) {
     switch (request.status.toLowerCase()) {
       case "approved": {
         return <Chip icon={<CheckCircleIcon />} label={request.status} color="success" />;
@@ -102,7 +102,7 @@ export function RequestsTableBody() {
       }
       default:
       case "pending": {
-        return <StackRequestButtons request={request} onHandleClick={updateRequests} />;
+        return <Chip icon={<PendingIcon />} label={request.status} />;
       }
     }
   }
@@ -115,18 +115,6 @@ export function RequestsTableBody() {
       default:
         return <Chip icon={<PersonIcon />} label={role} />;
     }
-  };
-
-  const updateRequests = (request: Request) => {
-    const requestsCopy: Request[] = [...rows];
-
-    for (let i = 0; i < requestsCopy.length; i++) {
-      if (requestsCopy[i].id.toString() === request.id.toString()) {
-        requestsCopy[i] = request;
-        break;
-      }
-    }
-    setRows(requestsCopy);
   };
 
   const rowsToRender = rows.map((row) => ({

@@ -14,6 +14,7 @@ import ApiService from "utils/api_service/api_service";
 import { ItemTypesResponse } from "utils/api_service/endpoints.config";
 import { TranslationKeys } from "translations/_translation_interface";
 import { snooze } from "utils/snooze";
+import { usePromise } from "hooks/usePromise";
 
 const columns: ColumnConfig[] = [
   {
@@ -94,21 +95,20 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
   const [rows, setRows] = useState<GenericTableRow[]>(parsedFetchedRows);
   const categoryFilter = useCategoryFilter(rows, setRows, parsedFetchedRows);
 
-  const fetchItemTypes = useCallback(async () => {
-    loading.set(true);
-    const response = await ApiService.get("/api/itemtypes");
-    setFetchedRows(response.data);
-    await snooze(150);
-    loading.set(false);
-  }, []);
-
   useEffect(() => {
     setRows(parsedFetchedRows);
   }, [parsedFetchedRows.length]);
 
-  useEffect(() => {
-    fetchItemTypes();
-  }, []);
+  usePromise(async (safeUpdate) => {
+    loading.set(true);
+    const response = await ApiService.get("/api/itemtypes");
+    setFetchedRows(response.data);
+    await snooze(150);
+
+    safeUpdate(() => {
+      loading.set(false);
+    });
+  });
 
   return (
     <BodyLayout>
