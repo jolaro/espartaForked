@@ -1,3 +1,4 @@
+import { User } from "interfaces/User";
 export interface RandomCatFactResponse {
   fact: string;
   length: number;
@@ -9,13 +10,22 @@ interface LoginEndpointData {
 }
 
 interface LoginEndpointResponse {
-  //TODO: Add User interface
   //onSuccess:
-  user?: any;
+  user?: User;
   access_token?: string;
 
   //onError:
   message?: string;
+}
+
+export interface ItemTypesResponse {
+  id: number;
+  name: string;
+  price: string;
+  category_id: string;
+  desired_amount: string;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
@@ -54,6 +64,11 @@ export type Endpoint =
       method: "GET";
       url: "https://catfact.ninja/fact";
       response: RandomCatFactResponse;
+    }
+  | {
+      method: "GET";
+      url: "/api/itemtypes";
+      response: ItemTypesResponse[];
     }
   | {
       method: "POST";

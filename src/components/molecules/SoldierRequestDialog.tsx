@@ -6,12 +6,13 @@ import React from "react";
 import { soldierAvailableItemsStyles } from "styles/mui/soldierAvailableItemsStyles";
 
 interface SoldierRequestDialogProps {
-  itemId: string;
+  itemId?: string;
+  name: string;
 }
 
 export const isSoldierRequestDialogOpen = createState(false);
 
-const SoldierRequestDialog: React.FC<SoldierRequestDialogProps> = ({ itemId }) => {
+const SoldierRequestDialog: React.FC<SoldierRequestDialogProps> = ({ itemId, name }) => {
   const t = useTranslate();
   const isOpen = useHookstate(isSoldierRequestDialogOpen);
   const fromDate = useHookstate(null).attach(Downgraded);
@@ -20,7 +21,7 @@ const SoldierRequestDialog: React.FC<SoldierRequestDialogProps> = ({ itemId }) =
   return (
     <Dialog open={isOpen.get()} onClose={() => isOpen.set(false)}>
       <DialogTitle>
-        {t("soldierActions.requestDialogTitle")} {itemId}
+        {t("soldierActions.requestDialogTitle")} {name}
       </DialogTitle>
       <DialogContent>
         <Alert severity="info">{t("soldierActions.requestDialogInfoAlert")}</Alert>

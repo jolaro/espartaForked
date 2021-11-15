@@ -44,13 +44,22 @@ interface GenericTableProps {
   filters?: TableFilter[];
   noFilters?: boolean;
   loading?: boolean;
+  loadingSkeletonCount?: number;
 }
 
 const isString = (value: any): value is string => typeof value === "string";
 
-const GenericTable: React.FC<GenericTableProps> = ({ columns, rows, loading, filters, noFilters = false }) => {
+const GenericTable: React.FC<GenericTableProps> = ({
+  columns,
+  rows,
+  loading,
+  filters,
+  noFilters = false,
+  loadingSkeletonCount = 5,
+}) => {
   const currentFilterTextRef = useRef<string>("");
   const [filteredRows, setFilteredRows] = useState<GenericTableRow[]>(rows);
+  const rowsToShow = !loading ? filteredRows : new Array(loadingSkeletonCount).fill({});
 
   const filterBySearchText = (row: GenericTableRow) => {
     const filterableValues = Object.values(row).filter(isString);
@@ -100,7 +109,7 @@ const GenericTable: React.FC<GenericTableProps> = ({ columns, rows, loading, fil
               ))}
             </TableRow>
           </TableHead>
-          <GenericTableBody rows={filteredRows} columns={columns} loading={loading} />
+          <GenericTableBody rows={rowsToShow} columns={columns} loading={loading} />
         </Table>
         {loading && <LinearProgress color="inherit" />}
       </TableContainer>
