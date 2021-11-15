@@ -29,7 +29,7 @@ const ManagerAssignItems: React.FC<ManagerAssignItemsProps> = () => {
           justifyContent: "right",
         }}
       >
-        <IconButton icon={<AddIcon />} text="Add Soldier" onHandleClick={showCreateReservation} />
+        <IconButton icon={<AddIcon />} text="Create reservation" onHandleClick={showCreateReservation} />
       </Box>
       <AssignTableBody />
     </BodyLayout>
