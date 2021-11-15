@@ -9,6 +9,19 @@ interface LoginEndpointData {
   password: string;
 }
 
+interface RequestGroupEndpointData {
+  borrower_id: string;
+  manager_id: string;
+}
+
+interface RequestGroupResponse {
+  borrower_id: string,
+  manager_id: string,
+  updated_at: string,
+  created_at: string,
+  id: string,
+}
+
 interface LoginEndpointResponse {
   //onSuccess:
   user?: User;
@@ -69,12 +82,12 @@ export type Endpoint =
       url: "/api/itemtypes";
       response: ItemTypesResponse[];
     }
-    | {
+  | {
       method: "GET";
       url: "/api/items";
       response: ItemResponse[];
     }
-    | {
+  | {
       method: "GET";
       url: "/api/users";
       response: User[];
@@ -84,4 +97,10 @@ export type Endpoint =
       url: "/api/login";
       data: LoginEndpointData;
       response: LoginEndpointResponse;
+    }
+  | {
+      method: "POST";
+      url: "/api/requestgroup";
+      data: RequestGroupEndpointData;
+      response: RequestGroupResponse;
     };
