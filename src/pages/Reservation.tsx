@@ -10,12 +10,12 @@ import * as React from "react";
 import WeaponFormDialog from "components/molecules/WeaponDialog";
 import { Weapon } from "components/molecules/WeaponsTableBody";
 import { IconButton } from "components/atoms/IconButton";
-import GlobalState from "state/GlobalState";
 import { User } from "interfaces/User";
+import SoldierFormDialog from "components/molecules/SoldierFormDialog";
 
 interface ReservationProps {}
 
-const columns: ColumnConfig[] = [
+const weaponColumns: ColumnConfig[] = [
   {
     id: "itemId",
     title: "Id",
@@ -39,27 +39,37 @@ const columns: ColumnConfig[] = [
 
 const Reservation: React.FC<ReservationProps> = () => {
   const genericTableRows: GenericTableRow[] = [];
+  const u: User = {
+    id: -1,
+    name: "",
+    email: "",
+    access_level: "-1",
+    email_verified_at: null,
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+  const [soldier, setSoldier] = React.useState(u);
   const [rows, setRows] = React.useState(genericTableRows);
 
-  const addSoldier = (users: User[]) => {
-    handleClickClose();
-    const newRows: GenericTableRow[] = [];
-    if (users != null) {
-      for (let i = 0; i < users.length; i++) {
-        console.log(users[i]);
-        newRows.push({
-          itemId: users[i].id.toString(),
-          name: users[i].name,
-          category: users[i].toString(),
-          qr_barcode: users[i].id.toString(),
-        });
-      }
+  const addSoldier = (soldier: User) => {
+    handleClickCloseSoldiersDialog();
+    setSoldier(soldier);
+  };
+
+  const getRole = (accessLevel: string) => {
+    if (accessLevel === "0") {
+      return "Troop";
+    } else if (accessLevel === "1") {
+      return "Commander";
+    } else if (accessLevel === "2") {
+      return "Manager";
+    } else {
+      return "";
     }
-    setRows(newRows);
   };
 
   const addWeapons = (weapons: Weapon[]) => {
-    handleClickClose();
+    handleClickCloseWeaponsDialog();
     const newRows: GenericTableRow[] = [];
     if (weapons != null) {
       for (let i = 0; i < weapons.length; i++) {
@@ -75,14 +85,24 @@ const Reservation: React.FC<ReservationProps> = () => {
     setRows(newRows);
   };
 
-  const [open, setOpen] = React.useState(false);
+  const [showWeapons, setShowWeapons] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenWeaponsDialog = () => {
+    setShowWeapons(true);
   };
 
-  const handleClickClose = () => {
-    setOpen(false);
+  const handleClickCloseWeaponsDialog = () => {
+    setShowWeapons(false);
+  };
+
+  const [showSoldiers, setShowSoldiers] = React.useState(false);
+
+  const handleClickOpenSoldiersDialog = () => {
+    setShowSoldiers(true);
+  };
+
+  const handleClickCloseSoldiersDialog = () => {
+    setShowSoldiers(false);
   };
 
   return (
@@ -94,23 +114,32 @@ const Reservation: React.FC<ReservationProps> = () => {
           justifyContent: "right",
         }}
       >
-        <IconButton icon={<AddIcon />} text="Add Soldier" onHandleClick={addSoldier} />
+        <IconButton icon={<AddIcon />} text="Add Soldier" onHandleClick={handleClickOpenSoldiersDialog} />
       </Box>
+      <SoldierFormDialog
+        handleClickClose={handleClickCloseSoldiersDialog}
+        open={showSoldiers}
+        handleAddSoldiers={addSoldier}
+      />
       <Box sx={reservationStyles.detailsMainBox}>
         <SoldierImage
           alt="Soldier placeholder"
           imageUrl="http://cpgw.org.uk/wp-content/uploads/soldier-placeholder.png"
         />
-        <SoldierDetails name="Soldier Name" id="12234" role="Troop" />
+        <SoldierDetails name={soldier.name} id={soldier.id.toString()} role={getRole(soldier.access_level)} />
       </Box>
       <Box>
         <h2>QR/Barcodes</h2>
         <Button variant="contained">Link QR/Barcode</Button>
       </Box>
       <Box sx={reservationStyles.itemsTableBox}>
-        <ItemTableHeader onHandleClick={handleClickOpen} />
-        <GenericTable columns={columns} rows={rows} />
-        <WeaponFormDialog handleClickClose={handleClickClose} open={open} handleAddWeapons={addWeapons} />
+        <ItemTableHeader onHandleClick={handleClickOpenWeaponsDialog} />
+        <GenericTable columns={weaponColumns} rows={rows} />
+        <WeaponFormDialog
+          handleClickClose={handleClickCloseWeaponsDialog}
+          open={showWeapons}
+          handleAddWeapons={addWeapons}
+        />
       </Box>
     </BodyLayout>
   );
