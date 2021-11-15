@@ -5,6 +5,10 @@ export const soldierActionTranslations = asTranslation({
     [Language.ENGLISH]: "New Request For Item",
     [Language.SPANISH]: "Nueva solicitud de artículo",
   },
+  "soldierActions.requestButtonText": {
+    [Language.ENGLISH]: "Request",
+    [Language.SPANISH]: "Solicitud",
+  },
   "soldierActions.returnTooltip": {
     [Language.ENGLISH]: "Return Item",
     [Language.SPANISH]: "Devolver objeto",

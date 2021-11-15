@@ -1,6 +1,31 @@
+import { User } from "interfaces/User";
 export interface RandomCatFactResponse {
   fact: string;
   length: number;
+}
+
+interface LoginEndpointData {
+  email: string;
+  password: string;
+}
+
+interface LoginEndpointResponse {
+  //onSuccess:
+  user?: User;
+  access_token?: string;
+
+  //onError:
+  message?: string;
+}
+
+export interface ItemTypesResponse {
+  id: number;
+  name: string;
+  price: string;
+  category_id: string;
+  desired_amount: string;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
@@ -24,19 +49,19 @@ export interface RandomCatFactResponse {
  */
 
 export type Endpoint =
-  // | {
-  //     method: "POST";
-  //     url: "/api/example";
-  //     response: ExampleEndpointResult;
-  //     data: ExampleEndpointData;
-  //   }
-  // | {
-  //     method: "GET";
-  //     url: "/api/example/2";
-  //     response: ExampleEndpoint2Result;
-  //   }
-  {
-    method: "GET";
-    url: "https://catfact.ninja/fact";
-    response: RandomCatFactResponse;
-  };
+  | {
+      method: "GET";
+      url: "https://catfact.ninja/fact";
+      response: RandomCatFactResponse;
+    }
+  | {
+      method: "GET";
+      url: "/api/itemtypes";
+      response: ItemTypesResponse[];
+    }
+  | {
+      method: "POST";
+      url: "/api/login";
+      data: LoginEndpointData;
+      response: LoginEndpointResponse;
+    };

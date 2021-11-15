@@ -22,8 +22,8 @@ export const signInTranslations = asTranslation({
     [Language.SPANISH]: "Este campo es obligatorio",
   },
   "signIn.passwordTooShort": {
-    [Language.ENGLISH]: "Password must be at least 8 characters",
-    [Language.SPANISH]: "La contraseña debe tener al menos 8 caracteres",
+    [Language.ENGLISH]: "Password must be at least 6 characters",
+    [Language.SPANISH]: "La contraseña debe tener al menos 6 caracteres",
   },
   "signIn.invalidEmail": {
     [Language.ENGLISH]: "The entered email is invalid",
