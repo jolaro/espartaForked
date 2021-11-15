@@ -1,57 +1,127 @@
-import * as React from "react";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
 import useTranslate from "../../hooks/useTranslate";
-import Box from "@mui/material/Box";
-import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
+import { Role } from "interfaces/Role";
+import { Chip } from "@mui/material";
+import { useState } from "react";
+import PersonIcon from "@mui/icons-material/Person";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import PendingIcon from "@mui/icons-material/Pending";
+
+export interface Assignation extends GenericTableRow {
+  id: string;
+  name: string;
+  role: Role;
+  items: string;
+  status: string;
+}
+
+const columns: ColumnConfig[] = [
+  {
+    id: "id",
+    title: "ID",
+    muiProps: {
+      width: "10%",
+    },
+  },
+  {
+    id: "name",
+    title: "Person Name",
+    muiProps: {
+      width: "30%",
+    },
+  },
+  {
+    id: "role",
+    title: "Role",
+    muiProps: {
+      width: "10%",
+      align: "center",
+    },
+  },
+  {
+    id: "items",
+    title: "Items",
+    muiProps: {
+      width: "30%",
+    },
+  },
+  {
+    id: "status",
+    title: "Status",
+    muiProps: {
+      width: "15%",
+      align: "right",
+    },
+  },
+];
+
+const mockRows: Assignation[] = [
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Jeniffer Lawrence",
+    role: Role.OFFICER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Rejected",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Sergio Ramos",
+    role: Role.COMMANDER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Pending",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Ballada Mallada",
+    role: Role.TROOP,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Pending",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Justin Bieber",
+    role: Role.COMMANDER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Approved",
+  },
+];
 
 export function AssignTableBody() {
   const t = useTranslate();
-  let soldiers = [], status = [t("pendingForPickUp"), t("returned"), t("inUse")], roles = [t("commander"), t("officer"), t("troop")],
-    mockItems = "2x ItemA \n 2x ItemB";
+  const [rows, setRows] = useState<Assignation[]>(mockRows);
 
-  for (let i = 0; i < 15; i++) {
-    soldiers[i] =
-      {
-        id: Math.floor(Math.random() * 10000000),
-        name: "SoldierName",
-        role: roles[Math.floor(Math.random() * roles.length)],
-        items: mockItems,
-        status: status[Math.floor(Math.random() * status.length)],
-      };
-  }
-
-  function getStatusStyle(status: string) {
-    let backgroundColor;
-    if (status === t("returned")) {
-      backgroundColor = "#4caf50";
-    } else if (status === t("pendingForPickUp")) {
-      backgroundColor = "#ff9800";
-    } else {
-      backgroundColor = "#ef5350";
+  function getStatusComponent(request: Assignation) {
+    switch (request.status.toLowerCase()) {
+      case "approved": {
+        return <Chip icon={<CheckCircleIcon />} label={request.status} color="success" />;
+      }
+      case "rejected":
+      case "denied": {
+        return <Chip icon={<CancelIcon />} label={request.status} color="error" />;
+      }
+      default:
+      case "pending": {
+        return <Chip icon={<PendingIcon />} label={request.status} />;
+      }
     }
-    return { backgroundColor: backgroundColor };
   }
 
-  return <TableBody>
-    {soldiers.map((soldier) => (
-      <TableRow
-        key={soldier.id}
-        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-      >
-        <TableCell component="th" scope="row" sx={inventoryTableStyles.tableBodyCell}>
-          {soldier.id}
-        </TableCell>
-        <TableCell sx={inventoryTableStyles.tableBodyCell}>{soldier.name}</TableCell>
-        <TableCell sx={inventoryTableStyles.tableBodyCell}>{soldier.role}</TableCell>
-        <TableCell sx={inventoryTableStyles.tableBodyCell}>{soldier.items}</TableCell>
-        <TableCell sx={inventoryTableStyles.tableBodyCell}>
-          <Box sx={inventoryTableStyles.itemQuantityStatus}
-                      style={getStatusStyle(soldier.status)}>{soldier.status}
-          </Box>
-        </TableCell>
-      </TableRow>
-    ))}
-  </TableBody>;
+  const getRoleComponent = (role: string) => {
+    switch (role.toLowerCase()) {
+      case Role.TROOP:
+      case Role.COMMANDER:
+      case Role.OFFICER:
+      default:
+        return <Chip icon={<PersonIcon />} label={role} />;
+    }
+  };
+
+  const rowsToRender = rows.map((row) => ({
+    ...row,
+    role: getRoleComponent(row.role),
+    status: getStatusComponent(row),
+  }));
+
+  return <GenericTable columns={columns} rows={rowsToRender} />;
 }

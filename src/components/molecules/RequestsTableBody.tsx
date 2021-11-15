@@ -1,51 +1,86 @@
-import * as React from "react";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import { StackRequestButtons } from "./StackRequestButtons";
+import StackRequestButtons from "./StackRequestButtons";
 import useTranslate from "../../hooks/useTranslate";
-import Box from "@mui/material/Box";
 import { useState } from "react";
-import { inventoryTableStyles } from "../../styles/mui/inventoryTableStyles";
+import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
+import { Chip } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import { Role } from "interfaces/Role";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
-enum Role {
-  COMMANDER = "commander",
-  OFFICER = "officer",
-  TROOP = "troop",
-}
-interface Request {
-  id: number;
+export interface Request extends GenericTableRow {
+  id: string;
   name: string;
   role: Role;
   items: string;
   status: string;
 }
 
-const mockupObjects = [
+const columns: ColumnConfig[] = [
   {
-    id: Math.floor(Math.random() * 10000000),
-    name: "Name",
-    role: Role.OFFICER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Pending",
+    id: "id",
+    title: "ID",
+    muiProps: {
+      width: "10%",
+    },
   },
   {
-    id: Math.floor(Math.random() * 10000000),
-    name: "Name",
+    id: "name",
+    title: "Person Name",
+    muiProps: {
+      width: "30%",
+    },
+  },
+  {
+    id: "role",
+    title: "Role",
+    muiProps: {
+      width: "10%",
+      align: "center",
+    },
+  },
+  {
+    id: "items",
+    title: "Items",
+    muiProps: {
+      width: "37%",
+    },
+  },
+  {
+    id: "status",
+    title: "Status",
+    muiProps: {
+      width: "8%",
+      align: "right",
+    },
+  },
+];
+
+const mockRows: Request[] = [
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Jeniffer Lawrence",
+    role: Role.OFFICER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Rejected",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Sergio Ramos",
     role: Role.COMMANDER,
     items: "2x ItemA \n 2x ItemB",
     status: "Pending",
   },
   {
-    id: Math.floor(Math.random() * 10000000),
-    name: "Name",
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Ballada Mallada",
     role: Role.TROOP,
     items: "2x ItemA \n 2x ItemB",
     status: "Pending",
   },
   {
-    id: Math.floor(Math.random() * 10000000),
-    name: "Name2",
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Justin Bieber",
     role: Role.COMMANDER,
     items: "2x ItemA \n 2x ItemB",
     status: "Approved",
@@ -54,53 +89,51 @@ const mockupObjects = [
 
 export function RequestsTableBody() {
   const t = useTranslate();
-  const [requests, setRequests] = useState<Request[]>(mockupObjects);
+  const [rows, setRows] = useState<Request[]>(mockRows);
 
-  function getStatusStyle(request: Request) {
-    console.log(request.status);
-    let backgroundColor;
-    if (request.status === t("approved") || request.status === "Approved") {
-      backgroundColor = "#4caf50";
-    } else if (request.status === t("pending") || request.status === "Pending") {
-      backgroundColor = "#ff9800";
-    } else {
-      backgroundColor = "#ef5350";
+  function getStatusComponent(request: Request) {
+    switch (request.status.toLowerCase()) {
+      case "approved": {
+        return <Chip icon={<CheckCircleIcon />} label={request.status} color="success" />;
+      }
+      case "rejected":
+      case "denied": {
+        return <Chip icon={<CancelIcon />} label={request.status} color="error" />;
+      }
+      default:
+      case "pending": {
+        return <StackRequestButtons request={request} onHandleClick={updateRequests} />;
+      }
     }
-    return { backgroundColor: backgroundColor };
   }
 
+  const getRoleComponent = (role: string) => {
+    switch (role.toLowerCase()) {
+      case Role.TROOP:
+      case Role.COMMANDER:
+      case Role.OFFICER:
+      default:
+        return <Chip icon={<PersonIcon />} label={role} />;
+    }
+  };
+
   const updateRequests = (request: Request) => {
-    const requestsCopy: Request[] = [...requests];
-    console.log("test");
+    const requestsCopy: Request[] = [...rows];
+
     for (let i = 0; i < requestsCopy.length; i++) {
-      if (requestsCopy[i].id === request.id) {
+      if (requestsCopy[i].id.toString() === request.id.toString()) {
         requestsCopy[i] = request;
         break;
       }
     }
-    setRequests(requestsCopy);
+    setRows(requestsCopy);
   };
 
-  return (
-    <TableBody>
-      {requests.map((request) => (
-        <TableRow key={request.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-          <TableCell component="th" scope="row" sx={inventoryTableStyles.tableBodyCell}>
-            {request.id}
-          </TableCell>
-          <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.name}</TableCell>
-          <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.role}</TableCell>
-          <TableCell sx={inventoryTableStyles.tableBodyCell}>
-            <Box sx={inventoryTableStyles.itemQuantityStatus} style={getStatusStyle(request)}>
-              {request.status}
-            </Box>
-          </TableCell>
-          <TableCell sx={inventoryTableStyles.tableBodyCell}>{request.items}</TableCell>
-          <TableCell sx={inventoryTableStyles.tableBodyCell}>
-            <StackRequestButtons request={request} onHandleClick={updateRequests} />
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  );
+  const rowsToRender = rows.map((row) => ({
+    ...row,
+    role: getRoleComponent(row.role),
+    status: getStatusComponent(row),
+  }));
+
+  return <GenericTable columns={columns} rows={rowsToRender} />;
 }

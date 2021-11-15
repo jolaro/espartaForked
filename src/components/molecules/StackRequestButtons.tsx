@@ -2,9 +2,18 @@ import { Stack } from "@mui/material";
 import { RejectButton } from "../atoms/RejectButton";
 import { ApproveButton } from "../atoms/ApproveButton";
 import useTranslate from "../../hooks/useTranslate";
+import { Request } from "./RequestsTableBody";
 
-export function StackRequestButtons(props: any) {
+import React from "react";
+
+interface StackRequestButtonsProps {
+  request: Request;
+  onHandleClick: (request: Request) => void;
+}
+
+const StackRequestButtons: React.FC<StackRequestButtonsProps> = (props) => {
   const t = useTranslate();
+
   const newRequest = {
     id: props.request.id,
     name: props.request.name,
@@ -24,8 +33,8 @@ export function StackRequestButtons(props: any) {
   };
 
   return (
-    <Stack direction="row" spacing={1}>
-      {(props.request.status === t("pending") || props.request.status === "Pending") && (
+    <Stack direction="row-reverse" spacing={1}>
+      {(props.request.status === t("pending") || props.request.status.toLowerCase() === "pending") && (
         <>
           <RejectButton onHandleClick={handleRejectClick} />
           <ApproveButton onHandleClick={handleApproveClick} />
@@ -33,4 +42,6 @@ export function StackRequestButtons(props: any) {
       )}
     </Stack>
   );
-}
+};
+
+export default StackRequestButtons;

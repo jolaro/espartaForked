@@ -5,8 +5,6 @@ import { Chip } from "@mui/material";
 import PageTabs from "components/molecules/PageTabs/PageTabs";
 import { useSoldierPageTabs } from "hooks/useSoldierPageTabs";
 import BodyLayout from "layouts/BodyLayout";
-import Filters from "components/molecules/Filters/Filters";
-import { TableFilter } from "components/molecules/GenericTable/GenericTable";
 import useCategoryFilter from "components/molecules/GenericTable/useCategoryFilter";
 
 const columns: ColumnConfig[] = [
