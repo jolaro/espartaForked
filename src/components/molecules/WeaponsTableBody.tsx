@@ -38,15 +38,36 @@ const columns: ColumnConfig[] = [
   },
 ];
 
+const getCategory = (weight_category: string) => {
+  if (weight_category === "0") {
+    return "Light";
+  } else if (weight_category === "1") {
+    return "Medium";
+  } else if (weight_category === "2") {
+    return "Heavy";
+  } else {
+    return "";
+  }
+};
+
 export function WeaponsTableBody() {
   const t = useTranslate();
-  const [weapons, setWeapons] = useState<ItemTypesResponse[]>([]);
+  const [rows, setRows] = useState<GenericTableRow[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetch = async () => {
     setLoading(true);
     const response = await ApiService.get("/api/itemtypes");
-    setWeapons(response.data);
+    const newRows: GenericTableRow[] = [];
+
+    for (let i = 0; i < response.data.length; i++) {
+      newRows.push({
+        name: response.data[i].name,
+        desired_amount: response.data[i].desired_amount,
+        category: getCategory(response.data[i].weight_category),
+      });
+    }
+    setRows(newRows);
     setLoading(false);
   };
 
@@ -54,5 +75,5 @@ export function WeaponsTableBody() {
     fetch();
   }, []);
 
-  return <GenericTable columns={columns} rows={weapons as unknown as GenericTableRow[]} loading={loading} />;
+  return <GenericTable columns={columns} rows={rows} loading={loading} />;
 }

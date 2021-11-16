@@ -111,6 +111,11 @@ export type Endpoint =
       url: "/api/items";
       response: ItemResponse[];
     }
+    | {
+      method: "GET";
+      url: "/api/items";
+      response: ItemResponse[];
+    }
   | {
       method: "GET";
       url: "/api/users";
