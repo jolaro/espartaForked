@@ -15,7 +15,6 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
 import { alpha, Box, InputBase, styled, Typography } from "@mui/material";
-import { Weapon } from "./WeaponsTableBody";
 import SearchIcon from "@mui/icons-material/Search";
 import { useCallback } from "react";
 import ApiService from "utils/api_service/api_service";
@@ -135,7 +134,7 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
 
   return (
     <div>
-      <Dialog open={props.open} onClose={props.handleClickClose}>
+      <Dialog open={props.open} onClose={props.handleClickClose} maxWidth="md" fullWidth>
         <DialogTitle>Weapons</DialogTitle>
         <DialogContent>
           <DialogContentText>Search by id or name</DialogContentText>
@@ -152,6 +151,8 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
                 return (
                   <ListItem
                     key={weapon.id}
+                    selected={selectedWeapons.indexOf(weapon) !== -1}
+                    onClick={handleToggle(weapon)}
                     secondaryAction={
                       <Checkbox
                         edge="end"

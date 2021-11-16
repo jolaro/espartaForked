@@ -14,11 +14,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
-import { alpha, Box, InputBase, styled, Typography } from "@mui/material";
+import { alpha, Box, CircularProgress, InputBase, LinearProgress, styled, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { User } from "interfaces/User";
 import ApiService from "utils/api_service/api_service";
 import { useCallback } from "react";
+import { getStringAvatar } from "utils/get_string_avatar.util";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -69,6 +70,7 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
     created_at: new Date(),
     updated_at: new Date(),
   };
+  const [isLoading, setIsLoading] = React.useState(true);
   const [soldiers, setSoldiers] = React.useState<User[]>([]);
   const [selectedSoldier, setSelectedSoldier] = React.useState(selectedSoldier1);
   const [searchKeyword, setSearchKeyword] = React.useState("");
@@ -87,27 +89,31 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
     }
     setSoldiers(users);
     setFoundSoldiers(users);
+    setIsLoading(false);
   }, []);
 
-  const filter = (e: any) => {
-    const keyword = e.target.value;
+  const filter = useCallback(
+    (e: any) => {
+      const keyword = e.target.value;
 
-    if (keyword !== "") {
-      const results = soldiers.filter((soldier) => {
-        return (
-          soldier.name.toLowerCase().startsWith(keyword.toLowerCase()) ||
-          soldier.id.toString().toLowerCase().startsWith(keyword.toLowerCase())
-        );
-        // Use the toLowerCase() method to make it case-insensitive
-      });
-      setFoundSoldiers(results);
-    } else {
-      setFoundSoldiers(soldiers);
-      // If the text field is empty, show all users
-    }
+      if (keyword !== "") {
+        const results = soldiers.filter((soldier) => {
+          return (
+            soldier.name.toLowerCase().startsWith(keyword.toLowerCase()) ||
+            soldier.id.toString().toLowerCase().startsWith(keyword.toLowerCase())
+          );
+          // Use the toLowerCase() method to make it case-insensitive
+        });
+        setFoundSoldiers(results);
+      } else {
+        setFoundSoldiers(soldiers);
+        // If the text field is empty, show all users
+      }
 
-    setSearchKeyword(keyword);
-  };
+      setSearchKeyword(keyword);
+    },
+    [soldiers],
+  );
 
   const getRole = (accessLevel: string) => {
     if (accessLevel === "0") {
@@ -121,98 +127,107 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
     }
   };
 
-  const handleToggle = (soldier: User) => () => {
-    let newSoldier: User;
+  const handleToggle = useCallback(
+    (soldier: User) => () => {
+      let newSoldier: User;
 
-    if (selectedSoldier.id === soldier.id) {
-      newSoldier = {
-        id: 0,
-        name: "",
-        email: "",
-        access_level: "",
-        email_verified_at: null,
-        created_at: new Date(),
-        updated_at: new Date(),
-      };
-    } else {
-      newSoldier = soldier;
-    }
+      if (selectedSoldier.id === soldier.id) {
+        newSoldier = {
+          id: 0,
+          name: "",
+          email: "",
+          access_level: "",
+          email_verified_at: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+        };
+      } else {
+        newSoldier = soldier;
+      }
 
-    setSelectedSoldier(newSoldier);
-  };
+      setSelectedSoldier(newSoldier);
+    },
+    [selectedSoldier.id],
+  );
+
+  const dialogContent = React.useMemo(
+    () => (
+      <DialogContent>
+        <DialogContentText>Search by id or name</DialogContentText>
+        <Search onChange={filter} defaultValue={searchKeyword} placeholder="Search by id or name">
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+        </Search>
+        {foundSoldiers && foundSoldiers.length > 0 ? (
+          <List dense sx={{ width: "100%" }}>
+            {foundSoldiers.map((soldier) => {
+              const labelId = `checkbox-list-secondary-label-${soldier}`;
+              return (
+                <ListItem
+                  key={soldier.id}
+                  onClick={handleToggle(soldier)}
+                  selected={selectedSoldier.id === soldier.id}
+                  secondaryAction={
+                    <Checkbox
+                      edge="end"
+                      onChange={handleToggle(soldier)}
+                      checked={selectedSoldier.id === soldier.id}
+                      inputProps={{ "aria-labelledby": labelId }}
+                    />
+                  }
+                  disablePadding
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Avatar {...getStringAvatar(soldier.name)} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={soldier.name}
+                      secondary={
+                        <React.Fragment>
+                          <Box>
+                            <Typography
+                              sx={{ display: "inline" }}
+                              component="span"
+                              variant="body2"
+                              color="text.primary"
+                            >
+                              Id: {soldier.id}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography
+                              sx={{ display: "inline" }}
+                              component="span"
+                              variant="body2"
+                              color="text.primary"
+                            >
+                              Category: {getRole(soldier.access_level)}
+                            </Typography>
+                          </Box>
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+        ) : (
+          <h1>No results found!</h1>
+        )}
+      </DialogContent>
+    ),
+    [filter, foundSoldiers, handleToggle, searchKeyword, selectedSoldier.id],
+  );
 
   return (
     <div>
-      <Dialog open={props.open} onClose={props.handleClickClose}>
+      <Dialog open={props.open} onClose={props.handleClickClose} maxWidth="md" fullWidth>
         <DialogTitle>Soldiers</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Search by id or name</DialogContentText>
-          <Search onChange={filter} defaultValue={searchKeyword} placeholder="Search by id or name">
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
-          </Search>
-          {foundSoldiers && foundSoldiers.length > 0 ? (
-            <List dense sx={{ width: "100%" }}>
-              {foundSoldiers.map((soldier) => {
-                const labelId = `checkbox-list-secondary-label-${soldier}`;
-                return (
-                  <ListItem
-                    key={soldier.id}
-                    secondaryAction={
-                      <Checkbox
-                        edge="end"
-                        onChange={handleToggle(soldier)}
-                        checked={selectedSoldier.id === soldier.id}
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    }
-                    disablePadding
-                  >
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar
-                          alt={`Avatar n°${soldier.id + 1}`}
-                          src={`/static/images/avatar/${soldier.id + 1}.jpg`}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={soldier.name}
-                        secondary={
-                          <React.Fragment>
-                            <Box>
-                              <Typography
-                                sx={{ display: "inline" }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                              >
-                                Id: {soldier.id}
-                              </Typography>
-                            </Box>
-                            <Box>
-                              <Typography
-                                sx={{ display: "inline" }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                              >
-                                Category: {getRole(soldier.access_level)}
-                              </Typography>
-                            </Box>
-                          </React.Fragment>
-                        }
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </List>
-          ) : (
-            <h1>No results found!</h1>
-          )}
-        </DialogContent>
+        {isLoading ? <CircularProgress sx={{ margin: "1rem auto" }} /> : dialogContent}
         <DialogActions>
           <Button onClick={props.handleClickClose}>Cancel</Button>
           <IconButton

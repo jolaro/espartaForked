@@ -8,9 +8,9 @@ export const reservationStyles = asStyle({
   detailsMainBox: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "flex-start",
-    columnGap: 10,
+    columnGap: "10px",
   },
 
   detailsBox: {
@@ -19,8 +19,17 @@ export const reservationStyles = asStyle({
     alignItems: "left",
   },
 
+  chipContainer: {
+    marginTop: "1rem",
+    display: "flex",
+    gap: "5px",
+    "& > *": {
+      alignSelf: "flex-start",
+    },
+  },
+
   detailsBoxElement: {
-    flexGrow: 0,
+    paddingTop: "0.5rem",
   },
 
   itemsTableBox: {
@@ -41,6 +50,24 @@ export const reservationStyles = asStyle({
 
   itemsTableHeaderButton: {
     alignSelf: "flex-end",
+  },
+
+  sectionBox: {
+    padding: "1rem",
+    display: "flex",
+    flexDirection: "column",
+
+    "&:not(:first-child)": {
+      marginTop: "1rem",
+    },
+  },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "flex-start",
+    width: "100%",
+    marginBottom: "1rem",
   },
 });
 

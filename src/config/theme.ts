@@ -1,4 +1,5 @@
 import { createTheme, ThemeOptions } from "@mui/material";
+import { Shadows } from "@mui/material/styles/shadows";
 
 export const themeOptions: ThemeOptions = {
   palette: {

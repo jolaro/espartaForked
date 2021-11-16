@@ -5,6 +5,7 @@ import { asTranslation, Language } from "./_translation_interface";
 import { soldierActionTranslations } from "./namespaces/soldierActions.translations";
 import { tableTranslations } from "./namespaces/table.translations";
 import { categoryTranslations } from "./namespaces/category.translations";
+import { reservationTranslations } from "./namespaces/reservation.translations";
 
 export const translations = asTranslation({
   ...pageTranslations,
@@ -13,6 +14,7 @@ export const translations = asTranslation({
   ...soldierActionTranslations,
   ...tableTranslations,
   ...categoryTranslations,
+  ...reservationTranslations,
   helloWorld: {
     [Language.ENGLISH]: "Hello World",
     [Language.SPANISH]: "Hola Mundo",

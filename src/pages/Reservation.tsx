@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Alert, AlertTitle, Avatar, Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { SoldierDetails } from "components/atoms/SoldierDetails";
 import { SoldierImage } from "components/atoms/SoldierImage";
 import GenericTable, { ColumnConfig } from "components/molecules/GenericTable";
@@ -17,6 +17,11 @@ import { GenericTableRow } from "components/molecules/GenericTable";
 import ApiService from "utils/api_service/api_service";
 import { useCallback } from "react";
 import GlobalState from "state/GlobalState";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import useTranslate from "hooks/useTranslate";
+import { useSnackbar } from "notistack";
+import { getStringAvatar } from "utils/get_string_avatar.util";
 
 interface ReservationProps {}
 
@@ -43,6 +48,8 @@ const weaponColumns: ColumnConfig[] = [
 ];
 
 const Reservation: React.FC<ReservationProps> = () => {
+  const t = useTranslate();
+  const { enqueueSnackbar } = useSnackbar();
   const [soldier, setSoldier] = React.useState<User>();
   const [items, setItems1] = React.useState<ItemResponse[]>([]);
   const [rows, setRows] = React.useState<GenericTableRow[]>([]);
@@ -91,35 +98,41 @@ const Reservation: React.FC<ReservationProps> = () => {
   };
 
   const createReservation = useCallback(async (it: ItemResponse[], soldier?: User) => {
-    if (GlobalState.user != null && soldier !== undefined) {
-      let requestGroupResponse: RequestGroupResponse;
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-      };
-      fetch(
-        `http://127.0.0.1:8000/api/requestgroup?borrower_id=${soldier.id.toString()}&manager_id=${GlobalState.user.id.toString()}`,
-        requestOptions,
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          requestGroupResponse = data;
-          const requestItems: RequestItemData[] = [];
-
-          for (let i = 0; i < it.length; i++) {
-            requestItems.push({
-              item_id: it[i].id,
-              item_type_id: Number(it[i].item_type_id),
-              request_group_id: Number(requestGroupResponse.id),
-              approved: 1,
-              date_due: new Date().toString(),
-              date_borrowed: new Date().toString(),
-              date_returned: new Date().toString(),
-            });
-          }
-          responseRequestItems(requestItems);
-        });
+    if (!GlobalState.user || !soldier) {
+      return;
     }
+
+    let requestGroupResponse: RequestGroupResponse;
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+    };
+    fetch(
+      `http://127.0.0.1:8000/api/requestgroup?borrower_id=${soldier.id.toString()}&manager_id=${GlobalState.user.id.toString()}`,
+      requestOptions,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        requestGroupResponse = data;
+        const requestItems: RequestItemData[] = [];
+
+        for (let i = 0; i < it.length; i++) {
+          requestItems.push({
+            item_id: it[i].id,
+            item_type_id: Number(it[i].item_type_id),
+            request_group_id: Number(requestGroupResponse.id),
+            approved: 1,
+            date_due: new Date().toString(),
+            date_borrowed: new Date().toString(),
+            date_returned: new Date().toString(),
+          });
+        }
+        responseRequestItems(requestItems);
+        enqueueSnackbar(t("reservation.reservationCreatedToast"), { variant: "success" });
+      })
+      .catch((e) => {
+        enqueueSnackbar("Error: " + e, { variant: "error" });
+      });
   }, []);
 
   const responseRequestItems = async (requestItems: RequestItemData[]) => {
@@ -128,40 +141,67 @@ const Reservation: React.FC<ReservationProps> = () => {
 
   return (
     <BodyLayout>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "right",
-        }}
-      >
-        <IconButton icon={<AddIcon />} text="Add Soldier" onHandleClick={handleClickOpenSoldiersDialog} />
-      </Box>
-      <SoldierFormDialog
-        handleClickClose={handleClickCloseSoldiersDialog}
-        open={showSoldiers}
-        handleAddSoldiers={addSoldier}
-      />
-      <Box sx={reservationStyles.detailsMainBox}>
-        <SoldierImage
-          alt="Soldier placeholder"
-          imageUrl="http://cpgw.org.uk/wp-content/uploads/soldier-placeholder.png"
-        />
-        <SoldierDetails name={soldier?.name} id={soldier?.id.toString()} role={soldier?.role} />
-      </Box>
-      <Box>
-        <h2>QR/Barcodes</h2>
-        <Button variant="contained">Link QR/Barcode</Button>
-      </Box>
-      <Box sx={reservationStyles.itemsTableBox}>
-        <ItemTableHeader onHandleClick={handleClickOpenWeaponsDialog} />
-        <GenericTable columns={weaponColumns} rows={rows} />
-        <WeaponFormDialog
-          handleClickClose={handleClickCloseWeaponsDialog}
-          open={showWeapons}
-          handleAddWeapons={addWeapons}
-        />
-      </Box>
+      <Paper elevation={-1} sx={reservationStyles.sectionBox}>
+        <Box sx={reservationStyles.buttonContainer}>
+          <Typography variant="h5">{t("reservation.soldierTitle")}</Typography>
+          <Button variant="outlined" startIcon={<AddIcon />} onClick={handleClickOpenSoldiersDialog}>
+            {t("reservation.addSoldierButton")}
+          </Button>
+        </Box>
+        <div>
+          <SoldierFormDialog
+            handleClickClose={handleClickCloseSoldiersDialog}
+            open={showSoldiers}
+            handleAddSoldiers={addSoldier}
+          />
+          <Box sx={reservationStyles.detailsMainBox}>
+            {soldier ? (
+              <>
+                <SoldierImage name={soldier.name} />
+                <SoldierDetails
+                  email={soldier.email}
+                  name={soldier.name}
+                  id={soldier.id.toString()}
+                  role={soldier.role}
+                />
+              </>
+            ) : (
+              <Alert sx={{ width: "100%" }} severity="warning">
+                <AlertTitle>{t("reservation.noSoldierTitle")}</AlertTitle>
+                {t("reservation.noSoldierText")}
+              </Alert>
+            )}
+          </Box>
+        </div>
+      </Paper>
+      <Paper elevation={-1} sx={reservationStyles.sectionBox}>
+        <Box sx={reservationStyles.buttonContainer}>
+          <Typography variant="h5">{t("reservation.weaponsTitle")}</Typography>
+          <Stack spacing={1} direction="row">
+            <Button variant="outlined" startIcon={<QrCode2Icon />}>
+              {t("reservation.scanButton")}
+            </Button>
+            <Button variant="outlined" startIcon={<BorderColorIcon />} onClick={handleClickOpenWeaponsDialog}>
+              {t("reservation.manualAddButton")}
+            </Button>
+          </Stack>
+        </Box>
+        <Box sx={reservationStyles.itemsTableBox}>
+          <GenericTable columns={weaponColumns} rows={rows} />
+          {rows.length === 0 && (
+            <Alert severity="warning">
+              <AlertTitle>{t("reservation.noWeaponTitle")}</AlertTitle>
+              {t("reservation.noWeaponText")}
+            </Alert>
+          )}
+          <WeaponFormDialog
+            handleClickClose={handleClickCloseWeaponsDialog}
+            open={showWeapons}
+            handleAddWeapons={addWeapons}
+          />
+        </Box>
+      </Paper>
+
       <Box
         sx={{
           marginTop: 1,
@@ -170,14 +210,18 @@ const Reservation: React.FC<ReservationProps> = () => {
           justifyContent: "right",
         }}
       >
-        <IconButton
-          backgroundColor="#4caf50"
-          icon={<CheckIcon />}
-          text="Create reservation"
-          onHandleClick={() => {
+        <Button
+          color="success"
+          variant="contained"
+          disableElevation
+          startIcon={<CheckIcon />}
+          onClick={() => {
             createReservation(items, soldier);
           }}
-        />
+          disabled={!rows.length || !soldier}
+        >
+          {t("reservation.createReservationButton")}
+        </Button>
       </Box>
     </BodyLayout>
   );
