@@ -20,6 +20,7 @@ export interface RequestGroupResponse {
   manager_id: string;
   updated_at: string;
   created_at: string;
+  requestItems?: RequestItemResponse[];
   id: string;
 }
 
@@ -103,6 +104,11 @@ export type Endpoint =
     }
   | {
       method: "GET";
+      url: "/api/requestgroup";
+      response: RequestGroupResponse[];
+    }
+  | {
+      method: "GET";
       url: "/api/itemtypes";
       response: ItemTypesResponse[];
     }
@@ -111,10 +117,10 @@ export type Endpoint =
       url: "/api/items";
       response: ItemResponse[];
     }
-    | {
+  | {
       method: "GET";
-      url: "/api/items";
-      response: ItemResponse[];
+      url: "/api/requestitem/";
+      response: RequestItemResponse[];
     }
   | {
       method: "GET";
