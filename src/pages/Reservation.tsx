@@ -12,12 +12,18 @@ import WeaponFormDialog from "components/molecules/WeaponDialog";
 import { IconButton } from "components/atoms/IconButton";
 import { User } from "interfaces/User";
 import SoldierFormDialog from "components/molecules/SoldierFormDialog";
-import { ItemResponse } from "utils/api_service/endpoints.config";
+import {
+  ItemResponse,
+  RequestGroupResponse,
+  RequestItemData,
+  RequestItemResponse,
+} from "utils/api_service/endpoints.config";
 import { GenericTableRow } from "components/molecules/GenericTable";
 import ApiService from "utils/api_service/api_service";
 import { useCallback, useEffect } from "react";
 import { Global } from "@emotion/react";
 import GlobalState from "state/GlobalState";
+
 interface ReservationProps {}
 
 const weaponColumns: ColumnConfig[] = [
@@ -43,30 +49,21 @@ const weaponColumns: ColumnConfig[] = [
 ];
 
 const Reservation: React.FC<ReservationProps> = () => {
-  const genericTableRows: GenericTableRow[] = [];
-  const u: User = {
-    id: -1,
-    name: "",
-    email: "",
-    access_level: "-1",
-    email_verified_at: null,
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-  const [soldier, setSoldier] = React.useState(u);
-  const [rows, setRows] = React.useState(genericTableRows);
+  const [soldier, setSoldier] = React.useState<User>();
+  const [items, setItems1] = React.useState<ItemResponse[]>([]);
+  const [rows, setRows] = React.useState<GenericTableRow[]>([]);
 
-  const addSoldier = (soldier: User) => {
+  const addSoldier = (soldier1: User) => {
     handleClickCloseSoldiersDialog();
-    setSoldier(soldier);
+    setSoldier(soldier1);
   };
 
   const addWeapons = (weapons: ItemResponse[]) => {
     handleClickCloseWeaponsDialog();
+    const newWeapons: ItemResponse[] = [...weapons];
     const newRows: GenericTableRow[] = [];
     if (weapons != null) {
       for (let i = 0; i < weapons.length; i++) {
-        console.log(weapons[i]);
         newRows.push({
           itemId: weapons[i].id.toString(),
           name: <Typography>{weapons[i].item_type?.name}</Typography>,
@@ -75,6 +72,7 @@ const Reservation: React.FC<ReservationProps> = () => {
         });
       }
     }
+    setItems1(newWeapons);
     setRows(newRows);
   };
 
@@ -98,24 +96,41 @@ const Reservation: React.FC<ReservationProps> = () => {
     setShowSoldiers(false);
   };
 
-  const createReservation = useCallback(async () => {
-    console.log("Soldier id " + soldier.id);
-    console.log("User id " + GlobalState.user?.id);
-    if (GlobalState.user != null && soldier.id.toString() !== "-1") {
-      const responseRequestGroup = await ApiService.post("/api/requestgroup", {
-        borrower_id: soldier.id.toString(),
-        manager_id: GlobalState.user.id.toString(),
-      });
-      console.log(responseRequestGroup.data);
-      console.log("Print");
+  const createReservation = useCallback(async (it: ItemResponse[], soldier?: User) => {
+    if (GlobalState.user != null && soldier !== undefined) {
+      let requestGroupResponse: RequestGroupResponse;
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+      };
+      fetch(
+        `http://127.0.0.1:8000/api/requestgroup?borrower_id=${soldier.id.toString()}&manager_id=${GlobalState.user.id.toString()}`,
+        requestOptions,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          requestGroupResponse = data;
+          const requestItems: RequestItemData[] = [];
 
-      // for (let i = 0; i < users.length; i++) {
-      //   users[i].role = getRole(users[i].access_level);
-      // }
-      // setSoldiers(users);
-      // setFoundSoldiers(users);
+          for (let i = 0; i < it.length; i++) {
+            requestItems.push({
+              item_id: it[i].id,
+              item_type_id: Number(it[i].item_type_id),
+              request_group_id: Number(requestGroupResponse.id),
+              approved: 1,
+              date_due: new Date().toString(),
+              date_borrowed: new Date().toString(),
+              date_returned: new Date().toString(),
+            });
+          }
+          responseRequestItems(requestItems);
+        });
     }
   }, []);
+
+  const responseRequestItems = async (requestItems: RequestItemData[]) => {
+    await ApiService.post("/api/requestitem", requestItems);
+  };
 
   return (
     <BodyLayout>
@@ -138,7 +153,7 @@ const Reservation: React.FC<ReservationProps> = () => {
           alt="Soldier placeholder"
           imageUrl="http://cpgw.org.uk/wp-content/uploads/soldier-placeholder.png"
         />
-        <SoldierDetails name={soldier.name} id={soldier.id.toString()} role={soldier?.role} />
+        <SoldierDetails name={soldier?.name} id={soldier?.id.toString()} role={soldier?.role} />
       </Box>
       <Box>
         <h2>QR/Barcodes</h2>
@@ -165,7 +180,9 @@ const Reservation: React.FC<ReservationProps> = () => {
           backgroundColor="#4caf50"
           icon={<CheckIcon />}
           text="Create reservation"
-          onHandleClick={createReservation}
+          onHandleClick={() => {
+            createReservation(items, soldier);
+          }}
         />
       </Box>
     </BodyLayout>

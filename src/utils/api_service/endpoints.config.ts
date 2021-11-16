@@ -1,4 +1,5 @@
 import { User } from "interfaces/User";
+import { number } from "prop-types";
 export interface RandomCatFactResponse {
   fact: string;
   length: number;
@@ -14,12 +15,12 @@ interface RequestGroupEndpointData {
   manager_id: string;
 }
 
-interface RequestGroupResponse {
-  borrower_id: string,
-  manager_id: string,
-  updated_at: string,
-  created_at: string,
-  id: string,
+export interface RequestGroupResponse {
+  borrower_id: string;
+  manager_id: string;
+  updated_at: string;
+  created_at: string;
+  id: string;
 }
 
 interface LoginEndpointResponse {
@@ -29,6 +30,29 @@ interface LoginEndpointResponse {
 
   //onError:
   message?: string;
+}
+
+export interface RequestItemData {
+  item_id: number;
+  item_type_id: number;
+  request_group_id: number;
+  approved: number;
+  date_due: string;
+  date_borrowed: string;
+  date_returned: string;
+}
+
+export interface RequestItemResponse {
+  item_id: number;
+  item_type_id: number;
+  request_group_id: number;
+  approved: number;
+  date_due: string;
+  date_borrowed: string;
+  date_returned: string;
+  updated_at: string;
+  created_at: string;
+  id: number;
 }
 
 export interface ItemTypesResponse {
@@ -103,4 +127,10 @@ export type Endpoint =
       url: "/api/requestgroup";
       data: RequestGroupEndpointData;
       response: RequestGroupResponse;
+    }
+  | {
+      method: "POST";
+      url: "/api/requestitem";
+      data: RequestItemData[];
+      response: RequestItemResponse;
     };
