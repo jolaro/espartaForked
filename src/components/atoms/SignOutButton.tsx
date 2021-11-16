@@ -19,7 +19,7 @@ const SignOutButton: React.FC = () => {
 
   return (
     <Tooltip title={t("signIn.signOut")}>
-      <IconButton aria-label="sign-out" color="secondary" onClick={handleLogout}>
+      <IconButton aria-label="sign-out" color="error" onClick={handleLogout}>
         <ExitToAppOutlinedIcon />
       </IconButton>
     </Tooltip>

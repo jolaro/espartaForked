@@ -1,4 +1,4 @@
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import { Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import LanguageIcon from "@mui/icons-material/Language";
 import { Downgraded, useHookstate } from "@hookstate/core";
@@ -47,9 +47,9 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <>
-      <IconButton aria-label="language" onClick={handleOpenLanguageMenu}>
-        <LanguageIcon />
-      </IconButton>
+      <Button endIcon={<LanguageIcon />} color="secondary" onClick={handleOpenLanguageMenu}>
+        {i18n.language}
+      </Button>
       <Menu
         id="basic-menu"
         anchorEl={languageMenuAnchorElement.attach(Downgraded).get()}

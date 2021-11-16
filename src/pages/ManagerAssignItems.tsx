@@ -15,7 +15,7 @@ const ManagerAssignItems: React.FC<ManagerAssignItemsProps> = () => {
   const history = useHistory();
 
   const showCreateReservation = () => {
-    history.push("/reservation");
+    history.push("/manager/assign/reservation");
   };
 
   return (

@@ -4,6 +4,7 @@ import { pageTranslations } from "./namespaces/pages.translations";
 import { asTranslation, Language } from "./_translation_interface";
 import { soldierActionTranslations } from "./namespaces/soldierActions.translations";
 import { tableTranslations } from "./namespaces/table.translations";
+import { categoryTranslations } from "./namespaces/category.translations";
 
 export const translations = asTranslation({
   ...pageTranslations,
@@ -11,6 +12,7 @@ export const translations = asTranslation({
   ...signInTranslations,
   ...soldierActionTranslations,
   ...tableTranslations,
+  ...categoryTranslations,
   helloWorld: {
     [Language.ENGLISH]: "Hello World",
     [Language.SPANISH]: "Hola Mundo",
@@ -107,18 +109,7 @@ export const translations = asTranslation({
     [Language.ENGLISH]: "Pending",
     [Language.SPANISH]: "Pendiente",
   },
-  light: {
-    [Language.ENGLISH]: "Light",
-    [Language.SPANISH]: "Ligero",
-  },
-  medium: {
-    [Language.ENGLISH]: "Medium",
-    [Language.SPANISH]: "Medio",
-  },
-  heavy: {
-    [Language.ENGLISH]: "Heavy",
-    [Language.SPANISH]: "Pesada",
-  },
+
   add: {
     [Language.ENGLISH]: "Add",
     [Language.SPANISH]: "Agregar",

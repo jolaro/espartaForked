@@ -12,16 +12,10 @@ import WeaponFormDialog from "components/molecules/WeaponDialog";
 import { IconButton } from "components/atoms/IconButton";
 import { User } from "interfaces/User";
 import SoldierFormDialog from "components/molecules/SoldierFormDialog";
-import {
-  ItemResponse,
-  RequestGroupResponse,
-  RequestItemData,
-  RequestItemResponse,
-} from "utils/api_service/endpoints.config";
+import { ItemResponse, RequestGroupResponse, RequestItemData } from "utils/api_service/endpoints.config";
 import { GenericTableRow } from "components/molecules/GenericTable";
 import ApiService from "utils/api_service/api_service";
-import { useCallback, useEffect } from "react";
-import { Global } from "@emotion/react";
+import { useCallback } from "react";
 import GlobalState from "state/GlobalState";
 
 interface ReservationProps {}
@@ -29,22 +23,22 @@ interface ReservationProps {}
 const weaponColumns: ColumnConfig[] = [
   {
     id: "itemId",
-    title: "Id",
+    title: "table.header.id",
     muiProps: {
       width: "60px",
     },
   },
   {
     id: "name",
-    title: "Weapon",
+    title: "table.header.weapon",
   },
   {
     id: "category",
-    title: "Category",
+    title: "table.header.category",
   },
   {
     id: "qr_barcode",
-    title: "QR/Barcode",
+    title: "table.header.qrbarcode",
   },
 ];
 

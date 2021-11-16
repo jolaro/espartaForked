@@ -15,24 +15,25 @@ import { ItemTypesResponse } from "utils/api_service/endpoints.config";
 import { TranslationKeys } from "translations/_translation_interface";
 import { snooze } from "utils/snooze";
 import { usePromise } from "hooks/usePromise";
+import CategoryChip from "components/atoms/CategoryChip";
 
 const columns: ColumnConfig[] = [
   {
-    title: "Icon",
+    title: "table.header.icon",
     id: "icon",
     muiProps: {
       width: "5%",
     },
   },
   {
-    title: "Item Name",
+    title: "table.header.itemName",
     id: "name",
     muiProps: {
       align: "left",
     },
   },
   {
-    title: "Category",
+    title: "table.header.category",
     id: "category",
     muiProps: {
       align: "center",
@@ -40,7 +41,7 @@ const columns: ColumnConfig[] = [
     },
   },
   {
-    title: "Actions",
+    title: "table.header.actions",
     id: "actions",
     muiProps: {
       align: "center",
@@ -71,7 +72,7 @@ const parseItemTypes = (
   return itemTypes.map((item) => ({
     icon: <MilitaryTechIcon />,
     name: item.name,
-    category: <Chip label={item.weight_category} />,
+    category: <CategoryChip categoryId={item.category_id} />,
     actions: getRequestButton(item.id.toString()),
   }));
 };
@@ -93,11 +94,16 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
   const parsedFetchedRows = parseItemTypes(fetchedRows, t, handleOpenRequestDialog);
 
   const [rows, setRows] = useState<GenericTableRow[]>(parsedFetchedRows);
-  const categoryFilter = useCategoryFilter(rows, setRows, parsedFetchedRows);
+  const categoryFilter = useCategoryFilter(parsedFetchedRows, setRows);
 
-  useEffect(() => {
-    setRows(parsedFetchedRows);
-  }, [parsedFetchedRows.length]);
+  usePromise(
+    async (safeUpdate) => {
+      safeUpdate(() => {
+        setRows(parsedFetchedRows);
+      });
+    },
+    [parsedFetchedRows.length],
+  );
 
   usePromise(async (safeUpdate) => {
     loading.set(true);

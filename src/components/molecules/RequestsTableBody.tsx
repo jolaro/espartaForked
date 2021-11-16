@@ -19,21 +19,21 @@ export interface Request extends GenericTableRow {
 const columns: ColumnConfig[] = [
   {
     id: "id",
-    title: "ID",
+    title: "table.header.id",
     muiProps: {
       width: "10%",
     },
   },
   {
     id: "name",
-    title: "Person Name",
+    title: "table.header.personName",
     muiProps: {
       width: "30%",
     },
   },
   {
     id: "role",
-    title: "Role",
+    title: "table.header.role",
     muiProps: {
       width: "10%",
       align: "center",
@@ -41,14 +41,14 @@ const columns: ColumnConfig[] = [
   },
   {
     id: "items",
-    title: "Items",
+    title: "table.header.items",
     muiProps: {
       width: "37%",
     },
   },
   {
     id: "status",
-    title: "Status",
+    title: "table.header.status",
     muiProps: {
       width: "8%",
       align: "right",

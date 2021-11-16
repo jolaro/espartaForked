@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 
-export const usePromise = (promise: (safeUpdate: (func: () => void) => void) => Promise<void>) => {
+export const usePromise = (
+  promise: (safeUpdate: (func: () => void) => void) => Promise<void>,
+  dependencies?: any[],
+) => {
   useEffect(() => {
     let isMounted = true;
 
@@ -13,5 +16,5 @@ export const usePromise = (promise: (safeUpdate: (func: () => void) => void) => 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [...(dependencies || [])]);
 };

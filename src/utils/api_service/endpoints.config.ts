@@ -59,7 +59,7 @@ export interface ItemTypesResponse {
   id: number;
   name: string;
   price: string;
-  weight_category: string;
+  category_id: string;
   category: string;
   desired_amount: string;
   created_at: string;
@@ -111,7 +111,7 @@ export type Endpoint =
       url: "/api/items";
       response: ItemResponse[];
     }
-    | {
+  | {
       method: "GET";
       url: "/api/items";
       response: ItemResponse[];

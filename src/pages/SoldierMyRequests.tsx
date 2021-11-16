@@ -9,14 +9,14 @@ import useCategoryFilter from "components/molecules/GenericTable/useCategoryFilt
 
 const columns: ColumnConfig[] = [
   {
-    title: "Icon",
+    title: "table.header.icon",
     id: "icon",
     muiProps: {
       width: "60px",
     },
   },
   {
-    title: "Item Name",
+    title: "table.header.itemName",
     id: "name",
     muiProps: {
       align: "left",
@@ -24,14 +24,14 @@ const columns: ColumnConfig[] = [
     },
   },
   {
-    title: "Category",
+    title: "table.header.category",
     id: "category",
     muiProps: {
       align: "center",
     },
   },
   {
-    title: "Status",
+    title: "table.header.status",
     id: "status",
     muiProps: {
       align: "center",
@@ -60,7 +60,7 @@ interface SoldierMyRequestsProps {}
 const SoldierMyRequests: React.FC<SoldierMyRequestsProps> = () => {
   const pageTabProps = useSoldierPageTabs();
   const [rows, setRows] = useState<GenericTableRow[]>(allRows);
-  const categoryFilter = useCategoryFilter(rows, setRows, allRows);
+  const categoryFilter = useCategoryFilter(allRows, setRows);
 
   return (
     <BodyLayout>

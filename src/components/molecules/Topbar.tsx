@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import bodyLayoutStyles from "styles/mui/bodyLayoutStyles";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -46,8 +46,10 @@ const Topbar: React.FC<TopbarProps> = ({ isMobile, onMenuIconClick }) => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {t(openedPageTitle.get())}
         </Typography>
-        <LanguageSwitcher />
-        <SignOutButton />
+        <Stack direction="row" spacing={1}>
+          <LanguageSwitcher />
+          <SignOutButton />
+        </Stack>
       </Toolbar>
     </AppBar>
   );

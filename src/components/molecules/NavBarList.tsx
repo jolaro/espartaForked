@@ -25,7 +25,7 @@ const NavBarListItem: React.FC<NavBarListItemProps> = ({ route }) => {
   return (
     <ListItem
       button
-      selected={match.path === route.path}
+      selected={match.path.includes(route.path)}
       key={route.path}
       sx={bodyLayoutStyles.listItem}
       onClick={() => navigateTo(route.path)}

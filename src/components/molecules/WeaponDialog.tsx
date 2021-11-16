@@ -91,7 +91,7 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
     for (let i = 0; i < itemsResponse.length; i++) {
       for (let i2 = 0; i2 < itemsItemsTypes.length; i2++) {
         if (itemsResponse[i].item_type_id === itemsItemsTypes[i2].id.toString()) {
-          itemsItemsTypes[i2].category = getCategory(itemsItemsTypes[i2].weight_category);
+          itemsItemsTypes[i2].category = getCategory(itemsItemsTypes[i2].category_id);
           itemsResponse[i].item_type = itemsItemsTypes[i2];
         }
       }

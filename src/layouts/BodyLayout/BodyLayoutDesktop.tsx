@@ -17,7 +17,9 @@ const BodyLayout: React.FC<BodyLayoutProps> = ({ drawer, children }) => {
       </Drawer>
       <Box sx={{ flex: 1 }}>
         <Topbar isMobile={false} />
-        <Paper sx={bodyLayoutStyles.container}>{children}</Paper>
+        <Paper elevation={0} sx={bodyLayoutStyles.container}>
+          {children}
+        </Paper>
       </Box>
     </Box>
   );

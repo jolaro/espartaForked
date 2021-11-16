@@ -14,6 +14,8 @@ import Filters from "../Filters/Filters";
 import GenericTableBody from "./GenericTableBody";
 import SelectFilter from "./SelectFilter";
 import { filterStyles } from "../../../styles/mui/filterStyles";
+import { TranslationKeys } from "translations/_translation_interface";
+import useTranslate from "hooks/useTranslate";
 
 export interface TableFilterOption {
   value: string;
@@ -29,7 +31,7 @@ export interface TableFilter {
 }
 
 export interface ColumnConfig {
-  title: string;
+  title: TranslationKeys;
   id: string;
   muiProps?: TableCellProps;
 }
@@ -57,6 +59,7 @@ const GenericTable: React.FC<GenericTableProps> = ({
   noFilters = false,
   loadingSkeletonCount = 5,
 }) => {
+  const t = useTranslate();
   const currentFilterTextRef = useRef<string>("");
   const [filteredRows, setFilteredRows] = useState<GenericTableRow[]>(rows);
   const rowsToShow = !loading ? filteredRows : new Array(loadingSkeletonCount).fill({});
@@ -104,7 +107,7 @@ const GenericTable: React.FC<GenericTableProps> = ({
             <TableRow>
               {columns.map((column) => (
                 <TableCell key={column.id} sx={soldierAvailableItemsStyles.tableHead} {...column.muiProps}>
-                  {column.title}
+                  {t(column.title)}
                 </TableCell>
               ))}
             </TableRow>

@@ -93,10 +93,11 @@ const routes: Route[] = [
   {
     id: 2,
     title: getPropertyName(pageTranslations, (p) => p["page.reservation"]),
-    path: "/reservation",
+    path: "/manager/assign/reservation",
     component: Reservation,
     exact: true,
     restricted: true,
+    hidden: true,
     group: "Manager",
   },
   {

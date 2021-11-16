@@ -20,21 +20,21 @@ export interface Weapon {
 const columns: ColumnConfig[] = [
   {
     id: "name",
-    title: "Item Name",
+    title: "table.header.itemName",
     muiProps: {
       width: "70%",
     },
   },
   {
     id: "desired_amount",
-    title: "Quantity",
+    title: "table.header.quantity",
     muiProps: {
       align: "center",
     },
   },
   {
     id: "category",
-    title: "Category",
+    title: "table.header.category",
   },
 ];
 
@@ -64,7 +64,7 @@ export function WeaponsTableBody() {
       newRows.push({
         name: response.data[i].name,
         desired_amount: response.data[i].desired_amount,
-        category: getCategory(response.data[i].weight_category),
+        category: getCategory(response.data[i].category_id),
       });
     }
     setRows(newRows);
