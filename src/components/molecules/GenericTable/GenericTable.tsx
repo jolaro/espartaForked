@@ -37,7 +37,8 @@ export interface ColumnConfig {
 }
 
 export type GenericTableRow = {
-  [key: string]: string | JSX.Element;
+  [key: string]: string | JSX.Element | undefined;
+  className?: string;
 };
 
 interface GenericTableProps {

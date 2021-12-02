@@ -11,3 +11,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+.highlighted-table-row {
+  background: rgba(255, 255, 255, 0.1);
+  animation: 0.3s ease-out 0s 1 quickHighlight !important;
+}
+
+@keyframes quickHighlight {
+  0% {
+    background: transparent;
+  }
+
+  20% {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  60% {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  100% {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}

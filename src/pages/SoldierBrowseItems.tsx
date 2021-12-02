@@ -1,11 +1,11 @@
-import { Button, Chip, Tooltip } from "@mui/material";
+import { Alert, AlertTitle, Button, Chip, Fab, IconButton, Tooltip } from "@mui/material";
 import GenericTable, { ColumnConfig, GenericTableRow } from "components/molecules/GenericTable";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import AddIcon from "@mui/icons-material/Add";
 import useTranslate from "hooks/useTranslate";
 import SoldierRequestDialog, { isSoldierRequestDialogOpen } from "components/molecules/SoldierRequestDialog";
-import { useHookstate } from "@hookstate/core";
+import { none, useHookstate } from "@hookstate/core";
 import { useSoldierPageTabs } from "hooks/useSoldierPageTabs";
 import PageTabs from "components/molecules/PageTabs/PageTabs";
 import BodyLayout from "layouts/BodyLayout";
@@ -16,6 +16,7 @@ import { TranslationKeys } from "translations/_translation_interface";
 import { snooze } from "utils/snooze";
 import { usePromise } from "hooks/usePromise";
 import CategoryChip from "components/atoms/CategoryChip";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const columns: ColumnConfig[] = [
   {
@@ -52,28 +53,50 @@ const columns: ColumnConfig[] = [
 
 const parseItemTypes = (
   itemTypes: ItemTypesResponse[],
+  addedItemsIds: string[],
   t: (key: TranslationKeys) => string,
-  handleOpenRequestDialog: (itemId: string) => void,
+  handleButtonClick: (itemId: string) => void,
 ): GenericTableRow[] => {
-  const getRequestButton = (itemId: string) => (
-    <Tooltip title={t("soldierActions.requestTooltip")}>
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={() => handleOpenRequestDialog(itemId)}
-        size="small"
-        startIcon={<AddIcon />}
-      >
-        {t("soldierActions.requestButtonText")}
-      </Button>
-    </Tooltip>
-  );
+  const isItemAdded = (itemId: string) => addedItemsIds.includes(itemId);
+
+  const getRequestButton = (itemId: string) => {
+    if (isItemAdded(itemId))
+      return (
+        <Tooltip title={t("soldierActions.requestRemoveTooltip")}>
+          <IconButton color="error" onClick={() => handleButtonClick(itemId)} size="small">
+            <RemoveIcon />
+          </IconButton>
+        </Tooltip>
+      );
+
+    return (
+      <Tooltip title={t("soldierActions.requestTooltip")}>
+        <IconButton color="primary" onClick={() => handleButtonClick(itemId)} size="small">
+          <AddIcon />
+        </IconButton>
+      </Tooltip>
+    );
+  };
+
+  itemTypes.sort((a, b) => {
+    const isItemASelected = addedItemsIds.includes(a.id.toString());
+    const isItemBSelected = addedItemsIds.includes(b.id.toString());
+
+    if (isItemASelected && !isItemBSelected) {
+      return -1;
+    } else if (!isItemASelected && isItemBSelected) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 
   return itemTypes.map((item) => ({
     icon: <MilitaryTechIcon />,
     name: item.name,
     category: <CategoryChip categoryId={item.category_id} />,
     actions: getRequestButton(item.id.toString()),
+    className: isItemAdded(item.id.toString()) ? "highlighted-table-row animated-row" : "animated-row",
   }));
 };
 
@@ -81,17 +104,25 @@ interface SoldierBrowseItemsProps {}
 
 const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
   const t = useTranslate();
-  const requestItemId = useHookstate<string | null>(null);
+  const addedItemsIds = useHookstate<string[]>([]);
   const loading = useHookstate(true);
   const pageTabProps = useSoldierPageTabs();
 
-  const handleOpenRequestDialog = (itemId: string) => {
-    requestItemId.set(itemId);
+  const handleButtonClick = (itemId: string) => {
+    if (addedItemsIds.get().includes(itemId)) {
+      const index = addedItemsIds.get().findIndex((_itemId) => itemId === _itemId);
+      addedItemsIds[index].set(none);
+    } else {
+      addedItemsIds.merge([itemId]);
+    }
+  };
+
+  const handleSubmit = () => {
     isSoldierRequestDialogOpen.set(true);
   };
 
   const [fetchedRows, setFetchedRows] = useState<ItemTypesResponse[]>([]);
-  const parsedFetchedRows = parseItemTypes(fetchedRows, t, handleOpenRequestDialog);
+  const parsedFetchedRows = parseItemTypes(fetchedRows, addedItemsIds.get(), t, handleButtonClick);
 
   const [rows, setRows] = useState<GenericTableRow[]>(parsedFetchedRows);
   const categoryFilter = useCategoryFilter(parsedFetchedRows, setRows);
@@ -102,7 +133,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
         setRows(parsedFetchedRows);
       });
     },
-    [parsedFetchedRows.length],
+    [parsedFetchedRows.length, addedItemsIds.length],
   );
 
   usePromise(async (safeUpdate) => {
@@ -116,12 +147,34 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
     });
   });
 
+  const currentSelectedItems = useMemo(() => {
+    return fetchedRows.filter((item) => addedItemsIds.get().includes(item.id.toString()));
+  }, [fetchedRows, addedItemsIds]);
+
   return (
     <BodyLayout>
       <PageTabs {...pageTabProps} />
+      {addedItemsIds.length > 0 && (
+        <Alert
+          action={
+            <Button color="inherit" variant="outlined" size="small" onClick={handleSubmit}>
+              {t("soldierActions.submitButtonText")}
+            </Button>
+          }
+          severity="info"
+          icon={false}
+          variant="filled"
+          sx={{ mt: 2, mb: 1, "& .MuiAlert-action": { alignItems: "center" } }}
+        >
+          <AlertTitle>
+            {addedItemsIds.length} {t("soldierActions.markedForExportTitle")}
+          </AlertTitle>
+          {t("soldierActions.markedForExportText")}
+        </Alert>
+      )}
       <GenericTable loading={loading.get()} columns={columns} rows={rows} filters={[...categoryFilter]} />
-      {requestItemId.get() && (
-        <SoldierRequestDialog name={fetchedRows.find((item) => item.id.toString() === requestItemId.get())!.name} />
+      {addedItemsIds.length > 0 && (
+        <SoldierRequestDialog items={currentSelectedItems} onSuccess={() => addedItemsIds.set([])} />
       )}
     </BodyLayout>
   );

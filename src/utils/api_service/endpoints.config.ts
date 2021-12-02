@@ -11,8 +11,8 @@ interface LoginEndpointData {
 }
 
 interface RequestGroupEndpointData {
-  borrower_id: string;
-  manager_id: string;
+  borrower_id: number;
+  manager_id?: number;
 }
 
 export interface RequestGroupResponse {
@@ -34,12 +34,12 @@ interface LoginEndpointResponse {
 
 export interface RequestItemData {
   item_id: number;
-  item_type_id: number;
   request_group_id: number;
   approved: number;
-  date_due: string;
-  date_borrowed: string;
-  date_returned: string;
+  item_type_id?: number;
+  date_due?: string;
+  date_borrowed?: string;
+  date_returned?: string;
 }
 
 export interface RequestItemResponse {
@@ -75,6 +75,11 @@ export interface ItemResponse {
   updated_at: string;
 }
 
+export interface RequestGroupQueryParams {
+  loanee_id?: number;
+  lender_id?: number;
+}
+
 /**
  * ! EXAMPLE POST/PUT CONFIG ENTRY
  * post config has to has the following:
@@ -95,32 +100,39 @@ export interface ItemResponse {
  *
  */
 
-export type Endpoint =
+export type GetEndpoint =
   | {
       method: "GET";
       url: "https://catfact.ninja/fact";
+      queryParams: undefined;
       response: RandomCatFactResponse;
     }
   | {
       method: "GET";
       url: "/api/itemtypes";
+      queryParams: undefined;
       response: ItemTypesResponse[];
     }
   | {
       method: "GET";
       url: "/api/items";
-      response: ItemResponse[];
-    }
-  | {
-      method: "GET";
-      url: "/api/items";
+      queryParams: undefined;
       response: ItemResponse[];
     }
   | {
       method: "GET";
       url: "/api/users";
+      queryParams: undefined;
       response: User[];
     }
+  | {
+      method: "GET";
+      url: "/api/requestgroup";
+      queryParams: RequestGroupQueryParams;
+      response: RequestGroupResponse | RequestGroupResponse[];
+    };
+
+export type PostEndpoint =
   | {
       method: "POST";
       url: "/api/login";

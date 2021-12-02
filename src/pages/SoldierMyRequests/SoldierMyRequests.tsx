@@ -6,6 +6,7 @@ import PageTabs from "components/molecules/PageTabs/PageTabs";
 import { useSoldierPageTabs } from "hooks/useSoldierPageTabs";
 import BodyLayout from "layouts/BodyLayout";
 import useCategoryFilter from "components/molecules/GenericTable/useCategoryFilter";
+import useSoldierMyRequests from "./useSoldierMyRequests";
 
 const columns: ColumnConfig[] = [
   {
@@ -59,7 +60,8 @@ interface SoldierMyRequestsProps {}
 
 const SoldierMyRequests: React.FC<SoldierMyRequestsProps> = () => {
   const pageTabProps = useSoldierPageTabs();
-  const [rows, setRows] = useState<GenericTableRow[]>(allRows);
+  const fetchedRows = useSoldierMyRequests();
+  const [rows, setRows] = useState<GenericTableRow[]>(fetchedRows);
   const categoryFilter = useCategoryFilter(allRows, setRows);
 
   return (
