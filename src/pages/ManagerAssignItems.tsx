@@ -34,7 +34,6 @@ const ManagerAssignItems: React.FC<ManagerAssignItemsProps> = () => {
         <Button variant="contained" disableElevation startIcon={<AddIcon />} onClick={showCreateReservation}>
           {t("reservation.createReservationButton")}
         </Button>
-        {/* <IconButton icon={<AddIcon />} text="Create reservation" onHandleClick={showCreateReservation} /> */}
       </Box>
       <AssignTableBody />
     </BodyLayout>
