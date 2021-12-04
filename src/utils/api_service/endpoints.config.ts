@@ -133,7 +133,7 @@ export type GetEndpoint =
       url: "/api/requestgroup";
       queryParams: RequestGroupQueryParams;
       response: RequestGroupResponse[];
-    }; 
+    };
 
 export type PostEndpoint =
   | {
