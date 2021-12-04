@@ -2,7 +2,7 @@ import useTranslate from "../../hooks/useTranslate";
 import { useEffect, useState } from "react";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
 import ApiService from "utils/api_service/api_service";
-import { ItemTypesResponse } from "utils/api_service/endpoints.config";
+import { ItemTypeResponse } from "utils/api_service/endpoints.config";
 
 export interface Weapon {
   weight_category: string;
@@ -64,7 +64,7 @@ export function WeaponsTableBody() {
       newRows.push({
         name: response.data[i].name,
         desired_amount: response.data[i].desired_amount,
-        category: getCategory(response.data[i].category_id),
+        category: getCategory(response.data[i].weight_category),
       });
     }
     setRows(newRows);
