@@ -118,8 +118,8 @@ const Reservation: React.FC<ReservationProps> = () => {
 
         for (let i = 0; i < it.length; i++) {
           requestItems.push({
-            item_id: it[i].id,
-            item_type_id: Number(it[i].item_type_id),
+            item_id: it[i].id.toString(),
+            item_type_id: it[i].item_type_id,
             request_group_id: Number(requestGroupResponse.id),
             approved: 1,
             date_due: new Date().toString(),
