@@ -69,7 +69,7 @@ export interface ItemTypesResponse {
 export interface ItemResponse {
   id: number;
   item_type_id: string;
-  item_type?: ItemTypesResponse;
+  item_type: ItemTypesResponse;
   serial: string;
   created_at: string;
   updated_at: string;
