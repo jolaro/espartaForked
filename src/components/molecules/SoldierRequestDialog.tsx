@@ -7,10 +7,10 @@ import React from "react";
 import GlobalState from "state/GlobalState";
 import { soldierAvailableItemsStyles } from "styles/mui/soldierAvailableItemsStyles";
 import ApiService from "utils/api_service/api_service";
-import { ItemTypesResponse } from "utils/api_service/endpoints.config";
+import { ItemTypeResponse } from "utils/api_service/endpoints.config";
 
 interface SoldierRequestDialogProps {
-  items: ItemTypesResponse[];
+  items: ItemTypeResponse[];
   onSuccess?: () => void;
 }
 
