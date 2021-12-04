@@ -19,6 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useCallback } from "react";
 import ApiService from "utils/api_service/api_service";
 import { ItemResponse, ItemTypesResponse } from "utils/api_service/endpoints.config";
+import { getStringAvatar } from "utils/get_string_avatar.util";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -165,7 +166,7 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
                   >
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar alt={`Avatar n°${weapon.id + 1}`} src={`/static/images/avatar/${weapon.id + 1}.jpg`} />
+                        <Avatar {...getStringAvatar(weapon?.item_type?.name)} />
                       </ListItemAvatar>
                       <ListItemText
                         primary={weapon?.item_type?.name}
