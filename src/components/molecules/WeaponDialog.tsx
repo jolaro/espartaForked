@@ -18,7 +18,7 @@ import { alpha, Box, InputBase, styled, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useCallback } from "react";
 import ApiService from "utils/api_service/api_service";
-import { ItemResponse, ItemTypesResponse } from "utils/api_service/endpoints.config";
+import { ItemResponse, ItemTypeResponse } from "utils/api_service/endpoints.config";
 import { getStringAvatar } from "utils/get_string_avatar.util";
 
 const Search = styled("div")(({ theme }) => ({
@@ -86,12 +86,12 @@ export default function WeaponFormDialog(props: WeaponFormDialogProps) {
     const responseItems = await ApiService.get("/api/items");
     const responseItemsTypes = await ApiService.get("/api/itemtypes");
     const itemsResponse: ItemResponse[] = responseItems.data;
-    const itemsItemsTypes: ItemTypesResponse[] = responseItemsTypes.data;
+    const itemsItemsTypes: ItemTypeResponse[] = responseItemsTypes.data;
 
     for (let i = 0; i < itemsResponse.length; i++) {
       for (let i2 = 0; i2 < itemsItemsTypes.length; i2++) {
         if (itemsResponse[i].item_type_id === itemsItemsTypes[i2].id.toString()) {
-          itemsItemsTypes[i2].category = getCategory(itemsItemsTypes[i2].category_id);
+          itemsItemsTypes[i2].category = getCategory(itemsItemsTypes[i2].weight_category);
           itemsResponse[i].item_type = itemsItemsTypes[i2];
         }
       }
