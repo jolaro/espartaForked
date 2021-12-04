@@ -2,11 +2,17 @@ import useTranslate from "../../hooks/useTranslate";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
 import { Role } from "interfaces/Role";
 import { Chip } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import PendingIcon from "@mui/icons-material/Pending";
+import ApiService from "utils/api_service/api_service";
+import { ItemTypeResponse, RequestItemResponse } from "utils/api_service/endpoints.config";
+import el from "date-fns/esm/locale/el/index.js";
+import { User } from "interfaces/User";
+import { access } from "fs";
+import { getRole } from "./SoldierFormDialog";
 
 export interface Assignation extends GenericTableRow {
   id: string;
@@ -89,7 +95,90 @@ const mockRows: Assignation[] = [
 
 export function AssignTableBody() {
   const t = useTranslate();
-  const [rows, setRows] = useState<Assignation[]>(mockRows);
+  var itemTypes: ItemTypeResponse[] = [];
+  const [isInit, setIsInit] = useState<boolean>(false);
+  const [rows, setRows] = useState<Assignation[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const fetch = async () => {
+    setLoading(true);
+    const response = await ApiService.get("/api/requestgroup");
+    const users: User[] = await getUsers();
+    const newRows: Assignation[] = [];
+
+    for (let i = 0; i < response.data.length; i++) {
+      let request = response.data[i];
+      let user = users.find((user) => (user.id = request.borrower_id));
+
+      if (request.approved) {
+        newRows.push({
+          id: request.id,
+          name: user?.name ?? "",
+          role: getRole(user?.access_level ?? Role.TROOP),
+          items: (await getRequestItemsAsString(request.request_items)).toString(),
+          status: t("approved"),
+        });
+      }
+    }
+    setRows(newRows);
+    setLoading(false);
+  };
+
+  async function init() {
+    itemTypes = await getItemTypes();
+    fetch();
+    setIsInit(true);
+  }
+
+  useEffect(() => {
+    if (!isInit) {
+      init();
+    } else {
+      fetch();
+    }
+  }, []);
+
+  async function getUsers() {
+    const response = await ApiService.get("/api/users");
+    const users: User[] = [];
+
+    for (let i = 0; i < response.data.length; i++) {
+      users.push(response.data[i]);
+    }
+    return users;
+  }
+
+  async function getItemTypes() {
+    const response = await ApiService.get("/api/itemtypes");
+    const itemTypes: ItemTypeResponse[] = [];
+
+    for (let i = 0; i < response.data.length; i++) {
+      itemTypes.push(response.data[i]);
+    }
+    return itemTypes;
+  }
+
+  async function getRequestItemsAsString(requestItems: RequestItemResponse[]) {
+    let items = "";
+    const itemsMonitor: string[] = [];
+
+    for (let i = 0; i < requestItems.length; i++) {
+      for (let i2 = 0; i2 < itemTypes.length; i2++) {
+        if (itemTypes[i2].id.toString() === requestItems[i].item_type_id.toString()) {
+          if (!itemsMonitor.includes(itemTypes[i2].id)) {
+            console.log(itemTypes[i2].id.toString());
+            items +=
+              itemTypes[i2].name +
+              " " +
+              requestItems.filter((item) => item.item_type_id.toString() === itemTypes[i2].id.toString()).length +
+              "\n";
+            itemsMonitor.push(itemTypes[i2].id);
+          }
+        }
+      }
+    }
+    return items;
+  }
 
   function getStatusComponent(request: Assignation) {
     switch (request.status.toLowerCase()) {
@@ -123,5 +212,5 @@ export function AssignTableBody() {
     status: getStatusComponent(row),
   }));
 
-  return <GenericTable columns={columns} rows={rowsToRender} />;
+  return <GenericTable columns={columns} rows={rowsToRender} loading={loading} />;
 }
