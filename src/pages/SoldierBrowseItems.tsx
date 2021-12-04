@@ -11,7 +11,7 @@ import PageTabs from "components/molecules/PageTabs/PageTabs";
 import BodyLayout from "layouts/BodyLayout";
 import useCategoryFilter from "components/molecules/GenericTable/useCategoryFilter";
 import ApiService from "utils/api_service/api_service";
-import { ItemTypesResponse } from "utils/api_service/endpoints.config";
+import { ItemTypeResponse } from "utils/api_service/endpoints.config";
 import { TranslationKeys } from "translations/_translation_interface";
 import { snooze } from "utils/snooze";
 import { usePromise } from "hooks/usePromise";
@@ -52,7 +52,7 @@ const columns: ColumnConfig[] = [
 ];
 
 const parseItemTypes = (
-  itemTypes: ItemTypesResponse[],
+  itemTypes: ItemTypeResponse[],
   addedItemsIds: string[],
   t: (key: TranslationKeys) => string,
   handleButtonClick: (itemId: string) => void,
@@ -94,7 +94,7 @@ const parseItemTypes = (
   return itemTypes.map((item) => ({
     icon: <MilitaryTechIcon />,
     name: item.name,
-    category: <CategoryChip categoryId={item.category_id} />,
+    category: <CategoryChip categoryId={item.weight_category} />,
     actions: getRequestButton(item.id.toString()),
     className: isItemAdded(item.id.toString()) ? "highlighted-table-row animated-row" : "animated-row",
   }));
@@ -121,7 +121,7 @@ const SoldierBrowseItems: React.FC<SoldierBrowseItemsProps> = () => {
     isSoldierRequestDialogOpen.set(true);
   };
 
-  const [fetchedRows, setFetchedRows] = useState<ItemTypesResponse[]>([]);
+  const [fetchedRows, setFetchedRows] = useState<ItemTypeResponse[]>([]);
   const parsedFetchedRows = parseItemTypes(fetchedRows, addedItemsIds.get(), t, handleButtonClick);
 
   const [rows, setRows] = useState<GenericTableRow[]>(parsedFetchedRows);
