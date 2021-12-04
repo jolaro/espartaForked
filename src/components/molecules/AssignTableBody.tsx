@@ -18,7 +18,7 @@ export interface Assignation extends GenericTableRow {
   id: string;
   name: string;
   role: Role;
-  items: any;
+  items: string;
   status: string;
 }
 
@@ -62,79 +62,36 @@ const columns: ColumnConfig[] = [
   },
 ];
 
-interface ArrowIconProps {
-  items?: RequestItemResponse[];
-}
-
-function ArrowIcon(props: ArrowIconProps) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        Items
-      </IconButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List dense sx={{ width: "100%" }}>
-          {props.items?.map((item) => {
-            const labelId = `checkbox-list-secondary-label-${item}`;
-            return (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton>
-                  <ListItemAvatar>
-                    <Avatar alt={`Avatar n°${item.id + 1}`} src={`/static/images/avatar/${item.id + 1}.jpg`} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item.item_id}
-                    secondary={
-                      <React.Fragment>
-                        <Box>
-                          <Typography sx={{ display: "inline" }} component="span" variant="body2" color="text.primary">
-                            Id: {item.id}
-                          </Typography>
-                        </Box>
-                      </React.Fragment>
-                    }
-                  />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Collapse>
-    </>
-  );
-}
-// const mockRows: Assignation[] = [
-//   {
-//     items: <ArrowIcon />,
-//     id: Math.floor(Math.random() * 10000000).toString(),
-//     name: "Jeniffer Lawrence",
-//     role: Role.OFFICER,
-//     status: "Rejected",
-//   },
-//   {
-//     items: <ArrowIcon />,
-//     id: Math.floor(Math.random() * 10000000).toString(),
-//     name: "Sergio Ramos",
-//     role: Role.COMMANDER,
-//     status: "Pending",
-//   },
-//   {
-//     items: <ArrowIcon />,
-//     id: Math.floor(Math.random() * 10000000).toString(),
-//     name: "Ballada Mallada",
-//     role: Role.TROOP,
-//     status: "Pending",
-//   },
-//   {
-//     items: <ArrowIcon />,
-//     id: Math.floor(Math.random() * 10000000).toString(),
-//     name: "Justin Bieber",
-//     role: Role.COMMANDER,
-//     status: "Approved",
-//   },
-// ];
+const mockRows: Assignation[] = [
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Jeniffer Lawrence",
+    role: Role.OFFICER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Rejected",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Sergio Ramos",
+    role: Role.COMMANDER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Pending",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Ballada Mallada",
+    role: Role.TROOP,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Pending",
+  },
+  {
+    id: Math.floor(Math.random() * 10000000).toString(),
+    name: "Justin Bieber",
+    role: Role.COMMANDER,
+    items: "2x ItemA \n 2x ItemB",
+    status: "Approved",
+  },
+];
 
 export function AssignTableBody() {
   const t = useTranslate();
@@ -249,11 +206,11 @@ export function AssignTableBody() {
     }
   };
 
-  // const rowsToRender = rows.map((row) => ({
-  //   ...row,
-  //   role: getRoleComponent(row[''].toString()),
-  //   status: getStatusComponent(row[''].toString()),
-  // }));
+  const rowsToRender = rows.map((row) => ({
+    ...row,
+    role: getRoleComponent(row.role),
+    status: getStatusComponent(row),
+  }));
 
   return <GenericTable columns={columns} rows={rowsToRender} loading={loading} />;
 }
