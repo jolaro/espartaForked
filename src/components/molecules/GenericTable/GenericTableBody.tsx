@@ -1,5 +1,6 @@
 import { Skeleton, TableBody, TableCell, TableRow } from "@mui/material";
 import React from "react";
+import { soldierAvailableItemsStyles } from "styles/mui/soldierAvailableItemsStyles";
 import { ColumnConfig, GenericTableRow } from "./GenericTable";
 
 interface GenericTableBodyProps {
@@ -24,7 +25,7 @@ const GenericTableBody: React.FC<GenericTableBodyProps> = ({ columns, rows, load
             className={row.className}
           >
             {columnIds.map((columnId, columnIndex) => (
-              <TableCell key={`value-${columnId}-${i}`} {...columns[columnIndex].muiProps}>
+              <TableCell  sx={soldierAvailableItemsStyles.tableRow} key={`value-${columnId}-${i}`} {...columns[columnIndex].muiProps}>
                 {loading ? <Skeleton /> : row[columnId]}
               </TableCell>
             ))}
