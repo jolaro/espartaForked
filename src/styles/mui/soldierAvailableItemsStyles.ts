@@ -13,4 +13,7 @@ export const soldierAvailableItemsStyles = asStyle({
     width: "100%",
     margin: "10px auto",
   },
+  tableRow: {
+    whiteSpace: "pre-line",
+  }
 });
