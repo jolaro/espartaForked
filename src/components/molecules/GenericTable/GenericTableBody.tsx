@@ -25,7 +25,11 @@ const GenericTableBody: React.FC<GenericTableBodyProps> = ({ columns, rows, load
             className={row.className}
           >
             {columnIds.map((columnId, columnIndex) => (
-              <TableCell  sx={soldierAvailableItemsStyles.tableRow} key={`value-${columnId}-${i}`} {...columns[columnIndex].muiProps}>
+              <TableCell
+                sx={soldierAvailableItemsStyles.tableRow}
+                key={`value-${columnId}-${i}`}
+                {...columns[columnIndex].muiProps}
+              >
                 {loading ? <Skeleton /> : row[columnId]}
               </TableCell>
             ))}

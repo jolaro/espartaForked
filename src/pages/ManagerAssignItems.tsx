@@ -8,6 +8,7 @@ import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { useHistory } from "react-router-dom";
 import useTranslate from "hooks/useTranslate";
+import { commonStyles } from "styles/mui/commonStyles";
 
 interface ManagerAssignItemsProps {}
 
@@ -23,14 +24,7 @@ const ManagerAssignItems: React.FC<ManagerAssignItemsProps> = () => {
   return (
     <BodyLayout>
       <PageTabs {...pageTabProps} />
-      <Box
-        sx={{
-          marginTop: 2,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "right",
-        }}
-      >
+      <Box sx={commonStyles.buttonContainer}>
         <Button variant="contained" disableElevation startIcon={<AddIcon />} onClick={showCreateReservation}>
           {t("reservation.createReservationButton")}
         </Button>

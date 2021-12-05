@@ -171,8 +171,6 @@ export function AssignTableBody() {
   useEffect(() => {
     if (!isInit) {
       init();
-    } else {
-      fetch();
     }
   }, []);
 

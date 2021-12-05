@@ -3,6 +3,12 @@ import { useEffect, useState } from "react";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
 import ApiService from "utils/api_service/api_service";
 import { ItemTypeResponse } from "utils/api_service/endpoints.config";
+import { usePromise } from "hooks/usePromise";
+import useCategoryFilter from "./GenericTable/useCategoryFilter";
+import CategoryChip from "components/atoms/CategoryChip";
+import AddItemDialog from "components/organisms/AddItemDialog";
+import { useHookstate } from "@hookstate/core";
+import { getPureValue } from "utils/pure_value";
 
 export interface Weapon {
   weight_category: string;
@@ -22,7 +28,7 @@ const columns: ColumnConfig[] = [
     id: "name",
     title: "table.header.itemName",
     muiProps: {
-      width: "70%",
+      width: "60%",
     },
   },
   {
@@ -30,50 +36,58 @@ const columns: ColumnConfig[] = [
     title: "table.header.quantity",
     muiProps: {
       align: "center",
+      width: "20%",
     },
   },
   {
     id: "category",
     title: "table.header.category",
+    muiProps: {
+      align: "center",
+      width: "20%",
+    },
   },
 ];
 
-const getCategory = (weight_category: string) => {
-  if (weight_category === "0") {
-    return "Light";
-  } else if (weight_category === "1") {
-    return "Medium";
-  } else if (weight_category === "2") {
-    return "Heavy";
-  } else {
-    return "";
-  }
-};
+const itemToRow = (item: ItemTypeResponse): GenericTableRow => ({
+  name: item.name,
+  desired_amount: item.desired_amount,
+  category: <CategoryChip categoryId={item.weight_category} />,
+});
 
 export function WeaponsTableBody() {
-  const t = useTranslate();
-  const [rows, setRows] = useState<GenericTableRow[]>([]);
+  const allRows = useHookstate<GenericTableRow[]>([]);
+  const rows = useHookstate<GenericTableRow[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const categoryFilter = useCategoryFilter(allRows.get(), rows.set);
 
   const fetch = async () => {
     setLoading(true);
     const response = await ApiService.get("/api/itemtypes");
-    const newRows: GenericTableRow[] = [];
-
-    for (let i = 0; i < response.data.length; i++) {
-      newRows.push({
-        name: response.data[i].name,
-        desired_amount: response.data[i].desired_amount,
-        category: getCategory(response.data[i].weight_category),
-      });
-    }
-    setRows(newRows);
-    setLoading(false);
+    const newRows: GenericTableRow[] = response.data.map(itemToRow);
+    return newRows;
   };
 
-  useEffect(() => {
-    fetch();
+  const addNewItems = (item: ItemTypeResponse) => {
+    const newItemRow = itemToRow(item);
+
+    allRows.merge([newItemRow]);
+    rows.merge([newItemRow]);
+  };
+
+  usePromise(async (safeUpdate) => {
+    const newRows = await fetch();
+    safeUpdate(() => {
+      rows.set(newRows);
+      allRows.set(newRows);
+      setLoading(false);
+    });
   }, []);
 
-  return <GenericTable columns={columns} rows={rows} loading={loading} />;
+  return (
+    <>
+      <AddItemDialog onSuccess={addNewItems} />
+      <GenericTable columns={columns} rows={getPureValue(rows)} loading={loading} filters={[...categoryFilter]} />
+    </>
+  );
 }

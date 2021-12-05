@@ -10,6 +10,7 @@ export const themeOptions: ThemeOptions = {
     },
     secondary: {
       main: "#ffffff",
+      contrastText: "#222222",
     },
     background: {
       paper: "#242424",
