@@ -34,12 +34,10 @@ const StackRequestButtons: React.FC<StackRequestButtonsProps> = (props) => {
 
   return (
     <Stack direction="row-reverse" spacing={1}>
-      {(props.request.status === t("pending") || props.request.status.toLowerCase() === "pending") && (
         <>
           <RejectButton onHandleClick={handleRejectClick} />
           <ApproveButton onHandleClick={handleApproveClick} />
         </>
-      )}
     </Stack>
   );
 };
