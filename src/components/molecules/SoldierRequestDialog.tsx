@@ -38,7 +38,7 @@ const SoldierRequestDialog: React.FC<SoldierRequestDialogProps> = ({ items, onSu
     });
 
     const requestItemsData = items.map((item) => ({
-      item_id: item.id,
+      item_type_id: item.id,
       request_group_id: Number(requestGroup.id),
       approved: 0,
       due_date: untilDate.get() || undefined,

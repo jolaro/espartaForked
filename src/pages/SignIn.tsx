@@ -45,7 +45,8 @@ export const SignInSide: React.FC = () => {
 
   const schema = yup
     .object({
-      email: yup.string().matches(EMAIL_REGEX, t("signIn.invalidEmail")).required(t("signIn.requiredField")),
+      //TODO: Uncomment
+      email: yup.string(), //.matches(EMAIL_REGEX, t("signIn.invalidEmail")).required(t("signIn.requiredField")),
       password: yup.string().min(6, t("signIn.passwordTooShort")).required(t("signIn.requiredField")),
     })
     .required();

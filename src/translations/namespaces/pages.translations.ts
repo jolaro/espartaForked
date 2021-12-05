@@ -26,11 +26,11 @@ export const pageTranslations = asTranslation({
     [Language.SPANISH]: "Reserva",
   },
   "page.manager.weapons": {
-    [Language.ENGLISH]: "Weapons",
+    [Language.ENGLISH]: "Weapons Stock",
     [Language.SPANISH]: "Armas",
   },
   "page.manager.requests": {
-    [Language.ENGLISH]: "Requests",
+    [Language.ENGLISH]: "Loan Requests",
     [Language.SPANISH]: "Peticiones",
   },
   "page.manager.assign": {

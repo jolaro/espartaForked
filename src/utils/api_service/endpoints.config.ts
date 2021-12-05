@@ -49,12 +49,13 @@ interface LoginEndpointResponse {
 }
 
 export interface RequestItemData {
-  item_id: string;
+  item_id?: string;
   request_group_id: number;
-  item_type_id?: string;
-  date_due?: string | null;
-  date_borrowed?: string | null;
-  date_returned?: string | null;
+  approved: number;
+  item_type_id: string;
+  date_due?: string;
+  date_borrowed?: string;
+  date_returned?: string;
 }
 
 export interface ItemTypeResponse {
@@ -78,8 +79,16 @@ export interface ItemResponse {
 }
 
 export interface RequestGroupQueryParams {
-  loanee_id?: number;
-  lender_id?: number;
+  borrower_id?: string;
+  manager_id?: string;
+}
+
+export interface ItemTypeData {
+  name: string;
+  image?: string;
+  price?: number;
+  weight_category: number;
+  desired_amount: number;
 }
 
 /**
@@ -152,4 +161,10 @@ export type PostEndpoint =
       url: "/api/requestitem";
       data: RequestItemData[];
       response: RequestItemResponse;
+    }
+  | {
+      method: "POST";
+      url: "/api/itemtypes";
+      data: ItemTypeData;
+      response: ItemTypeResponse;
     };

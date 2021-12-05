@@ -19,6 +19,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import useTranslate from "hooks/useTranslate";
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
+import ScanButton from "components/atoms/ScanButton";
 
 interface ReservationProps {}
 
@@ -130,7 +131,7 @@ const Reservation: React.FC<ReservationProps> = () => {
           });
         }
         await responseRequestItems(requestItems);
-      })
+      });
   }, []);
 
   const responseRequestItems = async (requestItems: RequestItemData[]) => {
@@ -190,9 +191,7 @@ const Reservation: React.FC<ReservationProps> = () => {
         <Box sx={reservationStyles.buttonContainer}>
           <Typography variant="h5">{t("reservation.weaponsTitle")}</Typography>
           <Stack spacing={1} direction="row">
-            <Button variant="outlined" startIcon={<QrCode2Icon />}>
-              {t("reservation.scanButton")}
-            </Button>
+            <ScanButton />
             <Button variant="outlined" startIcon={<BorderColorIcon />} onClick={handleClickOpenWeaponsDialog}>
               {t("reservation.manualAddButton")}
             </Button>
