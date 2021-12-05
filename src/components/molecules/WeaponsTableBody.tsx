@@ -59,7 +59,7 @@ export function WeaponsTableBody() {
   const allRows = useHookstate<GenericTableRow[]>([]);
   const rows = useHookstate<GenericTableRow[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const categoryFilter = useCategoryFilter(allRows.get(), rows.set);
+  const categoryFilter = useCategoryFilter(getPureValue(allRows), rows.set);
 
   const fetch = async () => {
     setLoading(true);
