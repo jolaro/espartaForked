@@ -1,19 +1,23 @@
 import StackRequestButtons from "./StackRequestButtons";
 import useTranslate from "../../hooks/useTranslate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
 import { Chip } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import { Role } from "interfaces/Role";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { User } from "interfaces/User";
+import ApiService from "utils/api_service/api_service";
+import { getRole } from "./SoldierFormDialog";
+import { ItemTypeResponse } from "utils/api_service/endpoints.config";
+import { getItemTypes, getRequestItemsAsString, getRoleComponent, getUsers } from "./AssignTableBody";
 
 export interface Request extends GenericTableRow {
   id: string;
   name: string;
   role: Role;
   items: string;
-  status: string;
+  status: string | boolean | null;
 }
 
 const columns: ColumnConfig[] = [
@@ -56,66 +60,13 @@ const columns: ColumnConfig[] = [
   },
 ];
 
-const mockRows: Request[] = [
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Jeniffer Lawrence",
-    role: Role.OFFICER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Rejected",
-  },
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Sergio Ramos",
-    role: Role.COMMANDER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Pending",
-  },
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Ballada Mallada",
-    role: Role.TROOP,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Pending",
-  },
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Justin Bieber",
-    role: Role.COMMANDER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Approved",
-  },
-];
-
 export function RequestsTableBody() {
   const t = useTranslate();
-  const [rows, setRows] = useState<Request[]>(mockRows);
-
-  function getStatusComponent(request: Request) {
-    switch (request.status.toLowerCase()) {
-      case "approved": {
-        return <Chip icon={<CheckCircleIcon />} label={request.status} color="success" />;
-      }
-      case "rejected":
-      case "denied": {
-        return <Chip icon={<CancelIcon />} label={request.status} color="error" />;
-      }
-      default:
-      case "pending": {
-        return <StackRequestButtons request={request} onHandleClick={updateRequests} />;
-      }
-    }
-  }
-
-  const getRoleComponent = (role: string) => {
-    switch (role.toLowerCase()) {
-      case Role.TROOP:
-      case Role.COMMANDER:
-      case Role.OFFICER:
-      default:
-        return <Chip icon={<PersonIcon />} label={role} />;
-    }
-  };
+  // const [rows, setRows] = useState<Request[]>(mockRows);
+  var itemTypes: ItemTypeResponse[] = [];
+  const [isInit, setIsInit] = useState<boolean>(false);
+  const [rows, setRows] = useState<Request[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const updateRequests = (request: Request) => {
     const requestsCopy: Request[] = [...rows];
@@ -129,11 +80,64 @@ export function RequestsTableBody() {
     setRows(requestsCopy);
   };
 
+  const fetch = async () => {
+    setLoading(true);
+    const response = await ApiService.get("/api/requestgroup");
+    const users: User[] = await getUsers();
+    const newRows: Request[] = [];
+
+    for (let i = 0; i < response.data.length; i++) {
+      let request = response.data[i];
+      // Get user assign to the reservation
+      let user = users.find((user) => user.id.toString() === request.borrower_id.toString());
+
+      if (request.approved === undefined || request.approved === null || !request.approved) {
+        newRows.push({
+          id: request.id,
+          name: user?.name ?? "",
+          role: getRole(user?.access_level ?? Role.TROOP),
+          items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
+          status: request.approved ?? "",
+        });
+      }
+    }
+    setRows(newRows);
+    setLoading(false);
+  };
+
+  function getStatusComponent(request: Request) {
+    switch (request.status) {
+      case true: {
+        return <Chip icon={<CheckCircleIcon />} label={t("approved")} color="success" />;
+      }
+      case false: {
+        return <Chip icon={<CancelIcon />} label={t("rejected")} color="error" />;
+      }
+      default: {
+        return <StackRequestButtons request={request} onHandleClick={updateRequests} />;
+      }
+    }
+  }
+
   const rowsToRender = rows.map((row) => ({
     ...row,
     role: getRoleComponent(row.role),
     status: getStatusComponent(row),
   }));
 
-  return <GenericTable columns={columns} rows={rowsToRender} />;
+  async function init() {
+    itemTypes = await getItemTypes();
+    fetch();
+    setIsInit(true);
+  }
+
+  useEffect(() => {
+    if (!isInit) {
+      init();
+    } else {
+      fetch();
+    }
+  }, []);
+
+  return <GenericTable columns={columns} rows={rowsToRender} loading={loading} />;
 }
