@@ -23,12 +23,12 @@ const StackRequestButtons: React.FC<StackRequestButtonsProps> = (props) => {
   };
 
   const handleRejectClick = () => {
-    newRequest.status = t("rejected");
+    newRequest.status = "0";
     props.onHandleClick(newRequest);
   };
 
   const handleApproveClick = () => {
-    newRequest.status = t("approved");
+    newRequest.status = "1";
     props.onHandleClick(newRequest);
   };
 
