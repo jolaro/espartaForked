@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Avatar, Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { SoldierDetails } from "components/atoms/SoldierDetails";
 import { SoldierImage } from "components/atoms/SoldierImage";
 import GenericTable, { ColumnConfig } from "components/molecules/GenericTable";
@@ -6,22 +6,19 @@ import BodyLayout from "layouts/BodyLayout";
 import { reservationStyles } from "styles/mui/reservationStyles";
 import CheckIcon from "@mui/icons-material/Check";
 import AddIcon from "@mui/icons-material/Add";
-import { ItemTableHeader } from "components/molecules/ItemTableHeader";
 import * as React from "react";
 import WeaponFormDialog from "components/molecules/WeaponDialog";
-import { IconButton } from "components/atoms/IconButton";
 import { User } from "interfaces/User";
 import SoldierFormDialog from "components/molecules/SoldierFormDialog";
 import { ItemResponse, RequestGroupResponse, RequestItemData } from "utils/api_service/endpoints.config";
 import { GenericTableRow } from "components/molecules/GenericTable";
-import ApiService from "utils/api_service/api_service";
 import { useCallback } from "react";
 import GlobalState from "state/GlobalState";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import useTranslate from "hooks/useTranslate";
 import { useSnackbar } from "notistack";
-import { getStringAvatar } from "utils/get_string_avatar.util";
+import { useHistory } from "react-router-dom";
 
 interface ReservationProps {}
 
@@ -53,6 +50,7 @@ const Reservation: React.FC<ReservationProps> = () => {
   const [soldier, setSoldier] = React.useState<User>();
   const [items, setItems1] = React.useState<ItemResponse[]>([]);
   const [rows, setRows] = React.useState<GenericTableRow[]>([]);
+  const history = useHistory();
 
   const addSoldier = (soldier1: User) => {
     handleClickCloseSoldiersDialog();
@@ -97,6 +95,10 @@ const Reservation: React.FC<ReservationProps> = () => {
     setShowSoldiers(false);
   };
 
+  const showReservations = () => {
+    history.push("/manager/assign");
+  };
+
   const createReservation = useCallback(async (it: ItemResponse[], soldier?: User) => {
     if (!GlobalState.user || !soldier) {
       return;
@@ -108,11 +110,12 @@ const Reservation: React.FC<ReservationProps> = () => {
       headers: { "Content-Type": "application/json", Accept: "application/json" },
     };
     fetch(
-      `http://127.0.0.1:8000/api/requestgroup?borrower_id=${soldier.id.toString()}&manager_id=${GlobalState.user.id.toString()}`,
+      `http://127.0.0.1:8000/api/requestgroup?borrower_id=${soldier.id.toString()}&manager_id=${GlobalState.user.id.toString()}
+      &approved=${1}&depot=${1}`,
       requestOptions,
     )
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         requestGroupResponse = data;
         const requestItems: RequestItemData[] = [];
 
@@ -121,22 +124,31 @@ const Reservation: React.FC<ReservationProps> = () => {
             item_id: it[i].id.toString(),
             item_type_id: it[i].item_type_id,
             request_group_id: Number(requestGroupResponse.id),
-            approved: 1,
-            date_due: new Date().toString(),
-            date_borrowed: new Date().toString(),
-            date_returned: new Date().toString(),
+            date_due: null,
+            date_borrowed: new Date().toLocaleDateString(),
+            date_returned: null,
           });
         }
-        responseRequestItems(requestItems);
+        await responseRequestItems(requestItems);
+      })
+  }, []);
+
+  const responseRequestItems = async (requestItems: RequestItemData[]) => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestItems),
+    };
+
+    fetch(`http://127.0.0.1:8000/api/requestitem`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
         enqueueSnackbar(t("reservation.reservationCreatedToast"), { variant: "success" });
+        showReservations();
       })
       .catch((e) => {
         enqueueSnackbar("Error: " + e, { variant: "error" });
       });
-  }, []);
-
-  const responseRequestItems = async (requestItems: RequestItemData[]) => {
-    await ApiService.post("/api/requestitem", requestItems);
   };
 
   return (
