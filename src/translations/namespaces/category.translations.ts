@@ -21,4 +21,20 @@ export const categoryTranslations = asTranslation({
     [Language.ENGLISH]: "Category Filter",
     [Language.SPANISH]: "Filtro de categoría",
   },
+  "status.inUse": {
+    [Language.ENGLISH]: "In Use",
+    [Language.SPANISH]: "En uso",
+  },
+  "status.overdue": {
+    [Language.ENGLISH]: "Overdue",
+    [Language.SPANISH]: "Atrasada",
+  },
+  "status.returned": {
+    [Language.ENGLISH]: "Returned",
+    [Language.SPANISH]: "Devuelto",
+  },
+  "status.waitingApproval": {
+    [Language.ENGLISH]: "Waiting approval",
+    [Language.SPANISH]: "Esperando aprovación",
+  },
 });
