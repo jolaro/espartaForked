@@ -20,6 +20,7 @@ import useTranslate from "hooks/useTranslate";
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
 import ScanButton from "components/atoms/ScanButton";
+import { LoadingButton } from "@mui/lab";
 
 interface ReservationProps {}
 
@@ -48,6 +49,8 @@ const weaponColumns: ColumnConfig[] = [
 const Reservation: React.FC<ReservationProps> = () => {
   const t = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const [soldier, setSoldier] = React.useState<User>();
   const [items, setItems1] = React.useState<ItemResponse[]>([]);
   const [rows, setRows] = React.useState<GenericTableRow[]>([]);
@@ -134,6 +137,7 @@ const Reservation: React.FC<ReservationProps> = () => {
   }, []);
 
   const responseRequestItems = async (requestItems: RequestItemData[]) => {
+    setIsSubmitting(true);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -145,6 +149,7 @@ const Reservation: React.FC<ReservationProps> = () => {
       .then((data) => {
         enqueueSnackbar(t("reservation.reservationCreatedToast"), { variant: "success" });
         showReservations();
+        setIsSubmitting(false);
       })
       .catch((e) => {
         enqueueSnackbar("Error: " + e, { variant: "error" });
@@ -220,7 +225,7 @@ const Reservation: React.FC<ReservationProps> = () => {
           justifyContent: "right",
         }}
       >
-        <Button
+        <LoadingButton
           color="success"
           variant="contained"
           disableElevation
@@ -229,9 +234,10 @@ const Reservation: React.FC<ReservationProps> = () => {
             createReservation(items, soldier);
           }}
           disabled={!rows.length || !soldier}
+          loading={isSubmitting}
         >
           {t("reservation.createReservationButton")}
-        </Button>
+        </LoadingButton>
       </Box>
     </BodyLayout>
   );
