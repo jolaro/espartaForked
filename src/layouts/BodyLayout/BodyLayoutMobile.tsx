@@ -30,7 +30,9 @@ const BodyLayoutMobile: React.FC<BodyLayoutMobileProps> = ({ drawer, children })
       </SwipeableDrawer>
       <Box sx={{ flex: 1 }}>
         <Topbar isMobile={true} onMenuIconClick={() => isMenuOpen.set((prevState) => !prevState)} />
-        <Paper sx={bodyLayoutStyles.container}>{children}</Paper>
+        <Paper sx={bodyLayoutStyles.container} elevation={0}>
+          {children}
+        </Paper>
       </Box>
     </Box>
   );

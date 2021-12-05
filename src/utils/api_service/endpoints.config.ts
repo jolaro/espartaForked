@@ -22,6 +22,7 @@ export interface RequestItemResponse {
   created_at: string;
   item_id: string;
   item_type_id: string;
+  item_type: ItemTypeResponse;
   request_group_id: string;
   date_borrowed: string;
   date_due: string;
@@ -67,6 +68,9 @@ export interface ItemTypeResponse {
   desired_amount: string;
   created_at: string;
   updated_at: string;
+  date_returned: string;
+  date_borrowed: string;
+  date_due: string;
 }
 
 export interface ItemResponse {
