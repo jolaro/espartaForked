@@ -51,11 +51,10 @@ interface LoginEndpointResponse {
 export interface RequestItemData {
   item_id: string;
   request_group_id: number;
-  approved: number;
   item_type_id?: string;
-  date_due?: string;
-  date_borrowed?: string;
-  date_returned?: string;
+  date_due?: string | null;
+  date_borrowed?: string | null;
+  date_returned?: string | null;
 }
 
 export interface ItemTypeResponse {
@@ -133,7 +132,7 @@ export type GetEndpoint =
       url: "/api/requestgroup";
       queryParams: RequestGroupQueryParams;
       response: RequestGroupResponse[];
-    }; 
+    };
 
 export type PostEndpoint =
   | {
