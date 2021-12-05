@@ -9,9 +9,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import PendingIcon from "@mui/icons-material/Pending";
 import ApiService from "utils/api_service/api_service";
 import { ItemTypeResponse, RequestItemResponse } from "utils/api_service/endpoints.config";
-import el from "date-fns/esm/locale/el/index.js";
 import { User } from "interfaces/User";
-import { access } from "fs";
 import { getRole } from "./SoldierFormDialog";
 
 export interface Assignation extends GenericTableRow {
@@ -62,37 +60,6 @@ const columns: ColumnConfig[] = [
   },
 ];
 
-const mockRows: Assignation[] = [
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Jeniffer Lawrence",
-    role: Role.OFFICER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Rejected",
-  },
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Sergio Ramos",
-    role: Role.COMMANDER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Pending",
-  },
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Ballada Mallada",
-    role: Role.TROOP,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Pending",
-  },
-  {
-    id: Math.floor(Math.random() * 10000000).toString(),
-    name: "Justin Bieber",
-    role: Role.COMMANDER,
-    items: "2x ItemA \n 2x ItemB",
-    status: "Approved",
-  },
-];
-
 export function AssignTableBody() {
   const t = useTranslate();
   var itemTypes: ItemTypeResponse[] = [];
@@ -108,6 +75,7 @@ export function AssignTableBody() {
 
     for (let i = 0; i < response.data.length; i++) {
       let request = response.data[i];
+      // Get user assign to the reservation
       let user = users.find((user) => (user.id = request.borrower_id));
 
       if (request.approved) {
