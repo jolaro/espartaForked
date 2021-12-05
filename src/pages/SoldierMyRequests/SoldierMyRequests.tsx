@@ -1,5 +1,5 @@
 import GenericTable, { ColumnConfig, GenericTableRow } from "components/molecules/GenericTable";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import { Chip } from "@mui/material";
 import PageTabs from "components/molecules/PageTabs/PageTabs";
@@ -41,33 +41,22 @@ const columns: ColumnConfig[] = [
   },
 ];
 
-const allRows: GenericTableRow[] = [
-  {
-    icon: <MilitaryTechIcon />,
-    name: "AK-47",
-    category: <Chip label="Heavy" />,
-    status: <Chip label="Returned" />,
-  },
-  {
-    icon: <MilitaryTechIcon />,
-    name: "M4a1-s",
-    category: <Chip label="Light" />,
-    status: <Chip color="error" label="In use" />,
-  },
-];
-
 interface SoldierMyRequestsProps {}
 
 const SoldierMyRequests: React.FC<SoldierMyRequestsProps> = () => {
   const pageTabProps = useSoldierPageTabs();
-  const fetchedRows = useSoldierMyRequests();
+  const [fetchedRows, loading] = useSoldierMyRequests();
   const [rows, setRows] = useState<GenericTableRow[]>(fetchedRows);
-  const categoryFilter = useCategoryFilter(allRows, setRows);
+  const categoryFilter = useCategoryFilter(fetchedRows, setRows);
+
+  useEffect(() => {
+    setRows(fetchedRows);
+  }, [fetchedRows]);
 
   return (
     <BodyLayout>
       <PageTabs {...pageTabProps} />
-      <GenericTable columns={columns} rows={rows} filters={[...categoryFilter]} />
+      <GenericTable loading={loading} columns={columns} rows={rows} filters={[...categoryFilter]} />
     </BodyLayout>
   );
 };

@@ -125,9 +125,8 @@ const Reservation: React.FC<ReservationProps> = () => {
             item_id: it[i].id.toString(),
             item_type_id: it[i].item_type_id,
             request_group_id: Number(requestGroupResponse.id),
-            date_due: null,
             date_borrowed: new Date().toLocaleDateString(),
-            date_returned: null,
+            approved: 1,
           });
         }
         await responseRequestItems(requestItems);
