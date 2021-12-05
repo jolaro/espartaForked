@@ -1,6 +1,6 @@
 import useTranslate from "../../hooks/useTranslate";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
-import { Role } from "interfaces/Role";
+import { Role, RoleByAccessLevel } from "interfaces/Role";
 import { Chip } from "@mui/material";
 import { useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
@@ -12,12 +12,12 @@ import { ItemTypeResponse, RequestItemResponse } from "utils/api_service/endpoin
 import { User } from "interfaces/User";
 import { getRole } from "./SoldierFormDialog";
 
-export interface Assignation extends GenericTableRow {
+interface Assignation extends GenericTableRow {
   id: string;
   name: string;
   role: Role;
   items: string;
-  status: string;
+  status: string | boolean | null;
 }
 
 const columns: ColumnConfig[] = [
@@ -60,6 +60,58 @@ const columns: ColumnConfig[] = [
   },
 ];
 
+export const getRequestItemsAsString = (requestItems: RequestItemResponse[], itemTypes: ItemTypeResponse[]) => {
+  let items = "";
+  const itemsMonitor: string[] = [];
+
+  for (let i = 0; i < requestItems.length; i++) {
+    for (let i2 = 0; i2 < itemTypes.length; i2++) {
+      if (itemTypes[i2].id.toString() === requestItems[i].item_type_id.toString()) {
+        if (!itemsMonitor.includes(itemTypes[i2].id)) {
+          items +=
+            itemTypes[i2].name +
+            " " +
+            requestItems.filter((item) => item.item_type_id.toString() === itemTypes[i2].id.toString()).length +
+            "\n";
+          itemsMonitor.push(itemTypes[i2].id);
+        }
+      }
+    }
+  }
+  return items;
+};
+
+export const getItemTypes = async () => {
+  const response = await ApiService.get("/api/itemtypes");
+  const itemTypes: ItemTypeResponse[] = [];
+
+  for (let i = 0; i < response.data.length; i++) {
+    itemTypes.push(response.data[i]);
+  }
+  return itemTypes;
+};
+
+export const getUsers = async () => {
+  const response = await ApiService.get("/api/users");
+  const users: User[] = [];
+
+  for (let i = 0; i < response.data.length; i++) {
+    users.push(response.data[i]);
+  }
+  return users;
+};
+
+export const getRoleComponent = (role: string) => {
+  switch (role.toLowerCase()) {
+    case Role.TROOP:
+    case Role.COMMANDER:
+    case Role.OFFICER:
+    case Role.ADMIN:
+    default:
+      return <Chip icon={<PersonIcon />} label={role} />;
+  }
+};
+
 export function AssignTableBody() {
   const t = useTranslate();
   var itemTypes: ItemTypeResponse[] = [];
@@ -76,21 +128,39 @@ export function AssignTableBody() {
     for (let i = 0; i < response.data.length; i++) {
       let request = response.data[i];
       // Get user assign to the reservation
-      let user = users.find((user) => (user.id = request.borrower_id));
+      let user = users.find((user) => user.id.toString() === request.borrower_id.toString());
 
       if (request.approved) {
         newRows.push({
           id: request.id,
           name: user?.name ?? "",
-          role: getRole(user?.access_level ?? Role.TROOP),
-          items: (await getRequestItemsAsString(request.request_items)).toString(),
-          status: t("approved"),
+          role: getRole(user?.access_level ?? RoleByAccessLevel.TROOP),
+          items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
+          status: "0",
         });
       }
     }
     setRows(newRows);
     setLoading(false);
   };
+
+  const getStatusComponent = (request: Assignation) => {
+    if (request?.status !== null) {
+      if (request.status) {
+        return <Chip icon={<CheckCircleIcon />} label={t("approved")} color="success" />;
+      } else if (!request.status) {
+        return <Chip icon={<CancelIcon />} label={t("rejected")} color="error" />;
+      }
+    } else {
+      return <Chip icon={<PendingIcon />} label={t("pending")} />;
+    }
+  };
+
+  const rowsToRender = rows.map((row) => ({
+    ...row,
+    role: getRoleComponent(row.role),
+    status: getStatusComponent(row),
+  }));
 
   async function init() {
     itemTypes = await getItemTypes();
@@ -105,80 +175,6 @@ export function AssignTableBody() {
       fetch();
     }
   }, []);
-
-  async function getUsers() {
-    const response = await ApiService.get("/api/users");
-    const users: User[] = [];
-
-    for (let i = 0; i < response.data.length; i++) {
-      users.push(response.data[i]);
-    }
-    return users;
-  }
-
-  async function getItemTypes() {
-    const response = await ApiService.get("/api/itemtypes");
-    const itemTypes: ItemTypeResponse[] = [];
-
-    for (let i = 0; i < response.data.length; i++) {
-      itemTypes.push(response.data[i]);
-    }
-    return itemTypes;
-  }
-
-  async function getRequestItemsAsString(requestItems: RequestItemResponse[]) {
-    let items = "";
-    const itemsMonitor: string[] = [];
-
-    for (let i = 0; i < requestItems.length; i++) {
-      for (let i2 = 0; i2 < itemTypes.length; i2++) {
-        if (itemTypes[i2].id.toString() === requestItems[i].item_type_id.toString()) {
-          if (!itemsMonitor.includes(itemTypes[i2].id)) {
-            console.log(itemTypes[i2].id.toString());
-            items +=
-              itemTypes[i2].name +
-              " " +
-              requestItems.filter((item) => item.item_type_id.toString() === itemTypes[i2].id.toString()).length +
-              "\n";
-            itemsMonitor.push(itemTypes[i2].id);
-          }
-        }
-      }
-    }
-    return items;
-  }
-
-  function getStatusComponent(request: Assignation) {
-    switch (request.status.toLowerCase()) {
-      case "approved": {
-        return <Chip icon={<CheckCircleIcon />} label={request.status} color="success" />;
-      }
-      case "rejected":
-      case "denied": {
-        return <Chip icon={<CancelIcon />} label={request.status} color="error" />;
-      }
-      default:
-      case "pending": {
-        return <Chip icon={<PendingIcon />} label={request.status} />;
-      }
-    }
-  }
-
-  const getRoleComponent = (role: string) => {
-    switch (role.toLowerCase()) {
-      case Role.TROOP:
-      case Role.COMMANDER:
-      case Role.OFFICER:
-      default:
-        return <Chip icon={<PersonIcon />} label={role} />;
-    }
-  };
-
-  const rowsToRender = rows.map((row) => ({
-    ...row,
-    role: getRoleComponent(row.role),
-    status: getStatusComponent(row),
-  }));
 
   return <GenericTable columns={columns} rows={rowsToRender} loading={loading} />;
 }
