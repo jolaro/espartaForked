@@ -9,8 +9,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { User } from "interfaces/User";
 import ApiService from "utils/api_service/api_service";
 import { getRole } from "./SoldierFormDialog";
-import { ItemTypeResponse } from "utils/api_service/endpoints.config";
+import { ItemTypeResponse, RequestGroupResponse } from "utils/api_service/endpoints.config";
 import { getItemTypes, getRequestItemsAsString, getRoleComponent, getUsers } from "./AssignTableBody";
+import { useSnackbar } from "notistack";
 
 export interface Request extends GenericTableRow {
   id: string;
@@ -62,7 +63,7 @@ const columns: ColumnConfig[] = [
 
 export function RequestsTableBody() {
   const t = useTranslate();
-  // const [rows, setRows] = useState<Request[]>(mockRows);
+  const { enqueueSnackbar } = useSnackbar();
   var itemTypes: ItemTypeResponse[] = [];
   const [isInit, setIsInit] = useState<boolean>(false);
   const [rows, setRows] = useState<Request[]>([]);
@@ -70,17 +71,12 @@ export function RequestsTableBody() {
 
   const updateRequests = (request: Request) => {
     const requestsCopy: Request[] = [...rows];
-
-    for (let i = 0; i < requestsCopy.length; i++) {
-      if (requestsCopy[i].id.toString() === request.id.toString()) {
-        requestsCopy[i] = request;
-        break;
-      }
-    }
+    const index = requestsCopy.findIndex(c => c.id.toString() === request.id.toString());
+    requestsCopy[index] = request;
     setRows(requestsCopy);
   };
 
-  const fetch = async () => {
+  const getRequests = async () => {
     setLoading(true);
     const response = await ApiService.get("/api/requestgroup");
     const users: User[] = await getUsers();
@@ -105,6 +101,27 @@ export function RequestsTableBody() {
     setLoading(false);
   };
 
+  async function handleRequest(request: Request) {
+    let requestGroupResponse: RequestGroupResponse;
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch(`http://127.0.0.1:8000/api/requestgroup/${request.id}?approved=${request.status ? "1" : "0"}`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        requestGroupResponse = data;
+        enqueueSnackbar(t("reservation.requestUpdateToast") + " (" + requestGroupResponse.id + " )", {
+          variant: "success",
+        });
+        updateRequests(request);
+      })
+      .catch((e) => {
+        enqueueSnackbar("Error: " + e, { variant: "error" });
+      });
+  }
+
   function getStatusComponent(request: Request) {
     switch (request.status) {
       case true: {
@@ -114,7 +131,7 @@ export function RequestsTableBody() {
         return <Chip icon={<CancelIcon />} label={t("rejected")} color="error" />;
       }
       default: {
-        return <StackRequestButtons request={request} onHandleClick={updateRequests} />;
+        return <StackRequestButtons request={request} onHandleClick={handleRequest} />;
       }
     }
   }
@@ -127,7 +144,7 @@ export function RequestsTableBody() {
 
   async function init() {
     itemTypes = await getItemTypes();
-    fetch();
+    getRequests();
     setIsInit(true);
   }
 
@@ -135,7 +152,7 @@ export function RequestsTableBody() {
     if (!isInit) {
       init();
     } else {
-      fetch();
+      getRequests();
     }
   }, []);
 
