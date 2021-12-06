@@ -1,10 +1,6 @@
 import { Request } from "./../../components/molecules/RequestsTableBody";
 import { User } from "interfaces/User";
 import { number } from "prop-types";
-export interface RandomCatFactResponse {
-  fact: string;
-  length: number;
-}
 
 interface LoginEndpointData {
   email: string;
@@ -13,7 +9,7 @@ interface LoginEndpointData {
 
 interface RequestGroupEndpointData {
   borrower_id: number;
-  manager_id?: number;
+  manager_id?: number | null;
 }
 
 export interface RequestItemResponse {
@@ -84,7 +80,7 @@ export interface ItemResponse {
 
 export interface RequestGroupQueryParams {
   borrower_id?: string;
-  manager_id?: string;
+  manager_id?: string | null;
   approved?: string;
   depot?: string;
 }
@@ -118,12 +114,6 @@ export interface ItemTypeData {
  */
 
 export type GetEndpoint =
-  | {
-      method: "GET";
-      url: "https://catfact.ninja/fact";
-      queryParams: undefined;
-      response: RandomCatFactResponse;
-    }
   | {
       method: "GET";
       url: "/api/itemtypes";

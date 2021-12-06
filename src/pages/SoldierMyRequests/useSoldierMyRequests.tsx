@@ -1,22 +1,11 @@
-import CategoryChip from "components/atoms/CategoryChip";
-import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import { GenericTableRow } from "components/molecules/GenericTable";
 import { useState } from "react";
-import { ItemTypeResponse, RequestGroupResponse } from "../../utils/api_service/endpoints.config";
+import { RequestGroupResponse } from "../../utils/api_service/endpoints.config";
 import { usePromise } from "hooks/usePromise";
 import GlobalState from "state/GlobalState";
 import ApiService from "utils/api_service/api_service";
 import { AxiosResponse } from "axios";
 import StatusChip from "components/atoms/StatusChip";
-
-const parseItem = (item: ItemTypeResponse): GenericTableRow => {
-  return {
-    icon: <MilitaryTechIcon />,
-    name: item.name,
-    category: <CategoryChip categoryId={item.weight_category} />,
-    status: <StatusChip item={item} />,
-  };
-};
 
 const useSoldierMyRequests = (): [GenericTableRow[], boolean] => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,9 +20,14 @@ const useSoldierMyRequests = (): [GenericTableRow[], boolean] => {
     ) as Promise<AxiosResponse<RequestGroupResponse>>[];
 
     const requestGroups = await Promise.all(requestGroupsPromises);
-    const requestItems = requestGroups
-      .flatMap((requestGroup) => requestGroup.data.request_items)
-      .map((requestItem) => parseItem(requestItem.item_type));
+    const requestItems = requestGroups.map(({ data: requestGroup }) => {
+      return {
+        id: requestGroup.id,
+        // TODO: Show in better form, maybe using <Chip />
+        items: requestGroup.request_items.map((item) => item.item_type.name).join(", "),
+        status: <StatusChip requestGroup={requestGroup} />,
+      };
+    });
 
     return requestItems;
   };

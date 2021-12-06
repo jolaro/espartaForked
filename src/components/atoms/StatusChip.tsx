@@ -1,41 +1,33 @@
 import React from "react";
-import { ItemTypeResponse } from "utils/api_service/endpoints.config";
-import SportsScoreIcon from "@mui/icons-material/SportsScore";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
+import { RequestGroupResponse } from "utils/api_service/endpoints.config";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import { Chip } from "@mui/material";
 import useTranslate from "hooks/useTranslate";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 interface StatusChipProps {
-  item: ItemTypeResponse;
+  requestGroup: RequestGroupResponse;
 }
 
-const StatusChip: React.FC<StatusChipProps> = ({ item }) => {
+const StatusChip: React.FC<StatusChipProps> = ({ requestGroup }) => {
   const t = useTranslate();
 
-  const dateReturned = item.date_returned ? new Date(item.date_returned) : null;
-  const dateBorrowed = item.date_borrowed ? new Date(item.date_borrowed) : null;
-  const dateDue = new Date(item.date_due);
-  const dateNow = new Date();
-
-  if (dateDue < dateNow && !dateReturned) {
-    return <Chip label={t("status.overdue")} icon={<AccessAlarmsIcon />} color="error" />;
-  }
-
-  if (dateDue > dateNow && !dateReturned) {
-    return <Chip label={t("status.inUse")} icon={<ManageAccountsIcon />} color="info" />;
-  }
-
-  if (dateReturned) {
-    return <Chip label={t("status.returned")} icon={<SportsScoreIcon />} color="success" />;
-  }
-
-  if (!dateBorrowed) {
+  if (!requestGroup.manager_id) {
     return <Chip label={t("status.waitingApproval")} icon={<HourglassTopIcon />} />;
   }
 
-  return <Chip label="Unknown" />;
+  if (requestGroup.approved) {
+    return <Chip label={t("approved")} icon={<CheckCircleIcon />} color="success" />;
+  } else {
+    return <Chip label={t("rejected")} icon={<CancelIcon />} color="error" />;
+  }
+
+  // return <Chip label={t("status.overdue")} icon={<AccessAlarmsIcon />} color="error" />;
+  // return <Chip label={t("status.inUse")} icon={<ManageAccountsIcon />} color="info" />;
+  // return <Chip label={t("status.returned")} icon={<SportsScoreIcon />} color="success" />;
+
+  // return <Chip label="Unknown" />;
 };
 
 export default StatusChip;

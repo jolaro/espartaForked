@@ -22,7 +22,9 @@ const NavBar: React.FC<NavBarProps> = () => {
 
   return (
     <>
-      <Toolbar />
+      <Toolbar>
+        <img src="https://i.ibb.co/zXfQsmR/Custom-Size-1.png" alt="esparta logo" style={{ width: "60%" }} />
+      </Toolbar>
       <Divider />
       <List>
         {Object.keys(groupedRoutes).map((group) => (

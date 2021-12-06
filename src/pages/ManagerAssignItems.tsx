@@ -25,7 +25,7 @@ const ManagerAssignItems: React.FC<ManagerAssignItemsProps> = () => {
     <BodyLayout>
       <PageTabs {...pageTabProps} />
       <Box sx={commonStyles.buttonContainer}>
-        <Button variant="contained" disableElevation startIcon={<AddIcon />} onClick={showCreateReservation}>
+        <Button variant="contained" disableElevation onClick={showCreateReservation}>
           {t("reservation.createReservationButton")}
         </Button>
       </Box>

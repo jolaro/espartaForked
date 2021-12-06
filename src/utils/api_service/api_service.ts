@@ -56,11 +56,20 @@ const post = async <U extends PostMethod["url"], K extends ExtractData<U>>(
   });
 };
 
+const put = async <T = any, R = any>(url: string, data: T) => {
+  return axios.put<R>(getUrl(url), data, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+};
+
 const ApiService = {
   unsafeGet,
   unsafePost,
   get,
   post,
+  put,
 };
 
 export default ApiService;

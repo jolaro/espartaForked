@@ -12,6 +12,7 @@ import { getUserRole } from "utils/get_user_role";
 import { ItemTypeResponse, RequestGroupResponse } from "utils/api_service/endpoints.config";
 import { getItemTypes, getRequestItemsAsString, getRoleComponent, getUsers } from "./AssignTableBody";
 import { useSnackbar } from "notistack";
+import GlobalState from "state/GlobalState";
 
 export interface Request extends GenericTableRow {
   id: string;
@@ -78,7 +79,7 @@ export function RequestsTableBody() {
 
   const getRequests = async () => {
     setLoading(true);
-    const response = await ApiService.get("/api/requestgroup");
+    const response = await ApiService.get("/api/requestgroup", { manager_id: null });
     const users: User[] = await getUsers();
     const newRows: Request[] = [];
 
@@ -87,7 +88,8 @@ export function RequestsTableBody() {
       // Get user assign to the reservation
       let user = users.find((user) => user.id.toString() === request.borrower_id.toString());
 
-      if (request.approved === undefined || request.approved === null || !request.approved) {
+      // TODO: Remove when manager_id == null works as query param
+      if (request.approved === undefined || request.approved === null) {
         newRows.push({
           id: request.id,
           name: user?.name ?? "",
@@ -102,24 +104,19 @@ export function RequestsTableBody() {
   };
 
   async function handleRequest(request: Request) {
-    let requestGroupResponse: RequestGroupResponse;
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    fetch(`http://127.0.0.1:8000/api/requestgroup/${request.id}?approved=${request.status ? "1" : "0"}`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        requestGroupResponse = data;
-        enqueueSnackbar(t("reservation.requestUpdateToast") + " (" + requestGroupResponse.id + " )", {
-          variant: "success",
-        });
-        updateRequests(request);
-      })
-      .catch((e) => {
-        enqueueSnackbar("Error: " + e, { variant: "error" });
+    try {
+      console.log(request);
+      const { data } = await ApiService.put(`/api/requestgroup/${request.id}`, {
+        approved: request.status,
+        manager_id: GlobalState.user?.id,
       });
+      enqueueSnackbar(t("reservation.requestUpdateToast"), {
+        variant: "success",
+      });
+      updateRequests(request);
+    } catch (e) {
+      enqueueSnackbar("Error: " + e, { variant: "error" });
+    }
   }
 
   function getStatusComponent(request: Request) {

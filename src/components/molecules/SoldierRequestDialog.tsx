@@ -33,8 +33,7 @@ const SoldierRequestDialog: React.FC<SoldierRequestDialogProps> = ({ items, onSu
     isSubmitting.set(true);
     const { data: requestGroup } = await ApiService.post("/api/requestgroup", {
       borrower_id: GlobalState.user!.id,
-      // TODO: Make this null when backend has made it nullable
-      manager_id: 1,
+      manager_id: null,
     });
 
     const requestItemsData = items.map((item) => ({
