@@ -46,4 +46,8 @@ export const reservationTranslations = asTranslation({
     [Language.ENGLISH]: "Reservation successfully created",
     [Language.SPANISH]: "Reserva creada correctamente",
   },
+  "reservation.requestUpdateToast": {
+    [Language.ENGLISH]: "Request successfully updated",
+    [Language.SPANISH]: "Solicitud actualizada correctamente",
+  },
 });

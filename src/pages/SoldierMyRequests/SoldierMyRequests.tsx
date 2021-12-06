@@ -54,7 +54,6 @@ const SoldierMyRequests: React.FC<SoldierMyRequestsProps> = () => {
 
   useEffect(() => {
     setRows(fetchedRows);
-    console.log(GlobalState.user);
   }, [fetchedRows]);
 
   return (
