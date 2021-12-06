@@ -1,10 +1,9 @@
-export enum Role {
+export enum UserRole {
   ADMIN = "Admin",
   COMMANDER = "Commander",
   OFFICER = "Officer",
   TROOP = "Troop",
 }
-
 
 export enum RoleByAccessLevel {
   ADMIN = "3",

@@ -1,3 +1,4 @@
+import { UserRole } from "./Role";
 import { Depot } from "./Depot";
 
 export interface User {
@@ -7,7 +8,7 @@ export interface User {
   access_level: string;
   language: string;
   depots: Depot[];
-  role?: string;
+  role: UserRole;
   email_verified_at: Date | null;
   created_at: Date;
   updated_at: Date;

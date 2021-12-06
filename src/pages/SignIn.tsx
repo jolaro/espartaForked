@@ -25,6 +25,7 @@ import { useSnackbar } from "notistack";
 import { snooze } from "utils/snooze";
 import { useUser } from "hooks/useUser";
 import ApiService from "utils/api_service/api_service";
+import { getDefaultPathForRole } from "utils/get_default_route_for_role";
 
 const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,7 +39,7 @@ type Inputs = {
 export const SignInSide: React.FC = () => {
   const isLoading = useHookstate(false);
   const errorSignIn = useHookstate(false);
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, user } = useUser();
   const t = useTranslate();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -63,7 +64,8 @@ export const SignInSide: React.FC = () => {
         await snooze(500);
         isLoading.set(false);
         await snooze(50);
-        history.push("/");
+        const defaultPath = getDefaultPathForRole(user.get()?.role);
+        history.push(defaultPath || "/");
       }
     })();
   }, [isLoggedIn.get()]);
@@ -79,8 +81,9 @@ export const SignInSide: React.FC = () => {
       if (response.data.access_token && response.data.user) {
         GlobalState.signIn(response.data.access_token, response.data.user);
         enqueueSnackbar(t("notification.signedIn"));
-        await snooze(500);
-        history.push("/");
+        await snooze(800);
+        const defaultPath = getDefaultPathForRole(user.get()?.role);
+        history.push(defaultPath || "/");
       } else {
         errorSignIn.set(true);
         isLoading.set(false);

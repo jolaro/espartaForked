@@ -85,6 +85,8 @@ export interface ItemResponse {
 export interface RequestGroupQueryParams {
   borrower_id?: string;
   manager_id?: string;
+  approved?: string;
+  depot?: string;
 }
 
 export interface ItemTypeData {

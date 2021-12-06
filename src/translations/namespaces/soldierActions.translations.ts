@@ -55,4 +55,14 @@ export const soldierActionTranslations = asTranslation({
     [Language.ENGLISH]: "Your request was successfully submitted!",
     [Language.SPANISH]: "¡Su solicitud fue enviada con éxito!",
   },
+  "soldierActions.noRequestsTitle": {
+    [Language.ENGLISH]: "You have no request history",
+    [Language.SPANISH]: "No tienes historial de solicitudes",
+  },
+  "soldierActions.noRequestsContent": {
+    [Language.ENGLISH]:
+      "Currently there is no history for your requests. You can go ahead and make your first request.",
+    [Language.SPANISH]:
+      "Actualmente no hay historial de sus solicitudes. Puede seguir adelante y hacer su primera solicitud.",
+  },
 });

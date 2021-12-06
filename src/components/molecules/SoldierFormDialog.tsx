@@ -14,13 +14,13 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
-import { alpha, Box, CircularProgress, InputBase, LinearProgress, styled, Typography } from "@mui/material";
+import { alpha, Box, CircularProgress, InputBase, styled, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { User } from "interfaces/User";
 import ApiService from "utils/api_service/api_service";
 import { useCallback } from "react";
 import { getStringAvatar } from "utils/get_string_avatar.util";
-import { Role } from "interfaces/Role";
+import { getUserRole } from "utils/get_user_role";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -33,16 +33,6 @@ const Search = styled("div")(({ theme }) => ({
   marginLeft: 0,
   width: "100%",
 }));
-
-export const getRole = (accessLevel: string) => {
-  if (accessLevel === "1") {
-    return Role.COMMANDER;
-  } else if (accessLevel === "2") {
-    return Role.OFFICER;
-  } else {
-    return Role.TROOP;
-  }
-};
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -72,20 +62,9 @@ interface SoldierFormDialogProps {
 }
 
 export default function WeaponFormDialog(props: SoldierFormDialogProps) {
-  const selectedSoldier1: User = {
-    id: 0,
-    name: "",
-    email: "",
-    access_level: "",
-    email_verified_at: null,
-    created_at: new Date(),
-    updated_at: new Date(),
-    language: "",
-    depots: [],
-  };
   const [isLoading, setIsLoading] = React.useState(true);
   const [soldiers, setSoldiers] = React.useState<User[]>([]);
-  const [selectedSoldier, setSelectedSoldier] = React.useState<User>(selectedSoldier1);
+  const [selectedSoldier, setSelectedSoldier] = React.useState<User>({} as User);
   const [searchKeyword, setSearchKeyword] = React.useState("");
   const [foundSoldiers, setFoundSoldiers] = React.useState(soldiers);
 
@@ -98,7 +77,7 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
     const users: User[] = responseUsers.data;
 
     for (let i = 0; i < users.length; i++) {
-      users[i].role = getRole(users[i].access_level);
+      users[i].role = getUserRole(users[i].access_level);
     }
     setSoldiers(users);
     setFoundSoldiers(users);
@@ -133,17 +112,7 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
       let newSoldier: User;
 
       if (selectedSoldier.id === soldier.id) {
-        newSoldier = {
-          id: 0,
-          name: "",
-          email: "",
-          access_level: "",
-          email_verified_at: null,
-          created_at: new Date(),
-          updated_at: new Date(),
-          language: "",
-          depots: [],
-        };
+        newSoldier = {} as User;
       } else {
         newSoldier = soldier;
       }
@@ -207,7 +176,7 @@ export default function WeaponFormDialog(props: SoldierFormDialogProps) {
                               variant="body2"
                               color="text.primary"
                             >
-                              Category: {getRole(soldier.access_level)}
+                              Category: {getUserRole(soldier.access_level)}
                             </Typography>
                           </Box>
                         </React.Fragment>

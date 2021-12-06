@@ -15,6 +15,7 @@ import ManagerRequestsBrowser from "pages/ManagerRequestsBrowser";
 import ManagerAssignItems from "pages/ManagerAssignItems";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { UserRole } from "interfaces/Role";
 
 export interface Route {
   /**
@@ -65,6 +66,12 @@ export interface Route {
    * In which group the link should be displayed
    */
   group: string;
+
+  /**
+   * Groups which can access the route if restricted === true
+   * Leave empty array for ALL GROUPS
+   */
+  accessLevel?: UserRole[];
 }
 
 const routes: Route[] = [
@@ -78,6 +85,7 @@ const routes: Route[] = [
     restricted: true,
     hidden: true,
     group: "Manager",
+    accessLevel: [UserRole.COMMANDER, UserRole.OFFICER, UserRole.ADMIN],
   },
   {
     id: 2,
@@ -89,6 +97,7 @@ const routes: Route[] = [
     hidden: false,
     restricted: true,
     group: "Manager",
+    accessLevel: [UserRole.COMMANDER, UserRole.OFFICER, UserRole.ADMIN],
   },
   {
     id: 2,
@@ -99,6 +108,7 @@ const routes: Route[] = [
     restricted: true,
     hidden: true,
     group: "Manager",
+    accessLevel: [UserRole.COMMANDER, UserRole.OFFICER, UserRole.ADMIN],
   },
   {
     id: 3,
@@ -110,6 +120,7 @@ const routes: Route[] = [
     hidden: false,
     restricted: true,
     group: "Manager",
+    accessLevel: [UserRole.COMMANDER, UserRole.OFFICER, UserRole.ADMIN],
   },
   {
     id: 4,
@@ -121,6 +132,7 @@ const routes: Route[] = [
     hidden: false,
     restricted: true,
     group: "Manager",
+    accessLevel: [UserRole.COMMANDER, UserRole.OFFICER, UserRole.ADMIN],
   },
   {
     id: 5,
@@ -142,6 +154,7 @@ const routes: Route[] = [
     hidden: false,
     restricted: true,
     group: "Soldier",
+    accessLevel: [UserRole.TROOP],
   },
   {
     id: 7,
@@ -153,6 +166,7 @@ const routes: Route[] = [
     hidden: false,
     restricted: true,
     group: "Soldier",
+    accessLevel: [UserRole.TROOP],
   },
 ];
 

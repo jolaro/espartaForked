@@ -21,6 +21,7 @@ import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
 import ScanButton from "components/atoms/ScanButton";
 import { LoadingButton } from "@mui/lab";
+import ApiService from "utils/api_service/api_service";
 
 interface ReservationProps {}
 
@@ -108,52 +109,38 @@ const Reservation: React.FC<ReservationProps> = () => {
       return;
     }
 
-    let requestGroupResponse: RequestGroupResponse;
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-    };
-    fetch(
-      `http://127.0.0.1:8000/api/requestgroup?borrower_id=${soldier.id.toString()}&manager_id=${GlobalState.user.id.toString()}
-      &approved=${1}&depot=${1}`,
-      requestOptions,
-    )
-      .then((response) => response.json())
-      .then(async (data) => {
-        requestGroupResponse = data;
-        const requestItems: RequestItemData[] = [];
+    const { data } = await ApiService.post("/api/requestgroup", {
+      borrower_id: soldier.id,
+      manager_id: GlobalState.user.id,
+      approved: "1",
+      depot: "1",
+    });
 
-        for (let i = 0; i < it.length; i++) {
-          requestItems.push({
-            item_id: it[i].id.toString(),
-            item_type_id: it[i].item_type_id,
-            request_group_id: Number(requestGroupResponse.id),
-            date_borrowed: new Date().toLocaleDateString(),
-            approved: 1,
-          });
-        }
-        await responseRequestItems(requestItems);
+    const requestItems: RequestItemData[] = [];
+
+    for (let i = 0; i < it.length; i++) {
+      requestItems.push({
+        item_id: it[i].id.toString(),
+        item_type_id: it[i].item_type_id,
+        request_group_id: Number(data.id),
+        date_borrowed: new Date().toLocaleDateString(),
+        approved: 1,
       });
+    }
+    await responseRequestItems(requestItems);
   }, []);
 
   const responseRequestItems = async (requestItems: RequestItemData[]) => {
     setIsSubmitting(true);
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestItems),
-    };
-
-    fetch(`http://127.0.0.1:8000/api/requestitem`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        enqueueSnackbar(t("reservation.reservationCreatedToast"), { variant: "success" });
-        showReservations();
-        setIsSubmitting(false);
-      })
-      .catch((e) => {
-        enqueueSnackbar("Error: " + e, { variant: "error" });
-      });
+    try {
+      const data = await ApiService.post("/api/requestitem", requestItems);
+      enqueueSnackbar(t("reservation.reservationCreatedToast"), { variant: "success" });
+      showReservations();
+    } catch (e) {
+      enqueueSnackbar("Error: " + e, { variant: "error" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -3,19 +3,19 @@ import useTranslate from "../../hooks/useTranslate";
 import { useEffect, useState } from "react";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
 import { Chip } from "@mui/material";
-import { Role } from "interfaces/Role";
+import { UserRole } from "interfaces/Role";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { User } from "interfaces/User";
 import ApiService from "utils/api_service/api_service";
-import { getRole } from "./SoldierFormDialog";
 import { ItemTypeResponse } from "utils/api_service/endpoints.config";
 import { getItemTypes, getRequestItemsAsString, getRoleComponent, getUsers } from "./AssignTableBody";
+import { getUserRole } from "utils/get_user_role";
 
 export interface Request extends GenericTableRow {
   id: string;
   name: string;
-  role: Role;
+  role: UserRole;
   items: string;
   status: string | boolean | null;
 }
@@ -95,7 +95,7 @@ export function RequestsTableBody() {
         newRows.push({
           id: request.id,
           name: user?.name ?? "",
-          role: getRole(user?.access_level ?? Role.TROOP),
+          role: getUserRole(user?.access_level),
           items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
           status: request.approved ?? "",
         });

@@ -20,7 +20,7 @@ const unsafeGet = async <T = any, Q = any>(url: string, queryParams?: Q) => {
   return axios.get<T, any>(getUrl(url), {
     params: queryParams,
     headers: {
-      Authentication: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${getToken()}`,
     },
   });
 };
@@ -32,7 +32,7 @@ const get = async <U extends GetMethod["url"], Q extends ExtractQueryParams<U>>(
   return axios.get<ExtractResponse<GetEndpoint, U>, any>(getUrl(url), {
     params: queryParams,
     headers: {
-      Authentication: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${getToken()}`,
     },
   });
 };
@@ -40,7 +40,7 @@ const get = async <U extends GetMethod["url"], Q extends ExtractQueryParams<U>>(
 const unsafePost = async <T, U>(url: string, data: U) => {
   return axios.post<T, any>(getUrl(url), data, {
     headers: {
-      Authentication: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${getToken()}`,
     },
   });
 };
@@ -51,7 +51,7 @@ const post = async <U extends PostMethod["url"], K extends ExtractData<U>>(
 ): Promise<AxiosResponse<ExtractResponse<PostEndpoint, U>, any>> => {
   return axios.post<ExtractResponse<PostEndpoint, U>, any>(getUrl(url), data, {
     headers: {
-      Authentication: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${getToken()}`,
     },
   });
 };

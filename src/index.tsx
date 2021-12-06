@@ -8,6 +8,7 @@ import Router from "router/Router";
 import { SnackbarProvider } from "notistack";
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import Auth from "router/Auth";
 
 require("dotenv").config();
 
@@ -24,6 +25,7 @@ ReactDOM.render(
           }}
         >
           <Router />
+          <Auth />
         </SnackbarProvider>
       </ThemeProvider>
     </LocalizationProvider>

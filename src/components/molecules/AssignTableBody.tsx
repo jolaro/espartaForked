@@ -1,6 +1,6 @@
 import useTranslate from "../../hooks/useTranslate";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
-import { Role, RoleByAccessLevel } from "interfaces/Role";
+import { UserRole, RoleByAccessLevel } from "interfaces/Role";
 import { Chip } from "@mui/material";
 import { useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
@@ -10,12 +10,12 @@ import PendingIcon from "@mui/icons-material/Pending";
 import ApiService from "utils/api_service/api_service";
 import { ItemTypeResponse, RequestItemResponse } from "utils/api_service/endpoints.config";
 import { User } from "interfaces/User";
-import { getRole } from "./SoldierFormDialog";
+import { getUserRole } from "utils/get_user_role";
 
 interface Assignation extends GenericTableRow {
   id: string;
   name: string;
-  role: Role;
+  role: UserRole;
   items: string;
   status: string | boolean | null;
 }
@@ -103,10 +103,10 @@ export const getUsers = async () => {
 
 export const getRoleComponent = (role: string) => {
   switch (role.toLowerCase()) {
-    case Role.TROOP:
-    case Role.COMMANDER:
-    case Role.OFFICER:
-    case Role.ADMIN:
+    case UserRole.TROOP:
+    case UserRole.COMMANDER:
+    case UserRole.OFFICER:
+    case UserRole.ADMIN:
     default:
       return <Chip icon={<PersonIcon />} label={role} />;
   }
@@ -115,7 +115,6 @@ export const getRoleComponent = (role: string) => {
 export function AssignTableBody() {
   const t = useTranslate();
   var itemTypes: ItemTypeResponse[] = [];
-  const [isInit, setIsInit] = useState<boolean>(false);
   const [rows, setRows] = useState<Assignation[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -134,7 +133,7 @@ export function AssignTableBody() {
         newRows.push({
           id: request.id,
           name: user?.name ?? "",
-          role: getRole(user?.access_level ?? RoleByAccessLevel.TROOP),
+          role: getUserRole(user?.access_level),
           items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
           status: "0",
         });
@@ -162,16 +161,9 @@ export function AssignTableBody() {
     status: getStatusComponent(row),
   }));
 
-  async function init() {
-    itemTypes = await getItemTypes();
-    fetch();
-    setIsInit(true);
-  }
-
   useEffect(() => {
-    if (!isInit) {
-      init();
-    }
+    getItemTypes();
+    fetch();
   }, []);
 
   return <GenericTable columns={columns} rows={rowsToRender} loading={loading} />;

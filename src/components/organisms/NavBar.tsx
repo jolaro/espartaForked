@@ -1,7 +1,9 @@
 import { Divider, List, Toolbar } from "@mui/material";
 import NavBarList from "components/molecules/NavBarList";
 import React, { useMemo } from "react";
+import { roleFilter } from "router/Router";
 import routes, { Route } from "router/routes";
+import GlobalState from "state/GlobalState";
 
 interface NavBarProps {}
 
@@ -10,6 +12,7 @@ const NavBar: React.FC<NavBarProps> = () => {
     () =>
       routes
         .filter((route) => !route.hidden)
+        .filter((route) => roleFilter(route, GlobalState.user?.role))
         .reduce((acc, curr) => {
           acc[curr.group] = [curr];
           return acc;

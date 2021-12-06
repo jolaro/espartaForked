@@ -4,6 +4,8 @@ import { Button, Typography } from "@mui/material";
 import { useHistory } from "react-router";
 import SentimentVeryDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentVeryDissatisfiedOutlined";
 import { useUser } from "hooks/useUser";
+import { getDefaultPathForRole } from "utils/get_default_route_for_role";
+import GlobalState from "state/GlobalState";
 
 interface Page404Props {}
 
@@ -16,6 +18,13 @@ const Page404: React.FC<Page404Props> = () => {
       history.push("/sign-in");
     }
   }, [history, isLoggedIn.get()]);
+
+  const redirectToHomePage = () => {
+    // TODO: Handle this more gracefully
+    const path = getDefaultPathForRole(GlobalState.user?.role);
+
+    history.push(path || "/sign-in");
+  };
 
   return (
     <Box
@@ -39,7 +48,7 @@ const Page404: React.FC<Page404Props> = () => {
           </Typography>
         </Box>
       </Box>
-      <Button variant="outlined" onClick={() => history.push("/")} sx={{ mt: 2 }}>
+      <Button variant="outlined" onClick={redirectToHomePage} sx={{ mt: 2 }}>
         To home page
       </Button>
     </Box>
