@@ -84,7 +84,6 @@ export const getRequestItemsAsString = (requestItems: RequestItemResponse[], ite
 export const getItemTypes = async () => {
   const response = await ApiService.get("/api/itemtypes");
   const itemTypes: ItemTypeResponse[] = [];
-
   for (let i = 0; i < response.data.length; i++) {
     itemTypes.push(response.data[i]);
   }
@@ -114,33 +113,34 @@ export const getRoleComponent = (role: string) => {
 
 export function AssignTableBody() {
   const t = useTranslate();
-  var itemTypes: ItemTypeResponse[] = [];
   const [rows, setRows] = useState<Assignation[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetch = async () => {
-    setLoading(true);
-    const response = await ApiService.get("/api/requestgroup");
-    const users: User[] = await getUsers();
-    const newRows: Assignation[] = [];
-
-    for (let i = 0; i < response.data.length; i++) {
-      let request = response.data[i];
-      // Get user assign to the reservation
-      let user = users.find((user) => user.id.toString() === request.borrower_id.toString());
-
-      if (request.approved) {
-        newRows.push({
-          id: request.id,
-          name: user?.name ?? "",
-          role: getUserRole(user?.access_level),
-          items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
-          status: "0",
-        });
+    await getItemTypes().then(async itemTypes => {
+      setLoading(true);
+      const response = await ApiService.get("/api/requestgroup");
+      const users: User[] = await getUsers();
+      const newRows: Assignation[] = [];
+  
+      for (let i = 0; i < response.data.length; i++) {
+        let request = response.data[i];
+        // Get user assign to the reservation
+        let user = users.find((user) => user.id.toString() === request.borrower_id.toString());
+  
+        if (request.approved) {
+          newRows.push({
+            id: request.id,
+            name: user?.name ?? "",
+            role: getUserRole(user?.access_level),
+            items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
+            status: "0",
+          });
+        }
       }
-    }
-    setRows(newRows);
-    setLoading(false);
+      setRows(newRows);
+      setLoading(false);
+    });
   };
 
   const getStatusComponent = (request: Assignation) => {
@@ -162,7 +162,6 @@ export function AssignTableBody() {
   }));
 
   useEffect(() => {
-    getItemTypes();
     fetch();
   }, []);
 
