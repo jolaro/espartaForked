@@ -17,7 +17,7 @@ const getUrl = (url: string) => {
 };
 
 const unsafeGet = async <T = any, Q = any>(url: string, queryParams?: Q) => {
-  return axios.get<T, any>(getUrl(url), {
+  return axios.get<T>(getUrl(url), {
     params: queryParams,
     headers: {
       Authorization: `Bearer ${getToken()}`,

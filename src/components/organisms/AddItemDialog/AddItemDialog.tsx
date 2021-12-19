@@ -13,6 +13,7 @@ import {
   Stepper,
   TextField,
 } from "@mui/material";
+import LocationSelect from "components/atoms/LocationSelect";
 import ScanButton from "components/atoms/ScanButton";
 import useTranslate from "hooks/useTranslate";
 import { Category } from "interfaces/Category";
@@ -121,14 +122,7 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({ onSuccess }) => {
         </TextField>
       </Box>
       <Box sx={addItemDialogStyles.row}>
-        <TextField
-          label={t("addItem.locationLabel")}
-          select
-          defaultValue={"1"}
-          onChange={(e) => location.set(e.target.value)}
-        >
-          <MenuItem value={"1"}>Location 1</MenuItem>
-        </TextField>
+        <LocationSelect onSelect={location.set} />
       </Box>
     </>
   );

@@ -9,8 +9,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { User } from "interfaces/User";
 import ApiService from "utils/api_service/api_service";
 import { getUserRole } from "utils/get_user_role";
-import { ItemTypeResponse, RequestGroupResponse } from "utils/api_service/endpoints.config";
-import { getItemTypes, getRequestItemsAsString, getRoleComponent, getUsers } from "./AssignTableBody";
+import { ItemTypeResponse } from "utils/api_service/endpoints.config";
+import { getItems, getItemTypes, getRoleComponent, getUsers } from "./AssignTableBody";
 import { useSnackbar } from "notistack";
 import GlobalState from "state/GlobalState";
 
@@ -18,7 +18,7 @@ export interface Request extends GenericTableRow {
   id: string;
   name: string;
   role: UserRole;
-  items: string;
+  items: JSX.Element;
   status: string | boolean | null;
 }
 
@@ -27,14 +27,14 @@ const columns: ColumnConfig[] = [
     id: "id",
     title: "table.header.id",
     muiProps: {
-      width: "10%",
+      width: "5%",
     },
   },
   {
     id: "name",
     title: "table.header.personName",
     muiProps: {
-      width: "30%",
+      width: "20%",
     },
   },
   {
@@ -49,14 +49,14 @@ const columns: ColumnConfig[] = [
     id: "items",
     title: "table.header.items",
     muiProps: {
-      width: "37%",
+      width: "45%",
     },
   },
   {
     id: "status",
     title: "table.header.status",
     muiProps: {
-      width: "8%",
+      width: "5%",
       align: "right",
     },
   },
@@ -94,7 +94,7 @@ export function RequestsTableBody() {
           id: request.id,
           name: user?.name ?? "",
           role: getUserRole(user?.access_level),
-          items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
+          items: getItems(request.request_items),
           status: request.approved ?? "",
         });
       }

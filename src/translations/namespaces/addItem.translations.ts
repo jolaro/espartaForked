@@ -46,4 +46,16 @@ export const addItemTranslations = asTranslation({
     [Language.ENGLISH]: "Successfully added items",
     [Language.SPANISH]: "Elementos agregados con éxito",
   },
+  "returnItem.title": {
+    [Language.ENGLISH]: "Return Items",
+    [Language.SPANISH]: "Devolver los artículos",
+  },
+  "returnItem.alertText": {
+    [Language.ENGLISH]: "To mark the item as returned, you have to select return location",
+    [Language.SPANISH]: "Para marcar el artículo como devuelto, debe seleccionar la ubicación de devolución",
+  },
+  "returnItem.successSnackbar": {
+    [Language.ENGLISH]: "Items have been marked as returned successfully",
+    [Language.SPANISH]: "Los artículos se han marcado como devueltos correctamente",
+  },
 });

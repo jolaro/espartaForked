@@ -76,6 +76,7 @@ export interface ItemResponse {
   serial: string;
   created_at: string;
   updated_at: string;
+  depot_id: string | null;
 }
 
 export interface RequestGroupQueryParams {
@@ -91,6 +92,17 @@ export interface ItemTypeData {
   price?: number;
   weight_category: number;
   desired_amount: number;
+}
+
+export interface DepotListResponse {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  address: string;
+  longitude: string;
+  latitude: string;
+  managers: User[];
 }
 
 /**
@@ -137,6 +149,12 @@ export type GetEndpoint =
       url: "/api/requestgroup";
       queryParams: RequestGroupQueryParams;
       response: RequestGroupResponse[];
+    }
+  | {
+      method: "GET";
+      url: "/api/depot";
+      queryParams: undefined;
+      response: DepotListResponse[];
     };
 
 export type PostEndpoint =

@@ -65,4 +65,12 @@ export const soldierActionTranslations = asTranslation({
     [Language.SPANISH]:
       "Actualmente no hay historial de sus solicitudes. Puede seguir adelante y hacer su primera solicitud.",
   },
+  "soldierActions.markReturned": {
+    [Language.ENGLISH]: "Mark as returned",
+    [Language.SPANISH]: "Marcar como devuelto",
+  },
+  "soldierActions.submit": {
+    [Language.ENGLISH]: "Submit",
+    [Language.SPANISH]: "Entregar",
+  },
 });

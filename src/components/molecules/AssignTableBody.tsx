@@ -1,7 +1,7 @@
 import useTranslate from "../../hooks/useTranslate";
 import GenericTable, { ColumnConfig, GenericTableRow } from "./GenericTable";
-import { UserRole, RoleByAccessLevel } from "interfaces/Role";
-import { Chip } from "@mui/material";
+import { UserRole } from "interfaces/Role";
+import { Avatar, Box, Chip } from "@mui/material";
 import { useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -11,12 +11,13 @@ import ApiService from "utils/api_service/api_service";
 import { ItemTypeResponse, RequestItemResponse } from "utils/api_service/endpoints.config";
 import { User } from "interfaces/User";
 import { getUserRole } from "utils/get_user_role";
+import ReturnItemDialog from "components/organisms/ReturnItemDialog";
 
 interface Assignation extends GenericTableRow {
   id: string;
   name: string;
   role: UserRole;
-  items: string;
+  items: JSX.Element;
   status: string | boolean | null;
 }
 
@@ -25,14 +26,14 @@ const columns: ColumnConfig[] = [
     id: "id",
     title: "table.header.id",
     muiProps: {
-      width: "10%",
+      width: "5%",
     },
   },
   {
     id: "name",
     title: "table.header.personName",
     muiProps: {
-      width: "30%",
+      width: "20%",
     },
   },
   {
@@ -47,39 +48,26 @@ const columns: ColumnConfig[] = [
     id: "items",
     title: "table.header.items",
     muiProps: {
-      width: "30%",
+      width: "40%",
     },
   },
   {
     id: "status",
     title: "table.header.status",
     muiProps: {
-      width: "15%",
+      width: "10%",
+      align: "center",
+    },
+  },
+  {
+    id: "action",
+    title: "table.header.actions",
+    muiProps: {
+      width: "5%",
       align: "right",
     },
   },
 ];
-
-export const getRequestItemsAsString = (requestItems: RequestItemResponse[], itemTypes: ItemTypeResponse[]) => {
-  let items = "";
-  const itemsMonitor: string[] = [];
-
-  for (let i = 0; i < requestItems.length; i++) {
-    for (let i2 = 0; i2 < itemTypes.length; i2++) {
-      if (itemTypes[i2].id.toString() === requestItems[i].item_type_id.toString()) {
-        if (!itemsMonitor.includes(itemTypes[i2].id)) {
-          items +=
-            itemTypes[i2].name +
-            " " +
-            requestItems.filter((item) => item.item_type_id.toString() === itemTypes[i2].id.toString()).length +
-            "\n";
-          itemsMonitor.push(itemTypes[i2].id);
-        }
-      }
-    }
-  }
-  return items;
-};
 
 export const getItemTypes = async () => {
   const response = await ApiService.get("/api/itemtypes");
@@ -112,9 +100,34 @@ export const getRoleComponent = (role: string) => {
   }
 };
 
+export const getItems = (items: RequestItemResponse[]) => {
+  const itemsInfo = items.map((item) => {
+    return {
+      id: item.item_type.id,
+      name: item.item_type.name,
+    };
+  });
+
+  const itemsSet = [...new Set(itemsInfo.map((item) => item.id))];
+
+  return (
+    <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+      {itemsSet.map((itemId) => {
+        const item = itemsInfo.find((it) => it.id === itemId);
+        return (
+          <Chip
+            avatar={<Avatar>{items.filter((it) => it.item_type_id.toString() === item?.id.toString()).length}</Avatar>}
+            label={item?.name}
+            variant="outlined"
+          />
+        );
+      })}
+    </Box>
+  );
+};
+
 export function AssignTableBody() {
   const t = useTranslate();
-  var itemTypes: ItemTypeResponse[] = [];
   const [rows, setRows] = useState<Assignation[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -129,12 +142,12 @@ export function AssignTableBody() {
       // Get user assign to the reservation
       let user = users.find((user) => user.id.toString() === request.borrower_id.toString());
 
-      if (request.approved) {
+      if (request.approved && request.request_items.some((item) => item.date_returned === null)) {
         newRows.push({
           id: request.id,
           name: user?.name ?? "",
           role: getUserRole(user?.access_level),
-          items: getRequestItemsAsString(request.request_items, itemTypes).toString(),
+          items: getItems(request.request_items),
           status: "0",
         });
       }
@@ -155,10 +168,16 @@ export function AssignTableBody() {
     }
   };
 
+  const removeItem = (id: string) => {
+    const newRows = rows.filter((row) => row.id !== id);
+    setRows(newRows);
+  };
+
   const rowsToRender = rows.map((row) => ({
     ...row,
     role: getRoleComponent(row.role),
     status: getStatusComponent(row),
+    action: <ReturnItemDialog id={row.id} onReturn={() => removeItem(row.id)} />,
   }));
 
   useEffect(() => {
@@ -166,5 +185,9 @@ export function AssignTableBody() {
     fetch();
   }, []);
 
-  return <GenericTable columns={columns} rows={rowsToRender} loading={loading} />;
+  return (
+    <>
+      <GenericTable columns={columns} rows={rowsToRender} loading={loading} />
+    </>
+  );
 }
