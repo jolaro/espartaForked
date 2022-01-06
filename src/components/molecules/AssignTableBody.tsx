@@ -72,7 +72,6 @@ const columns: ColumnConfig[] = [
 export const getItemTypes = async () => {
   const response = await ApiService.get("/api/itemtypes");
   const itemTypes: ItemTypeResponse[] = [];
-
   for (let i = 0; i < response.data.length; i++) {
     itemTypes.push(response.data[i]);
   }
@@ -181,7 +180,6 @@ export function AssignTableBody() {
   }));
 
   useEffect(() => {
-    getItemTypes();
     fetch();
   }, []);
 

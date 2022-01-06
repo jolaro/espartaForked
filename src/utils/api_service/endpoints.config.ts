@@ -59,6 +59,7 @@ export interface ItemTypeResponse {
   id: string;
   name: string;
   price: string;
+  image: string;
   weight_category: string;
   category: string;
   desired_amount: string;
