@@ -110,7 +110,15 @@ export function WeaponsTableBody() {
     return newRows;
   };
 
-  const addNewItems = (item: ItemTypeResponse) => {
+  const updateRows = (newRows: GenericTableRow[]) => {
+    rows.set(newRows);
+    allRows.set(newRows);
+    setLoading(false);
+  };
+
+  const addNewItems = async (item: ItemTypeResponse) => {
+    const newRows = await fetch();
+    updateRows(newRows);
     // const newItemRow = itemToRow(item);
     // allRows.merge([newItemRow]);
     // rows.merge([newItemRow]);
@@ -119,9 +127,7 @@ export function WeaponsTableBody() {
   usePromise(async (safeUpdate) => {
     const newRows = await fetch();
     safeUpdate(() => {
-      rows.set(newRows);
-      allRows.set(newRows);
-      setLoading(false);
+      updateRows(newRows);
     });
   }, []);
 
