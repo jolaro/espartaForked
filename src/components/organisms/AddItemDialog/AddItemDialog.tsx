@@ -18,12 +18,45 @@ import ScanButton from "components/atoms/ScanButton";
 import useTranslate from "hooks/useTranslate";
 import { Category } from "interfaces/Category";
 import { useSnackbar } from "notistack";
-import React from "react";
+import React, { useRef } from "react";
+import { MutableRefObject } from "react";
 import { addItemDialogStyles } from "styles/mui/addItemDialogStyles";
 import { commonStyles } from "styles/mui/commonStyles";
 import ApiService from "utils/api_service/api_service";
 import { ItemTypeResponse } from "utils/api_service/endpoints.config";
 import { getPureValue } from "utils/pure_value";
+
+interface SerialInputBoxProps {
+  index: number;
+  label: string;
+  handleSerialInputOnChange: (index: number, value: string) => void;
+}
+
+function SerialInputBoxWithQrButton(props: SerialInputBoxProps) {
+  const useFocus = (): [any, () => void] => {
+    const htmlElRef: MutableRefObject<any> = useRef(null);
+    const setFocus = (): void => {
+      htmlElRef?.current?.focus?.();
+    };
+
+    return [htmlElRef, setFocus];
+  };
+
+  const [inputRef, setInputRef] = useFocus();
+
+  return (
+    <>
+      <Box sx={addItemDialogStyles.row} key={props.index}>
+        <TextField
+          inputRef={inputRef}
+          label={props.label}
+          onChange={(e) => props.handleSerialInputOnChange(props.index, e.target.value)}
+        />
+        <ScanButton onClick={setInputRef} />
+      </Box>
+    </>
+  );
+}
 
 interface AddItemDialogProps {
   onSuccess?: (data: ItemTypeResponse) => void;
@@ -127,16 +160,18 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({ onSuccess }) => {
     </>
   );
 
+  const handleSerialInputOnChange = (index: number, value: string) => {
+    uniqueItems[index].set(value);
+  };
+
   const step1 = (
     <>
       {uniqueItems.get().map((_, i) => (
-        <Box sx={addItemDialogStyles.row} key={i}>
-          <TextField
-            label={`${t("addItem.serialCodeLabel")} ${i}`}
-            onChange={(e) => uniqueItems[i].set(e.target.value)}
-          />
-          <ScanButton />
-        </Box>
+        <SerialInputBoxWithQrButton
+          index={i}
+          label={`${t("addItem.serialCodeLabel")} ${i}`}
+          handleSerialInputOnChange={handleSerialInputOnChange}
+        />
       ))}
     </>
   );
