@@ -146,8 +146,6 @@ export const SignInSide: React.FC = () => {
               {...register("rememberMe", { setValueAs: (v) => !!v })}
             />
             <Box sx={signInStyles.buttonContainer}>
-              <Button variant="text">Register</Button>
-              or
               <LoadingButton loading={isLoading.get()} type="submit" variant="contained">
                 {t("signIn.title")}
               </LoadingButton>
