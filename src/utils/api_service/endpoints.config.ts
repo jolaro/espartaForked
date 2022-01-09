@@ -80,6 +80,12 @@ export interface ItemResponse {
   depot_id: string | null;
 }
 
+export interface ItemData {
+  item_type_id: string;
+  serial: string;
+  depot_id: string;
+}
+
 export interface RequestGroupQueryParams {
   borrower_id?: string;
   manager_id?: string | null;
@@ -182,4 +188,10 @@ export type PostEndpoint =
       url: "/api/itemtypes";
       data: ItemTypeData;
       response: ItemTypeResponse;
+    }
+  | {
+    method: "POST";
+    url: "/api/items";
+    data: ItemData[];
+    response: LoginEndpointResponse;
     };
