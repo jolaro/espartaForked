@@ -8,10 +8,19 @@ const stringToColor = (string: string) => {
 };
 
 export const getStringAvatar = (name: string) => {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.charAt(0)}`,
-  };
+  if (name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.charAt(0)}`,
+    };
+  } else {
+    return {
+      sx: {
+        bgcolor: stringToColor("No name"),
+      },
+      children: `${"No name".charAt(0)}`,
+    };
+  }
 };
