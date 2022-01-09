@@ -132,7 +132,7 @@ const Reservation: React.FC<ReservationProps> = () => {
   const responseRequestItems = async (requestItems: RequestItemData[]) => {
     setIsSubmitting(true);
     try {
-      const data = await ApiService.post("/api/requestitem", requestItems);
+      await ApiService.post("/api/requestitem", requestItems);
       enqueueSnackbar(t("reservation.reservationCreatedToast"), { variant: "success" });
       showReservations();
     } catch (e) {
@@ -181,7 +181,6 @@ const Reservation: React.FC<ReservationProps> = () => {
         <Box sx={reservationStyles.buttonContainer}>
           <Typography variant="h5">{t("reservation.weaponsTitle")}</Typography>
           <Stack spacing={1} direction="row">
-            <ScanButton />
             <Button variant="outlined" startIcon={<BorderColorIcon />} onClick={handleClickOpenWeaponsDialog}>
               {t("reservation.manualAddButton")}
             </Button>
