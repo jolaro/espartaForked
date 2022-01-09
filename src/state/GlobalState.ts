@@ -28,8 +28,7 @@ class GlobalState {
   }
 
   public signIn = (authToken: string, user: User) => {
-    const userWithRole = { ...user, role: getUserRole(user.access_level) };
-
+    const userWithRole = { ...user, role: getUserRole(user.access_level.toString()) };
     this._authToken.set(authToken);
     this._isLoggedIn.set(true);
     this._user.set(userWithRole);
