@@ -43,7 +43,6 @@ const ReturnItemDialog: React.FC<ReturnItemDialogProps> = ({ id, onReturn }) => 
     loading.set(false);
     onReturn();
     enqueueSnackbar(t("returnItem.successSnackbar"), { variant: "success" });
-    closeModal();
   };
 
   return (
@@ -72,7 +71,7 @@ const ReturnItemDialog: React.FC<ReturnItemDialogProps> = ({ id, onReturn }) => 
             onClick={submit}
             color="primary"
             disableElevation
-            disabled={loading.get()}
+            disabled={loading.get() || !depot.get()}
           >
             {t("soldierActions.submit")}
           </LoadingButton>

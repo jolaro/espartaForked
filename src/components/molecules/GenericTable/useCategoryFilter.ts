@@ -14,9 +14,9 @@ const useCategoryFilter = (
       return;
     }
 
-    const filteredRows = allRows.filter(
-      (r) => (r.category as JSX.Element).props.categoryId.toLowerCase() === value.toLowerCase(),
-    );
+    const filteredRows = allRows.filter((r) => {
+      return (r.category as JSX.Element).props.categoryId.toString() === value.toLowerCase();
+    });
     setRows([...filteredRows]);
   };
 

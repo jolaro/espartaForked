@@ -12,7 +12,7 @@ const CategoryChip: React.FC<CategoryChipProps> = ({ categoryId }) => {
   const t = useTranslate();
 
   const categoryInfo = useMemo(() => {
-    switch (categoryId) {
+    switch (categoryId.toString()) {
       case Category.LIGHT.toString():
         return {
           icon: <FaAngleDown />,

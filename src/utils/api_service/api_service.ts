@@ -16,11 +16,18 @@ const getUrl = (url: string) => {
   return process.env.REACT_APP_API_URL + url;
 };
 
+const getCommonHeaders = () => {
+  return {
+    Authorization: `Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+  };
+};
+
 const unsafeGet = async <T = any, Q = any>(url: string, queryParams?: Q) => {
   return axios.get<T>(getUrl(url), {
     params: queryParams,
     headers: {
-      Authorization: `Bearer ${getToken()}`,
+      ...getCommonHeaders(),
     },
   });
 };
@@ -32,7 +39,7 @@ const get = async <U extends GetMethod["url"], Q extends ExtractQueryParams<U>>(
   return axios.get<ExtractResponse<GetEndpoint, U>, any>(getUrl(url), {
     params: queryParams,
     headers: {
-      Authorization: `Bearer ${getToken()}`,
+      ...getCommonHeaders(),
     },
   });
 };
@@ -40,7 +47,7 @@ const get = async <U extends GetMethod["url"], Q extends ExtractQueryParams<U>>(
 const unsafePost = async <T, U>(url: string, data: U) => {
   return axios.post<T, any>(getUrl(url), data, {
     headers: {
-      Authorization: `Bearer ${getToken()}`,
+      ...getCommonHeaders(),
     },
   });
 };
@@ -51,7 +58,7 @@ const post = async <U extends PostMethod["url"], K extends ExtractData<U>>(
 ): Promise<AxiosResponse<ExtractResponse<PostEndpoint, U>, any>> => {
   return axios.post<ExtractResponse<PostEndpoint, U>, any>(getUrl(url), data, {
     headers: {
-      Authorization: `Bearer ${getToken()}`,
+      ...getCommonHeaders(),
     },
   });
 };
@@ -59,7 +66,7 @@ const post = async <U extends PostMethod["url"], K extends ExtractData<U>>(
 const put = async <T = any, R = any>(url: string, data: T) => {
   return axios.put<R>(getUrl(url), data, {
     headers: {
-      Authorization: `Bearer ${getToken()}`,
+      ...getCommonHeaders(),
     },
   });
 };
