@@ -37,4 +37,8 @@ export const categoryTranslations = asTranslation({
     [Language.ENGLISH]: "Waiting approval",
     [Language.SPANISH]: "Esperando aprovación",
   },
+  "quantity.accordionTitle": {
+    [Language.ENGLISH]: "See quantities",
+    [Language.SPANISH]: "Ver cantidades",
+  },
 });
