@@ -23,7 +23,7 @@ import { MutableRefObject } from "react";
 import { addItemDialogStyles } from "styles/mui/addItemDialogStyles";
 import { commonStyles } from "styles/mui/commonStyles";
 import ApiService from "utils/api_service/api_service";
-import { ItemTypeResponse } from "utils/api_service/endpoints.config";
+import { ItemData, ItemTypeResponse } from "utils/api_service/endpoints.config";
 import { getPureValue } from "utils/pure_value";
 
 interface SerialInputBoxProps {
@@ -76,6 +76,26 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({ onSuccess }) => {
   const category = useHookstate("0");
   const location = useHookstate("0");
 
+  const addItems = async (depotId: string, itemTypeId: string) => {
+    try {
+      const items: ItemData[] = [];
+      
+      for (let i = 0; i < uniqueItems.length; i++) {
+        const item: ItemData = {
+          item_type_id: itemTypeId,
+          serial: uniqueItems[i].value,
+          depot_id: depotId
+        };
+
+        items.push(item);
+      }
+
+      await ApiService.post("/api/items", items);
+    } catch (e) {
+      enqueueSnackbar("Error: " + e, { variant: "error" });
+    }
+  };
+
   const submit = async () => {
     loading.set(true);
     const { data } = await ApiService.post("/api/itemtypes", {
@@ -85,6 +105,10 @@ const AddItemDialog: React.FC<AddItemDialogProps> = ({ onSuccess }) => {
       image: "123", //TODO: Remove when made optional on backend
       price: 12, //TODO: Remove when made optional on backend
     });
+
+    // Add items after item type was created
+    await addItems(location.value, data.id);
+
     loading.set(false);
     closeModal();
     enqueueSnackbar(t("addItem.successSnackbar"), { variant: "success" });
