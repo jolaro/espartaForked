@@ -47,7 +47,7 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <>
-      <Button endIcon={<LanguageIcon />} color="secondary" onClick={handleOpenLanguageMenu}>
+      <Button startIcon={<LanguageIcon />} color="secondary" onClick={handleOpenLanguageMenu}>
         {i18n.language}
       </Button>
       <Menu

@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import bodyLayoutStyles from "styles/mui/bodyLayoutStyles";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -13,6 +13,7 @@ import SignOutButton from "components/atoms/SignOutButton";
 import GlobalState from "state/GlobalState";
 import { typography } from "@mui/system";
 import { Box } from "@material-ui/core";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const DEFAULT_TITLE = "page.home";
 
@@ -50,14 +51,9 @@ const Topbar: React.FC<TopbarProps> = ({ isMobile, onMenuIconClick }) => {
           {t(openedPageTitle.get())}
         </Typography>
         <Box component="div" m={1} sx={{ display: "inline" }}>
-          <Typography component="div" sx={{ flexGrow: 1 }}>
-            {GlobalState?.user?.name},
-          </Typography>
-        </Box>
-        <Box component="div" sx={{ display: "inline" }}>
-          <Typography component="div" sx={{ flexGrow: 1 }}>
-            {GlobalState?.user?.role}
-          </Typography>
+          <Button startIcon={<AccountCircleIcon />} color="secondary" disabled>
+            {GlobalState?.user?.name} ({GlobalState?.user?.role})
+          </Button>
         </Box>
         <Stack direction="row" spacing={1}>
           <LanguageSwitcher />
