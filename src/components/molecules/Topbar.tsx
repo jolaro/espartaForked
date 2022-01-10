@@ -10,6 +10,9 @@ import { useHookstate } from "@hookstate/core";
 import { TranslationKeys } from "translations/_translation_interface";
 import { useTranslation } from "react-i18next";
 import SignOutButton from "components/atoms/SignOutButton";
+import GlobalState from "state/GlobalState";
+import { typography } from "@mui/system";
+import { Box } from "@material-ui/core";
 
 const DEFAULT_TITLE = "page.home";
 
@@ -46,6 +49,16 @@ const Topbar: React.FC<TopbarProps> = ({ isMobile, onMenuIconClick }) => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {t(openedPageTitle.get())}
         </Typography>
+        <Box component="div" m={1} sx={{ display: "inline" }}>
+          <Typography component="div" sx={{ flexGrow: 1 }}>
+            {GlobalState?.user?.name},
+          </Typography>
+        </Box>
+        <Box component="div" sx={{ display: "inline" }}>
+          <Typography component="div" sx={{ flexGrow: 1 }}>
+            {GlobalState?.user?.role}
+          </Typography>
+        </Box>
         <Stack direction="row" spacing={1}>
           <LanguageSwitcher />
           <SignOutButton />
