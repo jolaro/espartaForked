@@ -94,3 +94,11 @@ const App: React.FC = () => {
 ## Routing
 
 To add new page follow the pattern established in `router/routes.ts` and add new element to the routes object. Look at the comments on the `Route` interface declaration.
+
+## State
+
+There is a global state defined in `state/GlobalState.ts` which can be accessed at any point in the application and get the state written in the class.
+
+## Deployment
+
+Currently the repository is set to be push-mirrored in GitHub (https://github.com/mutafow/esparta_gitlab_mirror). The reason for doing so is that GitHub provides free and quick integration with Vercel. Vercel is a platform for frontend frameworks and static sites. It automatically sets up pipelines and environments, so that you can set it up in with just a few clicks. The front-end is currently hosted at https://esparta-webpro.vercel.app/ but will be probably taken down after WEBPRO is done, as I like to keep my lists of hosted sites clean and manageable. If deployment is needed in the future, it should be taken care from the ground up, but the same method can be followed.
