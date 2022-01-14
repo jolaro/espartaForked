@@ -102,3 +102,27 @@ There is a global state defined in `state/GlobalState.ts` which can be accessed 
 ## Deployment
 
 Currently the repository is set to be push-mirrored in GitHub (https://github.com/mutafow/esparta_gitlab_mirror). The reason for doing so is that GitHub provides free and quick integration with Vercel. Vercel is a platform for frontend frameworks and static sites. It automatically sets up pipelines and environments, so that you can set it up in with just a few clicks. The front-end is currently hosted at https://esparta-webpro.vercel.app/ but will be probably taken down after WEBPRO is done, as I like to keep my lists of hosted sites clean and manageable. If deployment is needed in the future, it should be taken care from the ground up, but the same method can be followed.
+
+## Requirements
+Requirement  | Progress
+------------- | -------------
+The system must have login screen, which accepts email and password. Only authorized and registered users should be able to login.  | Done
+Every INVENTORY MGR must be able to approve and decline claim requests made by SOLDIERS  | Done
+Every SOLDIER must be able to request item | Done
+Every INVENTORY MGR must be able to assign and unassign items to soldiers | Done
+The system must allow users to switch between English and Spanish languages | Done
+The system must be accessible and optimized for mobile and desktop | Done
+The user interface of the application should follow the color scheme of black, white, and yellow | Done
+Every INVENTORY MGR should be able to see an item’s information | Done
+Every INVENTORY MGR should be able to filter items on categories | Done
+Every INVENTORY MGR should be able to scan applicable items based on their QR code | Done (Not tested)
+Every SOLDIER should be able to claim an item | Done
+Every SOLDIER should be able to see what they have claimed | Done
+Every SOLDIER should be able to see an overview of their requests and their statuses | Done
+The system should assign each user to a ROLE (permissions) | Done (Assinged durring registration)
+The user with specific ROLE should only see what the ROLE has access to. | Done
+Every INVENTORY MGR should be able to see a graph overview of the stock over time | Ignored
+Every INVENTORY MGR should be able to create new types of stock (bulk amount) | Done
+Every INVENTORY MGR could be able to transfer items between depots | Ignored
+Every INVENTORY MGR could be able to assign arbitrary key/value pairs to items | Ignored
+Every INVENTORY MGR could be able to make bulk changes to items | Ignored
